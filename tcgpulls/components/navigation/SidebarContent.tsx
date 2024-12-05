@@ -23,11 +23,11 @@ const SidebarContent = ({}: Props) => {
       </SidebarHeader>
       <SidebarBody>
         <SidebarSection>
-          <SidebarItem>
+          <SidebarItem href={`/`}>
             <HomeIcon />
             <SidebarLabel>Home</SidebarLabel>
           </SidebarItem>
-          <SidebarItem>
+          <SidebarItem href={`/pulls`}>
             <FireIcon />
             <SidebarLabel>Pulls</SidebarLabel>
           </SidebarItem>

@@ -10,15 +10,16 @@
     "migrate-dev": "dotenv -e .env.local -- npx prisma migrate dev"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.6.0",
+    "@clerk/nextjs": "^6.7.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@prisma/client": "^6.0.1",
+    "@tcgdex/sdk": "^2.6.0-beta.3",
     "clsx": "^2.1.1",
     "framer-motion": "^11.13.1",
     "next": "15.0.3",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^20",
