@@ -10,10 +10,15 @@ import {
 import AccountBar from "@/components/navigation/AccountBar";
 import { Link } from "@/components/catalyst-ui/link";
 import { FireIcon, HomeIcon } from "@heroicons/react/20/solid";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
+import { SignedIn } from "@clerk/nextjs";
 
 type Props = {};
 
 const SidebarContent = ({}: Props) => {
+  const t = useTranslations("SidebarContent");
+
   return (
     <Sidebar>
       <SidebarHeader className={`mt-4`}>
@@ -25,17 +30,22 @@ const SidebarContent = ({}: Props) => {
         <SidebarSection>
           <SidebarItem href={`/`}>
             <HomeIcon />
-            <SidebarLabel>Home</SidebarLabel>
+            <SidebarLabel>{t("home")}</SidebarLabel>
           </SidebarItem>
-          <SidebarItem href={`/pulls`}>
-            <FireIcon />
-            <SidebarLabel>Pulls</SidebarLabel>
-          </SidebarItem>
+          <SignedIn>
+            <SidebarItem href={`/pulls`}>
+              <FireIcon />
+              <SidebarLabel>{t("pulls")}</SidebarLabel>
+            </SidebarItem>
+          </SignedIn>
         </SidebarSection>
       </SidebarBody>
       <SidebarFooter>
         <SidebarSection>
-          <AccountBar />
+          <div className={`flex justify-between`}>
+            <AccountBar />
+            <LanguageSwitcher />
+          </div>
         </SidebarSection>
       </SidebarFooter>
     </Sidebar>

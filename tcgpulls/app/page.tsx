@@ -1,5 +1,8 @@
+import { useTranslations } from "next-intl";
+
 const HomePage = () => {
-  return <div>Welcome to TCGPulls</div>;
+  const t = useTranslations("HomePage");
+  return <h1>{t("title")}</h1>;
 };
 
 export default HomePage;

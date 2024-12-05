@@ -1,0 +1,12 @@
+{
+  "SidebarContent": {
+    "home": "ホームページ",
+    "pulls": "当たり"
+  },
+  "HomePage": {
+    "title": "TCGPullsへようこそ"
+  },
+  "PullsPage": {
+    "title": "こちらは当たりページです。"
+  }
+}

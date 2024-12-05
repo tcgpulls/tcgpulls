@@ -1,7 +1,10 @@
+import { useTranslations } from "next-intl";
+
 type Props = {};
 
 const PullsPage = ({}: Props) => {
-  return <div>This is the pulls page</div>;
+  const t = useTranslations("PullsPage");
+  return <div>{t("title")}</div>;
 };
 
 export default PullsPage;

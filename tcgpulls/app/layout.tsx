@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import { ReactNode } from "react";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import NavbarContent from "@/components/navigation/NavbarContent";
 import { SidebarLayout } from "@/components/catalyst-ui/sidebar-layout";
 import SidebarContent from "@/components/navigation/SidebarContent";
@@ -11,27 +13,32 @@ export const metadata: Metadata = {
   description: "Get your TCG pack pulls and pull rates all in one place!",
 };
 
-const RootLayout = ({
+const RootLayout = async ({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) => {
+  const locale = await getLocale();
+  const messages = await getMessages({ locale });
+
   return (
     <ClerkProvider>
       <html
-        lang="en"
+        lang={locale}
         className={`bg-white lg:bg-zinc-100 dark:bg-zinc-900 dark:lg:bg-zinc-950`}
       >
         <head>
           <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         </head>
         <body className={`font-sans`}>
-          <SidebarLayout
-            sidebar={<SidebarContent />}
-            navbar={<NavbarContent />}
-          >
-            <div>{children}</div>
-          </SidebarLayout>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <SidebarLayout
+              sidebar={<SidebarContent />}
+              navbar={<NavbarContent />}
+            >
+              <div>{children}</div>
+            </SidebarLayout>
+          </NextIntlClientProvider>
         </body>
       </html>
     </ClerkProvider>

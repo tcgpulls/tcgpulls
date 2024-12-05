@@ -1,0 +1,12 @@
+{
+  "SidebarContent": {
+    "home": "Home",
+    "pulls": "Pulls"
+  },
+  "HomePage": {
+    "title": "Welcome to TCG Pulls!"
+  },
+  "PullsPage": {
+    "title": "This is the Pulls page"
+  }
+}
