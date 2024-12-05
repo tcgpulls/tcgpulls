@@ -2,9 +2,9 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 type Props = {};
 
-const Navigation = ({}: Props) => {
+const AccountBar = ({}: Props) => {
   return (
-    <div>
+    <div className={`flex items-center`}>
       <SignedOut>
         <SignInButton />
       </SignedOut>
@@ -15,4 +15,4 @@ const Navigation = ({}: Props) => {
   );
 };
 
-export default Navigation;
+export default AccountBar;
