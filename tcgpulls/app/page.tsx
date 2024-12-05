@@ -1,5 +1,3 @@
 export default function Home() {
-  return (
-    <div>Welcome to PokePulls</div>
-  );
+  return <div>Welcome to TCGPulls</div>;
 }

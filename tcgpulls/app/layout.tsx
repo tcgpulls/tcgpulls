@@ -1,36 +1,32 @@
 import type { Metadata } from "next";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import { ReactNode } from "react";
+import Navigation from "@/components/navigation/navigation";
 
 export const metadata: Metadata = {
-  title: "PokePulls",
-  description: "Get your Pokemon TCG pack pulls and pull rates all in one place!",
+  title: "TCGPulls",
+  description: "Get your TCG pack pulls and pull rates all in one place!",
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
-  children: React.ReactNode;
-}>) {
+  children: ReactNode;
+}>) => {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body>
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-          {children}
+        <head>
+          <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        </head>
+        <body className={`flex font-sans`}>
+          <Navigation />
+          <div>{children}</div>
         </body>
       </html>
     </ClerkProvider>
   );
-}
+};
+
+export default RootLayout;
