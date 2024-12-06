@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { fetchPokemonSets } from "@/lib/tcgdex";
 import { TCGSetT } from "@/types/TCGDex";
 
 export const metadata: Metadata = {
@@ -22,18 +21,16 @@ const HomePage = async () => {
           {sets.map((set) => (
             <div
               key={set.id}
-              className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow"
+              className="bg-zinc-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow"
             >
               <img
                 src={
-                  set.logo
-                    ? `${set.logo}.webp`
-                    : "https://via.placeholder.com/150"
+                  set.logo ? `${set.logo}.webp` : "https://placehold.co/300x200"
                 }
                 alt={set.name}
                 className="w-full h-40 object-contain mb-4"
               />
-              <h2 className="text-lg font-semibold text-gray-800">
+              <h2 className="font-semibold text-sm text-center text-white">
                 {set.name}
               </h2>
             </div>
