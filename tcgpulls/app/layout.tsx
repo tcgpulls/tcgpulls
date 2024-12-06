@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
@@ -7,11 +6,6 @@ import { getLocale, getMessages } from "next-intl/server";
 import NavbarContent from "@/components/navigation/NavbarContent";
 import { SidebarLayout } from "@/components/catalyst-ui/sidebar-layout";
 import SidebarContent from "@/components/navigation/SidebarContent";
-
-export const metadata: Metadata = {
-  title: "TCGPulls",
-  description: "Get your TCG pack pulls and pull rates all in one place!",
-};
 
 const RootLayout = async ({
   children,

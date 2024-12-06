@@ -61,3 +61,17 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model PokemonSet {
+  id             String    @id @unique
+  name           String
+  logo           String?
+  symbol         String?
+  totalCards     Int
+  officialCards  Int
+  language       String
+  releaseDate    DateTime?
+  insertionOrder Int // Field for maintaining insertion order
+
+  @@index([language])
+}

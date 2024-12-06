@@ -1,4 +1,10 @@
 import { useTranslations } from "next-intl";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "TCGPulls - Pulls",
+  description: "Get your TCG pack pulls and pull rates all in one place!",
+};
 
 type Props = {};
 
