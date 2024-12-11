@@ -3,6 +3,7 @@ import {
   SidebarBody,
   SidebarFooter,
   SidebarHeader,
+  SidebarHeading,
   SidebarItem,
   SidebarLabel,
   SidebarSection,
@@ -11,8 +12,7 @@ import AccountBar from "@/components/navigation/AccountBar";
 import { Link } from "@/components/catalyst-ui/link";
 import { HomeIcon, RectangleStackIcon } from "@heroicons/react/20/solid";
 import { useTranslations } from "next-intl";
-import { SignedIn } from "@clerk/nextjs";
-import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
+// import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
 
 type Props = {};
 
@@ -23,28 +23,29 @@ const SidebarContent = ({}: Props) => {
     <Sidebar>
       <SidebarHeader className={`mt-4`}>
         <Link href="#" aria-label="Home">
-          <p className={`font-bold`}>{t("Global.company")}</p>
+          <p className={`font-bold`}>{t("common.company")}</p>
         </Link>
       </SidebarHeader>
       <SidebarBody>
         <SidebarSection>
           <SidebarItem href={`/`}>
             <HomeIcon />
-            <SidebarLabel>{t("SidebarContent.home")}</SidebarLabel>
+            <SidebarLabel>{t("sidebar_component.home")}</SidebarLabel>
           </SidebarItem>
-          <SignedIn>
-            <SidebarItem href={`/tcg/pokemon/sets`}>
-              <RectangleStackIcon />
-              <SidebarLabel>{t("SidebarContent.tcg-pokemon")}</SidebarLabel>
-            </SidebarItem>
-          </SignedIn>
+        </SidebarSection>
+        <SidebarSection>
+          <SidebarHeading>{t("common.tcg")}</SidebarHeading>
+          <SidebarItem href={`/tcg/pokemon/sets`}>
+            <RectangleStackIcon />
+            <SidebarLabel>{t("common.tcg_pokemon")}</SidebarLabel>
+          </SidebarItem>
         </SidebarSection>
       </SidebarBody>
       <SidebarFooter>
         <SidebarSection>
           <div className={`flex justify-between`}>
             <AccountBar />
-            <LanguageSwitcher />
+            {/*<LanguageSwitcher />*/}
           </div>
         </SidebarSection>
       </SidebarFooter>

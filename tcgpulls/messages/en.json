@@ -1,16 +1,20 @@
 {
-  "Global": {
-    "company": "TCG Pulls",
-    "loading": "Loading..."
+  "common": {
+    "company": "tcgpulls.xyz",
+    "loading": "Loading",
+    "tcg": "Trading Card Games",
+    "pokemon": "Pokémon",
+    "one_piece": "One Piece",
+    "tcg_pokemon": "Pokémon Trading Card Game",
+    "tcg_one_piece": "One Piece Trading Card Game"
   },
-  "SidebarContent": {
-    "home": "Home",
-    "tcg-pokemon": "Pokémon TCG"
+  "sidebar_component": {
+    "home": "Home"
   },
-  "HomePage": {
-    "title": "Welcome to TCG Pulls!"
+  "home_page": {
+    "title": "Welcome to tcgpulls.xyz"
   },
-  "PokemonTCGPage": {
-    "title": "Pokémon Trading Card Game"
+  "tcg_page": {
+    "title": "Trading Card Games"
   }
 }

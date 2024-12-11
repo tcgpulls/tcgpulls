@@ -8,7 +8,7 @@ const NavbarContent = ({}: Props) => {
     <Navbar>
       <div className={`w-full flex items-center`}>
         <div className={`flex-1 flex justify-center`}>
-          <p className={`font-bold`}>TCGPulls</p>
+          <p className={`font-bold`}>{process.env.NEXT_PUBLIC_APP_NAME}</p>
         </div>
         <AccountBar />
       </div>

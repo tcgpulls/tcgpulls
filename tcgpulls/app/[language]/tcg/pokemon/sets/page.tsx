@@ -14,7 +14,7 @@ const PAGE_SIZE = 36;
 
 const PokemonTCGPage = () => {
   const { language } = useLanguage(); // Get the current language from the context
-  const t = useTranslations("PokemonTCGPage");
+  const t = useTranslations();
   const [sets, setSets] = useState<PokemonSet[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,16 +46,19 @@ const PokemonTCGPage = () => {
 
   return (
     <>
-      <PageHeader title={t("title")} icon={<RectangleStackIcon />} />
+      <PageHeader
+        title={t("common.tcg_pokemon")}
+        icon={<RectangleStackIcon />}
+      />
       {isLoading ? (
-        <p>Loading...</p>
+        <p>{t("common.loading")}</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {sets.map((set) => (
             <SetCard
               key={set.id}
               set={set}
-              href={`/pokemon/sets/${set.language}/${set.originalId}`}
+              href={`/tcg/pokemon/sets/${set.originalId}`}
             />
           ))}
         </div>

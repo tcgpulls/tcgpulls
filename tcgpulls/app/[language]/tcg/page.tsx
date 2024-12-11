@@ -3,7 +3,7 @@ import { Link } from "@/components/catalyst-ui/link";
 import Card from "@/components/misc/Card";
 
 export const metadata: Metadata = {
-  title: "TCG - TCGPulls",
+  title: `TCG  - ${process.env.NEXT_PUBLIC_APP_NAME}`,
   description: "Get your TCG pack pulls and pull rates all in one place!",
 };
 
