@@ -1,12 +1,16 @@
 {
+  "Global": {
+    "company": "TCG Pulls",
+    "loading": "Loading..."
+  },
   "SidebarContent": {
     "home": "ホームページ",
-    "pulls": "当たり"
+    "tcg-pokemon": "当たり"
   },
   "HomePage": {
     "title": "TCGPullsへようこそ"
   },
-  "PullsPage": {
-    "title": "こちらは当たりページです。"
+  "PokemonTCGPage": {
+    "title": "Pokémon Trading Card Game"
   }
 }

@@ -1,12 +1,16 @@
 {
+  "Global": {
+    "company": "TCG Pulls",
+    "loading": "Loading..."
+  },
   "SidebarContent": {
     "home": "Home",
-    "pulls": "Pulls"
+    "tcg-pokemon": "Pokémon TCG"
   },
   "HomePage": {
     "title": "Welcome to TCG Pulls!"
   },
-  "PullsPage": {
-    "title": "This is the Pulls page"
+  "PokemonTCGPage": {
+    "title": "Pokémon Trading Card Game"
   }
 }

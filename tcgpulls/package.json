@@ -6,13 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prisma-studio": "dotenv -e .env.local -- npx prisma studio",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "migrate-dev": "dotenv -e .env.local -- npx prisma migrate dev",
-    "fetch-store-pokemon-sets": "dotenv -e .env.local -- tsx scripts/fetchAndStorePokemonSets.ts",
-    "reset-db": "dotenv -e .env.local -- npx prisma migrate reset --force"
+    "prisma:generate": "dotenv -e .env.local -- npx prisma generate",
+    "prisma:studio": "dotenv -e .env.local -- npx prisma studio",
+    "prisma:db-migrate-dev": "dotenv -e .env.local -- npx prisma migrate dev",
+    "prisma:db-reset": "dotenv -e .env.local -- npx prisma migrate reset --force",
+    "pokemon:fetch-store-sets": "dotenv -e .env.local -- tsx scripts/fetchAndStorePokemonSets.ts",
+    "pokemon:fetch-store-sets-with-image": "dotenv -e .env.local -- tsx scripts/fetchAndStorePokemonSets.ts -- --forceImageDownload",
+    "pokemon:clear-sets": "dotenv -e .env.local -- tsx scripts/clearPokemonSets.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.7.0",
@@ -20,7 +23,6 @@
     "@heroicons/react": "^2.2.0",
     "@playwright/test": "^1.49.0",
     "@prisma/client": "^6.0.1",
-    "@tcgdex/sdk": "^2.6.0-beta.3",
     "axios": "^1.7.9",
     "clsx": "^2.1.1",
     "framer-motion": "^11.13.1",

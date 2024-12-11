@@ -63,15 +63,21 @@ model VerificationToken {
 }
 
 model PokemonSet {
-  id             String    @id @unique
-  name           String
-  logo           String?
-  symbol         String?
-  totalCards     Int
-  officialCards  Int
-  language       String
-  releaseDate    DateTime?
-  insertionOrder Int // Field for maintaining insertion order
+  id           String       @id @default(cuid())
+  originalId   String
+  language     String
+  name         String
+  series       String
+  logo         String
+  symbol       String
+  printedTotal Int
+  total        Int
+  ptcgoCode    String?
+  releaseDate  DateTime
+  updatedAt    DateTime     @updatedAt
+  parentSetId  String? // Foreign key to the parent set
+  parentSet    PokemonSet?  @relation("Subsets", fields: [parentSetId], references: [id])
+  subsets      PokemonSet[] @relation("Subsets")
 
-  @@index([language])
+  @@unique([originalId, language])
 }

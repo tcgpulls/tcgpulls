@@ -2,40 +2,50 @@ import { ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
 import NavbarContent from "@/components/navigation/NavbarContent";
 import { SidebarLayout } from "@/components/catalyst-ui/sidebar-layout";
 import SidebarContent from "@/components/navigation/SidebarContent";
+import { LanguageProvider } from "@/context/LanguageContext";
+import ClientRedirect from "@/components/utils/ClientRedirect";
+import { setupLanguage } from "@/server/setupLanguage";
+import CustomHead from "@/components/misc/Head";
 
 const RootLayout = async ({
   children,
+  params,
 }: Readonly<{
   children: ReactNode;
+  params: { language: string };
 }>) => {
-  const locale = await getLocale();
-  const messages = await getMessages({ locale });
+  // Call the server utility to fetch language setup
+  const { locale, messages, validPreferredLocale } = await setupLanguage();
 
   return (
-    <ClerkProvider>
-      <html
-        lang={locale}
-        className={`bg-white lg:bg-zinc-100 dark:bg-zinc-900 dark:lg:bg-zinc-950`}
-      >
-        <head>
-          <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        </head>
-        <body className={`font-sans`}>
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            <SidebarLayout
-              sidebar={<SidebarContent />}
-              navbar={<NavbarContent />}
+    <LanguageProvider language={validPreferredLocale}>
+      {/* Redirect root url to default language*/}
+      <ClientRedirect from={"/"} to={validPreferredLocale} />
+      <ClerkProvider>
+        <html
+          lang={locale}
+          className={`bg-white lg:bg-zinc-100 dark:bg-zinc-900 dark:lg:bg-zinc-950`}
+        >
+          <CustomHead />
+          <body className={`font-sans`}>
+            <NextIntlClientProvider
+              locale={params.language || locale}
+              messages={messages}
             >
-              <div>{children}</div>
-            </SidebarLayout>
-          </NextIntlClientProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+              <SidebarLayout
+                sidebar={<SidebarContent />}
+                navbar={<NavbarContent />}
+              >
+                <div>{children}</div>
+              </SidebarLayout>
+            </NextIntlClientProvider>
+          </body>
+        </html>
+      </ClerkProvider>
+    </LanguageProvider>
   );
 };
 
