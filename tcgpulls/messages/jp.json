@@ -1,12 +1,20 @@
 {
-  "SidebarContent": {
-    "home": "ホームページ",
-    "pulls": "当たり"
+  "common": {
+    "company": "tcgpulls.xyz",
+    "loading": "ロード中",
+    "tcg": "トレーディングカードゲーム",
+    "pokemon": "ポケモン",
+    "one_piece": "ワンピース",
+    "tcg_pokemon": "ポケモンカードゲーム",
+    "tcg_one_piece": "ワンピースカードゲーム"
   },
-  "HomePage": {
-    "title": "TCGPullsへようこそ"
+  "sidebar_component": {
+    "home": "ホームページ"
   },
-  "PullsPage": {
-    "title": "こちらは当たりページです。"
+  "home_page": {
+    "title": "tcgpulls.xyzへようこそ"
+  },
+  "tcg_page": {
+    "title": "トレーディングカードゲーム"
   }
 }
