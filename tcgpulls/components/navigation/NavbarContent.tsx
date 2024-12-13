@@ -1,9 +1,7 @@
 import AccountBar from "@/components/navigation/AccountBar";
 import { Navbar } from "@/components/catalyst-ui/navbar";
 
-type Props = {};
-
-const NavbarContent = ({}: Props) => {
+const NavbarContent = () => {
   return (
     <Navbar>
       <div className={`w-full flex items-center`}>

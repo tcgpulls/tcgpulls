@@ -1,0 +1,35 @@
+import { Metadata } from "next";
+import { Link } from "@/components/catalyst-ui/link";
+import Card from "@/components/misc/Card";
+import { ParamsT } from "@/types/Params";
+import { getTranslations } from "next-intl/server";
+
+const SetsPage = async () => {
+  const t = await getTranslations("sets_page");
+
+  return (
+    <>
+      <Link href={`/tcg/pokemon/sets`}>
+        <Card isClickable={true}>
+          <p>{t("title")}</p>
+        </Card>
+      </Link>
+    </>
+  );
+};
+
+export default SetsPage;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: ParamsT;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "sets_page.metadata" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}

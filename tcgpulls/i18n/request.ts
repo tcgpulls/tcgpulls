@@ -1,15 +1,13 @@
 import { getRequestConfig } from "next-intl/server";
-import { headers, cookies } from "next/headers";
-import i18n from "@/messages/i18n";
+import { routing } from "./routing";
 
-export default getRequestConfig(async () => {
-  // Try to get the locale from cookies
-  let locale = (await cookies()).get("NEXT_LOCALE")?.value;
+export default getRequestConfig(async ({ requestLocale }) => {
+  // This typically corresponds to the `[locale]` segment
+  let locale = await requestLocale;
 
-  // If no locale is found in cookies, use the Accept-Language header
-  if (!locale) {
-    const acceptLanguage = (await headers()).get("accept-language");
-    locale = acceptLanguage ? acceptLanguage.split(",")[0] : i18n.defaultLocale;
+  // Ensure that a valid locale is used
+  if (!locale || !routing.locales.includes(locale)) {
+    locale = routing.defaultLocale;
   }
 
   return {
