@@ -32,7 +32,7 @@ const setMainSetSubsetRelationships: { [key: string]: string } = {
   swsh12pt5: "swsh12pt5gg", // Crown Zenith -> Crown Zenith Galarian Gallery
 };
 
-export async function fetchAndStorePokemonSets(forceImageDownload = false) {
+async function fetchAndStorePokemonSets(forceImageDownload = false) {
   try {
     ensureDirectoryExists(logoDir);
     ensureDirectoryExists(symbolDir);
