@@ -4,12 +4,12 @@ import Card from "@/components/misc/Card";
 import { getTranslations } from "next-intl/server";
 import { ParamsT } from "@/types/Params";
 
-const TCGPage = async () => {
+const AppPage = async () => {
   const t = await getTranslations();
 
   return (
     <>
-      <Link href={`/tcg/pokemon/`}>
+      <Link href={`/app/tcg/pokemon/`}>
         <Card isClickable={true}>
           <p>{t("common.tcg_pokemon")}</p>
         </Card>
@@ -18,7 +18,7 @@ const TCGPage = async () => {
   );
 };
 
-export default TCGPage;
+export default AppPage;
 
 export async function generateMetadata({
   params,
@@ -26,7 +26,7 @@ export async function generateMetadata({
   params: ParamsT;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "tcg_page.metadata" });
+  const t = await getTranslations({ locale, namespace: "app_page.metadata" });
 
   return {
     title: t("title"),

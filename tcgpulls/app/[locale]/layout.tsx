@@ -4,9 +4,6 @@ import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { SidebarLayout } from "@/components/catalyst-ui/sidebar-layout";
-import SidebarContent from "@/components/navigation/SidebarContent";
-import NavbarContent from "@/components/navigation/NavbarContent";
 import { ParamsT } from "@/types/Params";
 
 const LocaleLayout = async ({
@@ -31,12 +28,7 @@ const LocaleLayout = async ({
     <html lang={locale}>
       <body className={`font-sans`}>
         <NextIntlClientProvider messages={messages}>
-          <SidebarLayout
-            sidebar={<SidebarContent />}
-            navbar={<NavbarContent />}
-          >
-            {children}
-          </SidebarLayout>
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

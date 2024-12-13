@@ -9,7 +9,7 @@ const SetsPage = async () => {
 
   return (
     <>
-      <Link href={`/tcg/pokemon/sets`}>
+      <Link href={`/app/tcg/pokemon/sets`}>
         <Card isClickable={true}>
           <p>{t("title")}</p>
         </Card>
