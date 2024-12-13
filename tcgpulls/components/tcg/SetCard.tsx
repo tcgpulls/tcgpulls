@@ -2,6 +2,7 @@ import Card from "@/components/misc/Card";
 import { PokemonSet } from "@prisma/client";
 import { Link } from "@/components/catalyst-ui/link";
 import { Href } from "@react-types/shared";
+import Image from "next/image";
 
 type Props = {
   set: PokemonSet;
@@ -12,10 +13,12 @@ const SetCard = ({ set, href }: Props) => {
   return (
     <Link href={href}>
       <Card isClickable={true}>
-        <img
+        <Image
           src={set.logo ? set.logo : "https://placehold.co/300x200"}
           className="w-full h-40 object-contain mb-4"
           alt={`${set.name} logo - ${set.originalId}`}
+          width={300}
+          height={200}
         />
         <h2 className="font-semibold text-sm text-center text-white">
           {set.name}

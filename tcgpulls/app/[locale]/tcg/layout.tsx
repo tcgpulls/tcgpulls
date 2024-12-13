@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 
-const PokemonLayout = ({
+const TCGLayout = ({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) => {
-  return <div>{children}</div>;
+  return <>{children}</>;
 };
 
-export default PokemonLayout;
+export default TCGLayout;

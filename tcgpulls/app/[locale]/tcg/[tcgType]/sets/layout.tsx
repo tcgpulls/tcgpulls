@@ -5,7 +5,7 @@ const SetsLayout = ({
 }: Readonly<{
   children: ReactNode;
 }>) => {
-  return <div>{children}</div>;
+  return <>{children}</>;
 };
 
 export default SetsLayout;
