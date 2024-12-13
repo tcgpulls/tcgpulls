@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
@@ -13,8 +13,8 @@
     "prisma:studio": "dotenv -e .env.local -- npx prisma studio",
     "prisma:db-migrate-dev": "dotenv -e .env.local -- npx prisma migrate dev",
     "prisma:db-reset": "dotenv -e .env.local -- npx prisma migrate reset --force",
-    "pokemon:fetch-store-sets": "dotenv -e .env.local -- tsx scripts/fetchAndStorePokemonSets.ts",
-    "pokemon:fetch-store-sets-with-image": "dotenv -e .env.local -- tsx scripts/fetchAndStorePokemonSets.ts -- --forceImageDownload",
+    "pokemon:fetch-store-sets": "dotenv -e .env.local -- npx tsx scripts/fetchAndStorePokemonSets.ts",
+    "pokemon:fetch-store-sets-with-image": "dotenv -e .env.local -- npx tsx scripts/fetchAndStorePokemonSets.ts -- --forceImageDownload",
     "pokemon:clear-sets": "dotenv -e .env.local -- tsx scripts/clearPokemonSets.ts"
   },
   "dependencies": {
@@ -52,6 +52,7 @@
     "prisma": "^6.0.1",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }
