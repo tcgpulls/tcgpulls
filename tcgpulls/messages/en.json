@@ -15,10 +15,17 @@
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     }
   },
-  "home_page": {
+  "landing_page": {
     "title": "Welcome to tcgpulls.xyz",
     "metadata": {
       "title": "Home - tcgpulls.xyz",
+      "description": "Get your TCG pack pulls and pull rates all in one place!"
+    }
+  },
+  "app_page": {
+    "title": "Welcome to tcgpulls.xyz",
+    "metadata": {
+      "title": "App - tcgpulls.xyz",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     }
   },

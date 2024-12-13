@@ -43,7 +43,7 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
           <SetCard
             key={set.id}
             set={set}
-            href={`/tcg/pokemon/sets/${set.originalId}`}
+            href={`/app/tcg/pokemon/sets/${set.originalId}`}
           />
         ))}
       </div>

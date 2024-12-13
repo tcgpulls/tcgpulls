@@ -15,10 +15,17 @@
       "description": "TCGパックの開封結果や出現率を一元管理！"
     }
   },
-  "home_page": {
+  "landing_page": {
     "title": "tcgpulls.xyzへようこそ",
     "metadata": {
       "title": "ホームページ - tcgpulls.xyz",
+      "description": "TCGパックの開封結果や出現率を一元管理！"
+    }
+  },
+  "app_page": {
+    "title": "tcgpulls.xyzへようこそ",
+    "metadata": {
+      "title": "アップリ - tcgpulls.xyz",
       "description": "TCGパックの開封結果や出現率を一元管理！"
     }
   },
