@@ -5,6 +5,7 @@ import PaginationComponent from "@/components/misc/Pagination";
 import { PokemonSet } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { ParamsT } from "@/types/Params";
+import { apiFetcher } from "@/utils/apiFetcher";
 
 const PAGE_SIZE = 36;
 
@@ -20,16 +21,11 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
   const currentPage = parseInt(page || "1", 10);
   const offset = (currentPage - 1) * PAGE_SIZE;
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/public/tcg/${tcgType}/sets?tcg_language=en&limit=${PAGE_SIZE}&offset=${offset}`,
-    { next: { revalidate: 60 } }, // Revalidate data every 60 seconds
+  const { data: sets, total } = await apiFetcher(
+    `/api/public/tcg/${tcgType}/sets?tcg_language=en&limit=${PAGE_SIZE}&offset=${offset}`,
+    { next: { revalidate: 60 } },
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch Pokémon sets");
-  }
-
-  const { data: sets, total } = await response.json();
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
