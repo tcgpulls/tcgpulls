@@ -4,14 +4,14 @@ import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { ParamsT } from "@/types/Params";
+import { UrlParamsT } from "@/types/Params";
 
 const LocaleLayout = async ({
   children,
   params,
 }: {
   children: ReactNode;
-  params: ParamsT;
+  params: UrlParamsT;
 }) => {
   const { locale } = await params;
 

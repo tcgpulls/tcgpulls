@@ -1,7 +1,7 @@
-import { ParamsT } from "@/types/Params";
+import { UrlParamsT } from "@/types/Params";
 
 type Props = {
-  params: ParamsT;
+  params: UrlParamsT;
 };
 
 const SetPage = async ({ params }: Props) => {

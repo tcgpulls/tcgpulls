@@ -4,14 +4,15 @@ import { RectangleStackIcon } from "@heroicons/react/20/solid";
 import PaginationComponent from "@/components/misc/Pagination";
 import { PokemonSet } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
-import { ParamsT } from "@/types/Params";
+import { SearchParamsT, UrlParamsT } from "@/types/Params";
 import axiosInstance from "@/utils/axiosInstance";
+import SetGrid from "@/components/tcg/SetGrid";
 
 const PAGE_SIZE = 36;
 
 interface Props {
-  params: ParamsT;
-  searchParams: Promise<{ page?: string }>;
+  params: UrlParamsT;
+  searchParams: SearchParamsT;
 }
 
 const PokemonTCGPage = async ({ params, searchParams }: Props) => {
@@ -21,7 +22,8 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
   const currentPage = parseInt(page || "1", 10);
   const offset = (currentPage - 1) * PAGE_SIZE;
 
-  const response = await axiosInstance(`/api/public/tcg/${tcgType}/sets`, {
+  // API call with axiosInstance
+  const response = await axiosInstance.get(`/api/public/tcg/${tcgType}/sets`, {
     params: {
       tcg_language: "en",
       limit: PAGE_SIZE,
@@ -30,7 +32,6 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
   });
 
   const { data: sets, total } = response.data;
-
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
@@ -39,7 +40,7 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
         title={t("common.tcg_pokemon")}
         icon={<RectangleStackIcon />}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <SetGrid>
         {sets.map((set: PokemonSet) => (
           <SetCard
             key={set.id}
@@ -47,7 +48,7 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
             href={`/app/tcg/pokemon/sets/${set.originalId}`}
           />
         ))}
-      </div>
+      </SetGrid>
       <PaginationComponent currentPage={currentPage} totalPages={totalPages} />
     </>
   );

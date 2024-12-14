@@ -1,7 +1,13 @@
-export type ParamsKeysT = {
+export type UrlParamsKeyT = {
   locale: string;
   tcgType: string;
   originalId: string;
 };
 
-export type ParamsT = Promise<Partial<ParamsKeysT>>;
+export type UrlParamsT = Promise<Partial<UrlParamsKeyT>>;
+
+export type SearchParamsKeyT = {
+  page: string;
+};
+
+export type SearchParamsT = Promise<Partial<SearchParamsKeyT>>;
