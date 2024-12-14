@@ -21,7 +21,7 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
   const currentPage = parseInt(page || "1", 10);
   const offset = (currentPage - 1) * PAGE_SIZE;
 
-  const response = await axiosInstance(`/api/public/tcg/${tcgType}/sets`, {
+  const response = await axiosInstance.get(`/api/public/tcg/${tcgType}/sets`, {
     params: {
       tcg_language: "en",
       limit: PAGE_SIZE,
