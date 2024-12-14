@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const POKEMONTCG_API_BASE_URL = "https://api.pokemontcg.io/v2";
+
 /**
  * Fetch Pokémon sets using the TCGdex API.
  * @param language - The language to fetch sets for.
@@ -7,7 +9,7 @@ import axios from "axios";
  * @returns An array of Pokémon sets.
  */
 export async function fetchPokemonSets(language: string, retries: number = 3) {
-  const baseUrl = `https://api.pokemontcg.io/v2/sets`;
+  const baseUrl = `${POKEMONTCG_API_BASE_URL}/sets`;
   const timeout = 30000; // Increase timeout to 30 seconds (30000ms)
 
   for (let attempt = 1; attempt <= retries; attempt++) {
