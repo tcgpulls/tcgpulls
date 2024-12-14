@@ -1,0 +1,1 @@
+cd tcgpulls && npm run build
