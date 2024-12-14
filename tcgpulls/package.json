@@ -17,7 +17,8 @@
     "prisma:db-reset": "dotenv -e .env.local -- npx prisma migrate reset --force",
     "pokemon:fetch-store-sets": "dotenv -e .env.local -- npx tsx scripts/fetchAndStorePokemonSets.ts",
     "pokemon:fetch-store-sets-with-image": "dotenv -e .env.local -- npx tsx scripts/fetchAndStorePokemonSets.ts -- --forceImageDownload",
-    "pokemon:clear-sets": "dotenv -e .env.local -- tsx scripts/clearPokemonSets.ts"
+    "pokemon:clear-sets": "dotenv -e .env.local -- tsx scripts/clearPokemonSets.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.5.9",
@@ -47,6 +48,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8",

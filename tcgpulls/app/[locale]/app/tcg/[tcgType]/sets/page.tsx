@@ -4,15 +4,15 @@ import { RectangleStackIcon } from "@heroicons/react/20/solid";
 import PaginationComponent from "@/components/misc/Pagination";
 import { PokemonSet } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
-import { ParamsT } from "@/types/Params";
+import { SearchParamsT, UrlParamsT } from "@/types/Params";
 import axiosInstance from "@/utils/axiosInstance";
 import SetGrid from "@/components/tcg/SetGrid";
 
 const PAGE_SIZE = 36;
 
 interface Props {
-  params: ParamsT;
-  searchParams: Promise<{ page?: string }>;
+  params: UrlParamsT;
+  searchParams: SearchParamsT;
 }
 
 const PokemonTCGPage = async ({ params, searchParams }: Props) => {

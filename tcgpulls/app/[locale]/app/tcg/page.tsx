@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
-import { ParamsT } from "@/types/Params";
+import { UrlParamsT } from "@/types/Params";
 
 type Props = {
-  params: ParamsT;
+  params: UrlParamsT;
 };
 
 const TcgPage = async ({ params }: Props) => {

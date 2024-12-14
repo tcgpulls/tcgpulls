@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
-import { ParamsT } from "@/types/Params";
+import { UrlParamsT } from "@/types/Params";
 import { Button } from "@/components/catalyst-ui/button";
 
 const HomePage = async () => {
@@ -18,7 +18,7 @@ export default HomePage;
 export async function generateMetadata({
   params,
 }: {
-  params: ParamsT;
+  params: UrlParamsT;
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({

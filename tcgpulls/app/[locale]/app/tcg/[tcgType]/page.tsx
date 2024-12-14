@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Link } from "@/components/catalyst-ui/link";
 import Card from "@/components/misc/Card";
-import { ParamsT } from "@/types/Params";
+import { UrlParamsT } from "@/types/Params";
 import { getTranslations } from "next-intl/server";
 
 const SetsPage = async () => {
@@ -23,7 +23,7 @@ export default SetsPage;
 export async function generateMetadata({
   params,
 }: {
-  params: ParamsT;
+  params: UrlParamsT;
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "sets_page.metadata" });
