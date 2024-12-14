@@ -21,6 +21,7 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
   const currentPage = parseInt(page || "1", 10);
   const offset = (currentPage - 1) * PAGE_SIZE;
 
+  // API call with axiosInstance
   const response = await axiosInstance.get(`/api/public/tcg/${tcgType}/sets`, {
     params: {
       tcg_language: "en",
@@ -30,7 +31,6 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
   });
 
   const { data: sets, total } = response.data;
-
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
