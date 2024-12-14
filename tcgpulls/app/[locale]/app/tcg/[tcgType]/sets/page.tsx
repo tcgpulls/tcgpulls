@@ -21,17 +21,17 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
   const currentPage = parseInt(page || "1", 10);
   const offset = (currentPage - 1) * PAGE_SIZE;
 
-  const response = await axiosInstance(`/api/public/tcg/${tcgType}/sets`, {
-    params: {
-      tcg_language: "en",
-      limit: PAGE_SIZE,
-      offset,
-    },
-  });
-
-  const { data: sets, total } = response.data;
-
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  // const response = await axiosInstance(`/api/public/tcg/${tcgType}/sets`, {
+  //   params: {
+  //     tcg_language: "en",
+  //     limit: PAGE_SIZE,
+  //     offset,
+  //   },
+  // });
+  //
+  // const { data: sets, total } = response.data;
+  //
+  // const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
     <>
@@ -39,16 +39,16 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
         title={t("common.tcg_pokemon")}
         icon={<RectangleStackIcon />}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {sets.map((set: PokemonSet) => (
-          <SetCard
-            key={set.id}
-            set={set}
-            href={`/app/tcg/pokemon/sets/${set.originalId}`}
-          />
-        ))}
-      </div>
-      <PaginationComponent currentPage={currentPage} totalPages={totalPages} />
+      {/*<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">*/}
+      {/*  {sets.map((set: PokemonSet) => (*/}
+      {/*    <SetCard*/}
+      {/*      key={set.id}*/}
+      {/*      set={set}*/}
+      {/*      href={`/app/tcg/pokemon/sets/${set.originalId}`}*/}
+      {/*    />*/}
+      {/*  ))}*/}
+      {/*</div>*/}
+      {/*<PaginationComponent currentPage={currentPage} totalPages={totalPages} />*/}
     </>
   );
 };
