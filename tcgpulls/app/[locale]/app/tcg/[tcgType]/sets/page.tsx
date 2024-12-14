@@ -1,25 +1,15 @@
-import SetCard from "@/components/tcg/SetCard";
 import PageHeader from "@/components/misc/PageHeader";
 import { RectangleStackIcon } from "@heroicons/react/20/solid";
-import PaginationComponent from "@/components/misc/Pagination";
-import { PokemonSet } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { ParamsT } from "@/types/Params";
-import axiosInstance from "@/utils/axiosInstance";
-
-const PAGE_SIZE = 36;
 
 interface Props {
   params: ParamsT;
   searchParams: Promise<{ page?: string }>;
 }
 
-const PokemonTCGPage = async ({ params, searchParams }: Props) => {
-  const { tcgType } = await params;
-  const { page } = await searchParams;
+const PokemonTCGPage = async ({}: Props) => {
   const t = await getTranslations();
-  const currentPage = parseInt(page || "1", 10);
-  const offset = (currentPage - 1) * PAGE_SIZE;
 
   // const response = await axiosInstance(`/api/public/tcg/${tcgType}/sets`, {
   //   params: {
