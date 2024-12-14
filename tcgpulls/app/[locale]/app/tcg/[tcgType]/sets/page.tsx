@@ -5,7 +5,7 @@ import PaginationComponent from "@/components/misc/Pagination";
 import { PokemonSet } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { ParamsT } from "@/types/Params";
-import { apiFetcher } from "@/utils/apiFetcher";
+import axiosInstance from "@/utils/axiosInstance";
 
 const PAGE_SIZE = 36;
 
@@ -21,10 +21,15 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
   const currentPage = parseInt(page || "1", 10);
   const offset = (currentPage - 1) * PAGE_SIZE;
 
-  const { data: sets, total } = await apiFetcher(
-    `/api/public/tcg/${tcgType}/sets?tcg_language=en&limit=${PAGE_SIZE}&offset=${offset}`,
-    { next: { revalidate: 60 } },
-  );
+  const response = await axiosInstance(`/api/public/tcg/${tcgType}/sets`, {
+    params: {
+      tcg_language: "en",
+      limit: PAGE_SIZE,
+      offset,
+    },
+  });
+
+  const { data: sets, total } = response.data;
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
