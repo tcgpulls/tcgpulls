@@ -1,1 +1,13 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running build process..."
 cd tcgpulls && npm run build
+build_status=$?
+
+if [ $build_status -ne 0 ]; then
+  echo "Build failed. Aborting commit."
+  exit 1
+fi
+
+echo "Build succeeded. Proceeding with commit."

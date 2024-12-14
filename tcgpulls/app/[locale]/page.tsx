@@ -9,7 +9,7 @@ const HomePage = async () => {
   return (
     <div>
       <Heading>{t("title")}</Heading>
-      <Button href={`/app`}>Go to App</Button>
+      <Button href={`/app`}>GO TO APP</Button>
     </div>
   );
 };
