@@ -6,6 +6,7 @@ import { PokemonSet } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { ParamsT } from "@/types/Params";
 import axiosInstance from "@/utils/axiosInstance";
+import SetGrid from "@/components/tcg/SetGrid";
 
 const PAGE_SIZE = 36;
 
@@ -39,7 +40,7 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
         title={t("common.tcg_pokemon")}
         icon={<RectangleStackIcon />}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <SetGrid>
         {sets.map((set: PokemonSet) => (
           <SetCard
             key={set.id}
@@ -47,7 +48,7 @@ const PokemonTCGPage = async ({ params, searchParams }: Props) => {
             href={`/app/tcg/pokemon/sets/${set.originalId}`}
           />
         ))}
-      </div>
+      </SetGrid>
       <PaginationComponent currentPage={currentPage} totalPages={totalPages} />
     </>
   );
