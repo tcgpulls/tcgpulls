@@ -1,4 +1,5 @@
 import axios from "axios";
+import customLog from "@/utils/customLog";
 
 const POKEMONTCG_API_BASE_URL = "https://api.pokemontcg.io/v2";
 
@@ -17,7 +18,7 @@ export async function fetchPokemonTcgApiSets(
 
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      console.log(
+      customLog(
         `Fetching sets for language: ${language} (Attempt ${attempt}/${retries})`,
       );
 
@@ -32,7 +33,7 @@ export async function fetchPokemonTcgApiSets(
       const sets = response.data?.data;
 
       if (Array.isArray(sets)) {
-        console.log(`Successfully fetched ${sets.length} sets.`);
+        customLog(`Successfully fetched ${sets.length} sets.`);
         return sets;
       } else {
         throw new Error(
@@ -41,7 +42,8 @@ export async function fetchPokemonTcgApiSets(
       }
     } catch (error) {
       if (attempt === retries) {
-        console.error(
+        customLog(
+          "error",
           `Failed to fetch Pokémon sets for language: ${language} after ${retries} attempts`,
           error,
         );
@@ -50,7 +52,8 @@ export async function fetchPokemonTcgApiSets(
         );
       }
 
-      console.warn(
+      customLog(
+        "warn",
         `Retrying fetch for language: ${language} (Attempt ${
           attempt + 1
         }/${retries})`,

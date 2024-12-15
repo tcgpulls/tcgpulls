@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchPokemonSets } from "@/services/pokemon/fetchPokemonSets";
+import customLog from "@/utils/customLog";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -34,7 +35,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ data: sets, total });
   } catch (error) {
-    console.error("Error fetching Pokémon sets:", error);
+    customLog("error", "Error fetching Pokémon sets:", error);
     return NextResponse.json(
       { error: "Failed to fetch Pokémon sets from database." },
       { status: 500 },

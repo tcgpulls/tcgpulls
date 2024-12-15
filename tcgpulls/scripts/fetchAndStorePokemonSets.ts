@@ -5,6 +5,7 @@ import { downloadImage } from "@/utils/downloadImage";
 import { ensureDirectoryExists } from "@/utils/ensureDirectoryExists";
 import { PokemonTCGSetT } from "@/types/PokemonTCG";
 import { fileExists } from "@/utils/fileExists";
+import customLog from "@/utils/customLog";
 
 const languages = ["en"];
 
@@ -44,15 +45,15 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
     ensureDirectoryExists(symbolDir);
 
     for (const language of languages) {
-      console.log(`Fetching sets for language: ${language}...`);
+      customLog(`Fetching sets for language: ${language}...`);
       const sets = await fetchPokemonTcgApiSets(language);
 
       if (!sets || sets.length === 0) {
-        console.warn(`No sets found for language: ${language}`);
+        customLog("warn", `No sets found for language: ${language}`);
         continue;
       }
 
-      console.log(`Fetched ${sets.length} sets for language: ${language}`);
+      customLog(`Fetched ${sets.length} sets for language: ${language}`);
 
       // Deduplicate sets
       const uniqueSets = new Map();
@@ -61,7 +62,8 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
         if (!uniqueSets.has(uniqueId)) {
           uniqueSets.set(uniqueId, set);
         } else {
-          console.warn(
+          customLog(
+            "warn",
             `Duplicate set detected: ${set.id} in language: ${language}`,
           );
         }
@@ -162,12 +164,12 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
           const logoPath = path.join(logoDir, logoFilename);
           if (forceImageDownload || !fileExists(logoPath)) {
             await downloadImage(set.images.logo, logoPath);
-            console.log(`Downloaded logo for set: ${set.name} - ${set.id}...`);
+            customLog(`Downloaded logo for set: ${set.name} - ${set.id}...`);
           } else {
-            console.log(`Logo already exists for set: ${set.name} - ${set.id}`);
+            customLog(`Logo already exists for set: ${set.name} - ${set.id}`);
           }
         } else {
-          console.log(`No logo found for set: ${set.name} - ${set.id}`);
+          customLog(`No logo found for set: ${set.name} - ${set.id}`);
         }
 
         // Download and save symbol image
@@ -175,16 +177,12 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
           const symbolPath = path.join(symbolDir, symbolFilename);
           if (forceImageDownload || !fileExists(symbolPath)) {
             await downloadImage(set.images.symbol, symbolPath);
-            console.log(
-              `Downloaded symbol for set: ${set.name} - ${set.id}...`,
-            );
+            customLog(`Downloaded symbol for set: ${set.name} - ${set.id}...`);
           } else {
-            console.log(
-              `Symbol already exists for set: ${set.name} - ${set.id}`,
-            );
+            customLog(`Symbol already exists for set: ${set.name} - ${set.id}`);
           }
         } else {
-          console.log(`No symbol found for set: ${set.name} - ${set.id}`);
+          customLog(`No symbol found for set: ${set.name} - ${set.id}`);
         }
       };
 
@@ -200,7 +198,8 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
         ).find((key) => setMainSetSubsetRelationships[key] === subset.id);
 
         if (!parentSetOriginalId) {
-          console.warn(
+          customLog(
+            "warn",
             `Parent set originalId not found for subset: ${subset.id} in language: ${language}`,
           );
           continue;
@@ -217,7 +216,8 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
         });
 
         if (!parentSet) {
-          console.warn(
+          customLog(
+            "warn",
             `Parent set not found for subset: ${subset.id} in language: ${language}`,
           );
           continue;
@@ -227,10 +227,11 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
         await createSet(subset, parentSetOriginalId || null); // Ensure correct type is passed
       }
 
-      console.log(`Successfully stored sets for language: ${language}`);
+      customLog(`Successfully stored sets for language: ${language}`);
     }
   } catch (error) {
-    console.error(
+    customLog(
+      "error",
       "Error wiping the Pokémon sets table or fetching data:",
       error,
     );
@@ -244,6 +245,6 @@ const args = process.argv.slice(2);
 const forceImageDownload = args.includes("--forceImageDownload");
 
 fetchAndStorePokemonSets(forceImageDownload).catch((error) => {
-  console.error("Error in fetchAndStorePokemonSets script:", error);
+  customLog("error", "Error in fetchAndStorePokemonSets script:", error);
   process.exit(1);
 });

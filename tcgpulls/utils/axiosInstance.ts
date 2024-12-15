@@ -1,5 +1,6 @@
 import axios from "axios";
 import { headers as getHeaders } from "next/headers";
+import customLog from "@/utils/customLog";
 
 const axiosInstance = axios.create({
   timeout: 10000,
@@ -25,17 +26,17 @@ axiosInstance.interceptors.request.use(
       }
     }
 
-    console.log("🚀 Axios Request:");
-    console.log("🔗 URL:", `${config.baseURL ?? ""}${config.url ?? ""}`);
-    console.log("📜 Method:", config.method?.toUpperCase());
-    console.log("📊 Params:", config.params || "None");
-    console.log("📦 Data:", config.data || "None");
-    console.log("🛡️ Headers:", config.headers);
+    customLog("🚀 Axios Request:");
+    customLog("🔗 URL:", `${config.baseURL ?? ""}${config.url ?? ""}`);
+    customLog("📜 Method:", config.method?.toUpperCase());
+    customLog("📊 Params:", config.params || "None");
+    customLog("📦 Data:", config.data || "None");
+    customLog("🛡️ Headers:", config.headers);
 
     return config;
   },
   (error) => {
-    console.error("❌ Axios Request Error:", error.message);
+    customLog("error", "❌ Axios Request Error:", error.message);
     return Promise.reject(error);
   },
 );

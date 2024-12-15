@@ -1,37 +1,26 @@
-import SetCard from "@/components/tcg/SetCard";
+import { getPacks } from "@/actions/getPacks";
 import PageHeader from "@/components/misc/PageHeader";
 import { RectangleStackIcon } from "@heroicons/react/20/solid";
-import PaginationComponent from "@/components/misc/Pagination";
-import { PokemonSet } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
-import { SearchParamsT, UrlParamsT } from "@/types/Params";
-import axiosInstance from "@/utils/axiosInstance";
-import SetGrid from "@/components/tcg/SetGrid";
-import { getPagination } from "@/utils/pagination";
-
-const PAGE_SIZE = 36;
+import { UrlParamsT } from "@/types/Params";
+import SetsList from "@/components/tcg/SetsList";
 
 interface Props {
   params: UrlParamsT;
-  searchParams: SearchParamsT;
 }
 
-const TcgTypePacksPage = async ({ params, searchParams }: Props) => {
+const PAGE_SIZE = 24;
+
+const TcgTypePacksPage = async ({ params }: Props) => {
   const { tcgType } = await params;
-  const { page } = await searchParams;
   const t = await getTranslations();
-  const { currentPage, offset } = getPagination(page, 0, PAGE_SIZE);
 
-  const response = await axiosInstance.get(`/api/public/tcg/${tcgType}/packs`, {
-    params: {
-      tcg_language: "en",
-      limit: PAGE_SIZE,
-      offset,
-    },
-  });
+  if (!tcgType) {
+    // Handle the case where tcgType is undefined
+    return null;
+  }
 
-  const { data: sets, total } = response.data;
-  const { totalPages } = getPagination(page, total, PAGE_SIZE);
+  const initialPacks = await getPacks({ tcgType, offset: 0, limit: PAGE_SIZE });
 
   return (
     <>
@@ -39,16 +28,7 @@ const TcgTypePacksPage = async ({ params, searchParams }: Props) => {
         title={`${t("common.tcg_pokemon_short")} - ${t("common.packs")}`}
         icon={<RectangleStackIcon />}
       />
-      <SetGrid>
-        {sets.map((set: PokemonSet) => (
-          <SetCard
-            key={set.id}
-            set={set}
-            href={`/app/tcg/pokemon/sets/${set.originalId}`}
-          />
-        ))}
-      </SetGrid>
-      <PaginationComponent currentPage={currentPage} totalPages={totalPages} />
+      <SetsList initialSets={initialPacks} tcgType={tcgType} />
     </>
   );
 };
