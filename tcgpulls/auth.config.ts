@@ -4,6 +4,6 @@ import type { NextAuthConfig } from "next-auth";
 export default {
   providers: [Google],
   pages: {
-    signIn: "/auth/sign-in",
+    signIn: "/sign-in",
   },
 } satisfies NextAuthConfig;

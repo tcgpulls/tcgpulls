@@ -12,10 +12,14 @@ import {
 } from "@/components/catalyst-ui/sidebar";
 import { Link } from "@/components/catalyst-ui/link";
 import { HomeIcon, RectangleStackIcon } from "@heroicons/react/20/solid";
-import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
+// import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
 import { useTranslations } from "use-intl";
 
-const SidebarContent = () => {
+type Props = {
+  footer?: React.ReactNode;
+};
+
+const SidebarContent = ({ footer }: Props) => {
   const t = useTranslations("common");
 
   return (
@@ -50,13 +54,14 @@ const SidebarContent = () => {
           </SidebarItem>
         </SidebarSection>
       </SidebarBody>
-      <SidebarFooter>
+      {/* <SidebarFooter>
         <SidebarSection>
           <div className={`flex justify-end`}>
             <LanguageSwitcher />
           </div>
         </SidebarSection>
-      </SidebarFooter>
+      </SidebarFooter> */}
+      {footer && <SidebarFooter>{footer}</SidebarFooter>}
     </Sidebar>
   );
 };
