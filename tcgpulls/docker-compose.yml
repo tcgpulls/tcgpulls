@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: achampagnedev
+      POSTGRES_PASSWORD: ch40s_m3d!a_20!5
+      POSTGRES_DB: tcgpulls
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  postgres_data:

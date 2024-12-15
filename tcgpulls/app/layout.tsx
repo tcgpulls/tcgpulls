@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import NavbarContent from "@/components/navigation/NavbarContent";
@@ -24,27 +23,25 @@ const RootLayout = async ({
     <LanguageProvider language={validPreferredLocale}>
       {/* Redirect root url to default language*/}
       <ClientRedirect from={"/"} to={validPreferredLocale} />
-      <ClerkProvider>
-        <html
-          lang={locale}
-          className={`bg-white lg:bg-zinc-100 dark:bg-zinc-900 dark:lg:bg-zinc-950`}
-        >
-          <CustomHead />
-          <body className={`font-sans`}>
-            <NextIntlClientProvider
-              locale={params.language || locale}
-              messages={messages}
+      <html
+        lang={locale}
+        className={`bg-white lg:bg-zinc-100 dark:bg-zinc-900 dark:lg:bg-zinc-950`}
+      >
+        <CustomHead />
+        <body className={`font-sans`}>
+          <NextIntlClientProvider
+            locale={params.language || locale}
+            messages={messages}
+          >
+            <SidebarLayout
+              sidebar={<SidebarContent />}
+              navbar={<NavbarContent />}
             >
-              <SidebarLayout
-                sidebar={<SidebarContent />}
-                navbar={<NavbarContent />}
-              >
-                <div>{children}</div>
-              </SidebarLayout>
-            </NextIntlClientProvider>
-          </body>
-        </html>
-      </ClerkProvider>
+              <div>{children}</div>
+            </SidebarLayout>
+          </NextIntlClientProvider>
+        </body>
+      </html>
     </LanguageProvider>
   );
 };

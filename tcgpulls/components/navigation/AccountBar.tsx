@@ -1,16 +1,18 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { signIn } from "@/auth";
 
 type Props = {};
 
 const AccountBar = ({}: Props) => {
   return (
-    <div className={`flex items-center`}>
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
+    <div>
+      <form
+        action={async () => {
+          "use server";
+          await signIn("google");
+        }}
+      >
+        <button type="submit">Signin with Google</button>
+      </form>
     </div>
   );
 };
