@@ -10,7 +10,6 @@ import {
   SidebarLabel,
   SidebarSection,
 } from "@/components/catalyst-ui/sidebar";
-import AccountBar from "@/components/navigation/AccountBar";
 import { Link } from "@/components/catalyst-ui/link";
 import { HomeIcon, RectangleStackIcon } from "@heroicons/react/20/solid";
 import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
@@ -35,16 +34,25 @@ const SidebarContent = () => {
         </SidebarSection>
         <SidebarSection>
           <SidebarHeading>{t("tcg")}</SidebarHeading>
-          <SidebarItem href={`/app/tcg/pokemon/sets`}>
+          <SidebarItem href={`/app/tcg/pokemon`}>
             <RectangleStackIcon />
             <SidebarLabel>{t("tcg_pokemon_short")}</SidebarLabel>
+          </SidebarItem>
+          <SidebarItem href={`/app/tcg/pokemon/packs`} className={`pl-8`}>
+            <SidebarLabel className={`text-xs text-zinc-300`}>
+              {t("packs")}
+            </SidebarLabel>
+          </SidebarItem>
+          <SidebarItem href={`/app/tcg/pokemon/sets`} className={`pl-8`}>
+            <SidebarLabel className={`text-xs text-zinc-300`}>
+              {t("sets")}
+            </SidebarLabel>
           </SidebarItem>
         </SidebarSection>
       </SidebarBody>
       <SidebarFooter>
         <SidebarSection>
-          <div className={`flex justify-between`}>
-            <AccountBar />
+          <div className={`flex justify-end`}>
             <LanguageSwitcher />
           </div>
         </SidebarSection>

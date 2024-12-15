@@ -8,7 +8,10 @@ const POKEMONTCG_API_BASE_URL = "https://api.pokemontcg.io/v2";
  * @param retries - The number of retries to attempt if the fetch fails.
  * @returns An array of Pokémon sets.
  */
-export async function fetchPokemonSets(language: string, retries: number = 3) {
+export async function fetchPokemonTcgApiSets(
+  language: string,
+  retries: number = 3,
+) {
   const baseUrl = `${POKEMONTCG_API_BASE_URL}/sets`;
   const timeout = 30000; // Increase timeout to 30 seconds (30000ms)
 

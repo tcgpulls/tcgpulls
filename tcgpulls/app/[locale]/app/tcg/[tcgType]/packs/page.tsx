@@ -16,13 +16,13 @@ interface Props {
   searchParams: SearchParamsT;
 }
 
-const TcgTypeSetsPage = async ({ params, searchParams }: Props) => {
+const TcgTypePacksPage = async ({ params, searchParams }: Props) => {
   const { tcgType } = await params;
   const { page } = await searchParams;
   const t = await getTranslations();
   const { currentPage, offset } = getPagination(page, 0, PAGE_SIZE);
 
-  const response = await axiosInstance.get(`/api/public/tcg/${tcgType}/sets`, {
+  const response = await axiosInstance.get(`/api/public/tcg/${tcgType}/packs`, {
     params: {
       tcg_language: "en",
       limit: PAGE_SIZE,
@@ -32,10 +32,11 @@ const TcgTypeSetsPage = async ({ params, searchParams }: Props) => {
 
   const { data: sets, total } = response.data;
   const { totalPages } = getPagination(page, total, PAGE_SIZE);
+
   return (
     <>
       <PageHeader
-        title={`${t("common.tcg_pokemon_short")} - ${t("common.sets")}`}
+        title={`${t("common.tcg_pokemon_short")} - ${t("common.packs")}`}
         icon={<RectangleStackIcon />}
       />
       <SetGrid>
@@ -52,4 +53,4 @@ const TcgTypeSetsPage = async ({ params, searchParams }: Props) => {
   );
 };
 
-export default TcgTypeSetsPage;
+export default TcgTypePacksPage;

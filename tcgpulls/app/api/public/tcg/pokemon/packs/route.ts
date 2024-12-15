@@ -23,20 +23,21 @@ export async function GET(request: Request) {
       sortOrder,
       limit,
       offset,
+      isBoosterPack: true, // Only fetch booster packs
     });
 
     if (sets.length === 0) {
       return NextResponse.json(
-        { message: `No sets found for language: ${tcg_language}` },
+        { message: `No packs found for language: ${tcg_language}` },
         { status: 404 },
       );
     }
 
     return NextResponse.json({ data: sets, total });
   } catch (error) {
-    console.error("Error fetching Pokémon sets:", error);
+    console.error("Error fetching Pokémon packs:", error);
     return NextResponse.json(
-      { error: "Failed to fetch Pokémon sets from database." },
+      { error: "Failed to fetch Pokémon packs from database." },
       { status: 500 },
     );
   }
