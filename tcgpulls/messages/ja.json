@@ -1,0 +1,50 @@
+{
+  "common": {
+    "company": "tcgpulls.xyz",
+    "loading": "ロード中",
+    "home": "ホームページ",
+    "tcg": "トレーディングカードゲーム",
+    "pack": "パック",
+    "packs": "パック",
+    "set": "弾",
+    "sets": "弾",
+    "pokemon": "ポケモン",
+    "one_piece": "ワンピース",
+    "tcg_pokemon": "ポケモンカードゲーム",
+    "tcg_pokemon_short": "ポケカ",
+    "tcg_one_piece": "ワンピースカードゲーム",
+    "tcg_one_piece_short": "ワンピカ",
+    "metadata": {
+      "title": "tcgpulls.xyz",
+      "description": "TCGパックの開封結果や出現率を一元管理！"
+    }
+  },
+  "landing_page": {
+    "title": "tcgpulls.xyzへようこそ",
+    "metadata": {
+      "title": "ホームページ - tcgpulls.xyz",
+      "description": "TCGパックの開封結果や出現率を一元管理！"
+    }
+  },
+  "app_page": {
+    "title": "tcgpulls.xyzへようこそ",
+    "metadata": {
+      "title": "アップリ - tcgpulls.xyz",
+      "description": "TCGパックの開封結果や出現率を一元管理！"
+    }
+  },
+  "tcg_page": {
+    "title": "トレーディングカードゲーム",
+    "metadata": {
+      "title": "拡張パック - tcgpulls.xyz",
+      "description": "TCGパックの開封結果や出現率を一元管理！"
+    }
+  },
+  "sets_page": {
+    "title": "拡張パック",
+    "metadata": {
+      "title": "拡張パック - tcgpulls.xyz",
+      "description": "TCGパックの開封結果や出現率を一元管理！"
+    }
+  }
+}

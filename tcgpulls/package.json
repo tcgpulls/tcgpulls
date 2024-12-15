@@ -4,21 +4,25 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
+    "next:clear": "rm -rf .next",
     "prisma:generate": "dotenv -e .env.local -- npx prisma generate",
     "prisma:studio": "dotenv -e .env.local -- npx prisma studio",
     "prisma:db-migrate-dev": "dotenv -e .env.local -- npx prisma migrate dev",
+    "prisma:db-pull": "dotenv -e .env.local -- npx prisma db pull",
     "prisma:db-reset": "dotenv -e .env.local -- npx prisma migrate reset --force",
-    "pokemon:fetch-store-sets": "dotenv -e .env.local -- tsx scripts/fetchAndStorePokemonSets.ts",
-    "pokemon:fetch-store-sets-with-image": "dotenv -e .env.local -- tsx scripts/fetchAndStorePokemonSets.ts -- --forceImageDownload",
-    "pokemon:clear-sets": "dotenv -e .env.local -- tsx scripts/clearPokemonSets.ts"
+    "pokemon:fetch-store-sets": "dotenv -e .env.local -- npx tsx scripts/fetchAndStorePokemonSets.ts",
+    "pokemon:fetch-store-sets-with-image": "dotenv -e .env.local -- npx tsx scripts/fetchAndStorePokemonSets.ts -- --forceImageDownload",
+    "pokemon:clear-sets": "dotenv -e .env.local -- tsx scripts/clearPokemonSets.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
+    "@formatjs/intl-localematcher": "^0.5.9",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@playwright/test": "^1.49.0",
@@ -28,13 +32,13 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.13.1",
     "js-cookie": "^3.0.5",
-    "next": "15.0.3",
+    "next": "15.1.0",
     "next-auth": "^5.0.0-beta.25",
-    "next-intl": "^3.25.3",
+    "next-intl": "^3.26.1",
     "pg": "^8.13.1",
     "playwright": "^1.49.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",

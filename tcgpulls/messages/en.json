@@ -2,19 +2,49 @@
   "common": {
     "company": "tcgpulls.xyz",
     "loading": "Loading",
+    "home": "Home",
     "tcg": "Trading Card Games",
+    "pack": "Pack",
+    "packs": "Packs",
+    "set": "Set",
+    "sets": "Sets",
     "pokemon": "Pokémon",
     "one_piece": "One Piece",
     "tcg_pokemon": "Pokémon Trading Card Game",
-    "tcg_one_piece": "One Piece Trading Card Game"
+    "tcg_pokemon_short": "Pokémon TCG",
+    "tcg_one_piece": "One Piece Trading Card Game",
+    "tcg_one_piece_short": "One Piece TCG",
+    "metadata": {
+      "title": "tcgpulls.xyz",
+      "description": "Get your TCG pack pulls and pull rates all in one place!"
+    }
   },
-  "sidebar_component": {
-    "home": "Home"
+  "landing_page": {
+    "title": "Welcome to tcgpulls.xyz",
+    "metadata": {
+      "title": "Home - tcgpulls.xyz",
+      "description": "Get your TCG pack pulls and pull rates all in one place!"
+    }
   },
-  "home_page": {
-    "title": "Welcome to tcgpulls.xyz"
+  "app_page": {
+    "title": "Welcome to tcgpulls.xyz",
+    "metadata": {
+      "title": "App - tcgpulls.xyz",
+      "description": "Get your TCG pack pulls and pull rates all in one place!"
+    }
   },
   "tcg_page": {
-    "title": "Trading Card Games"
+    "title": "Trading Card Games",
+    "metadata": {
+      "title": "Trading Card Games - tcgpulls.xyz",
+      "description": "Get your TCG pack pulls and pull rates all in one place!"
+    }
+  },
+  "sets_page": {
+    "title": "Sets",
+    "metadata": {
+      "title": "Sets - tcgpulls.xyz",
+      "description": "Get your TCG pack pulls and pull rates all in one place!"
+    }
   }
 }
