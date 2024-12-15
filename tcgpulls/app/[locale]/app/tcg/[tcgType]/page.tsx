@@ -4,21 +4,26 @@ import Card from "@/components/misc/Card";
 import { UrlParamsT } from "@/types/Params";
 import { getTranslations } from "next-intl/server";
 
-const SetsPage = async () => {
-  const t = await getTranslations("sets_page");
+const TcgTypePage = async () => {
+  const t = await getTranslations();
 
   return (
-    <>
-      <Link href={`/app/tcg/pokemon/sets`}>
+    <div className={`flex flex-col gap-4`}>
+      <Link href={`/app/tcg/pokemon/packs`}>
         <Card isClickable={true}>
-          <p>{t("title")}</p>
+          <p>{t("common.packs")}</p>
         </Card>
       </Link>
-    </>
+      <Link href={`/app/tcg/pokemon/sets`}>
+        <Card isClickable={true}>
+          <p>{t("common.sets")}</p>
+        </Card>
+      </Link>
+    </div>
   );
 };
 
-export default SetsPage;
+export default TcgTypePage;
 
 export async function generateMetadata({
   params,

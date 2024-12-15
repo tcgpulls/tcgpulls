@@ -1,9 +1,8 @@
-import { fetchPokemonSets } from "@/lib/pokemontcg";
+import { fetchPokemonTcgApiSets } from "@/lib/PokemonTcgApi";
 import { prisma } from "@/lib/prisma";
 import path from "path";
 import { downloadImage } from "@/utils/downloadImage";
 import { ensureDirectoryExists } from "@/utils/ensureDirectoryExists";
-import { PokemonSet } from "@prisma/client";
 import { PokemonTCGSetT } from "@/types/PokemonTCG";
 import { fileExists } from "@/utils/fileExists";
 
@@ -13,15 +12,7 @@ const languages = ["en"];
 const logoDir = path.join(process.cwd(), "public/img/sets/logo");
 const symbolDir = path.join(process.cwd(), "public/img/sets/symbol");
 
-// Filter out sets that aren't booster packs like promos, etc.
-const setFilteringUtility = (set: PokemonSet) => {
-  if (!set.ptcgoCode) return false;
-  return !["PR", "FUT", "BP", "SVE"].some((prefix) =>
-    set.ptcgoCode?.startsWith(prefix),
-  );
-};
-
-// Define main set-subset relationships
+// Define main set-subset relationships so that we know which ones have to be queried together
 const setMainSetSubsetRelationships: { [key: string]: string } = {
   swsh45: "swsh45sv", // Shining Fates -> Shining Fates Shiny Vault
   cel25: "cel25c", // Celebrations -> Celebrations Classic Collection
@@ -32,6 +23,21 @@ const setMainSetSubsetRelationships: { [key: string]: string } = {
   swsh12pt5: "swsh12pt5gg", // Crown Zenith -> Crown Zenith Galarian Gallery
 };
 
+// Mark all sets so that we know which ones are booster packs
+// Booster Packs are sets that can be purchased in stores
+// This includes subsets, and special sets like promos
+const isBoosterPackUtility = (set: PokemonTCGSetT) => {
+  if (Object.values(setMainSetSubsetRelationships).includes(set.id)) {
+    return false; // Subsets are always non-booster packs
+  }
+
+  if (!set.ptcgoCode) return false;
+
+  return !["PR", "FUT", "BP", "SVE"].some((prefix) =>
+    set.ptcgoCode.startsWith(prefix),
+  );
+};
+
 async function fetchAndStorePokemonSets(forceImageDownload = false) {
   try {
     ensureDirectoryExists(logoDir);
@@ -39,7 +45,7 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
 
     for (const language of languages) {
       console.log(`Fetching sets for language: ${language}...`);
-      const sets = await fetchPokemonSets(language);
+      const sets = await fetchPokemonTcgApiSets(language);
 
       if (!sets || sets.length === 0) {
         console.warn(`No sets found for language: ${language}`);
@@ -48,11 +54,9 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
 
       console.log(`Fetched ${sets.length} sets for language: ${language}`);
 
-      const filteredSets = sets.filter(setFilteringUtility);
-
       // Deduplicate sets
       const uniqueSets = new Map();
-      filteredSets.forEach((set) => {
+      sets.forEach((set) => {
         const uniqueId = `${language}-${set.id}`;
         if (!uniqueSets.has(uniqueId)) {
           uniqueSets.set(uniqueId, set);
@@ -87,6 +91,8 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
         const logoFilename = `logo-${set.id}-${language}.png`;
         const symbolFilename = `symbol-${set.id}-${language}.png`;
 
+        const isBoosterPack = isBoosterPackUtility(set);
+
         // Upsert the set in the database
         await prisma.pokemonSet.upsert({
           where: {
@@ -119,6 +125,7 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
                   },
                 }
               : undefined,
+            isBoosterPack,
           },
           create: {
             originalId: set.id,
@@ -146,6 +153,7 @@ async function fetchAndStorePokemonSets(forceImageDownload = false) {
                   },
                 }
               : undefined,
+            isBoosterPack,
           },
         });
 

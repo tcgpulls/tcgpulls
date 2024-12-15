@@ -26,7 +26,7 @@ const LanguageSwitcher = () => {
   };
 
   return (
-    <Field className="flex">
+    <Field>
       <Select name="language" value={locale} onChange={handleChange}>
         {i18n.locales.map((loc) => (
           <option value={loc.value} key={loc.value}>

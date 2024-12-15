@@ -54,21 +54,22 @@ model VerificationToken {
 }
 
 model PokemonSet {
-  id           String       @id @default(cuid())
-  name         String
-  language     String
-  releaseDate  DateTime
-  originalId   String
-  printedTotal Int
-  ptcgoCode    String?
-  series       String
-  total        Int
-  updatedAt    DateTime     @updatedAt
-  logo         String
-  symbol       String
-  parentSetId  String?
-  parentSet    PokemonSet?  @relation("Subsets", fields: [parentSetId], references: [id])
-  subsets      PokemonSet[] @relation("Subsets")
+  id            String       @id @default(cuid())
+  name          String
+  language      String
+  releaseDate   DateTime
+  originalId    String
+  printedTotal  Int
+  ptcgoCode     String?
+  series        String
+  total         Int
+  updatedAt     DateTime     @updatedAt
+  logo          String
+  symbol        String
+  parentSetId   String?
+  parentSet     PokemonSet?  @relation("Subsets", fields: [parentSetId], references: [id])
+  subsets       PokemonSet[] @relation("Subsets")
+  isBoosterPack Boolean      @default(true) // New field with default value
 
   @@unique([originalId, language])
 }
