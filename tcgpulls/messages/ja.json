@@ -17,6 +17,9 @@
     "metadata": {
       "title": "tcgpulls.xyz",
       "description": "TCGパックの開封結果や出現率を一元管理！"
+    },
+    "footer": {
+      "copyright": "本ウェブサイトは、任天堂または株式会社ポケモンによって制作、承認、サポート、または提携されているものではありません。"
     }
   },
   "landing_page": {
