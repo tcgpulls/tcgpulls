@@ -54,7 +54,7 @@ model VerificationToken {
 }
 
 model PokemonSet {
-  id            String       @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String
   language      String
   releaseDate   DateTime
@@ -63,13 +63,79 @@ model PokemonSet {
   ptcgoCode     String?
   series        String
   total         Int
-  updatedAt     DateTime     @updatedAt
-  logo          String
-  symbol        String
+  updatedAt     DateTime      @updatedAt
+  logo          String // Original URL from API
+  symbol        String // Original URL from API
+  localLogo     String? // Local path after download
+  localSymbol   String? // Local path after download
   parentSetId   String?
-  parentSet     PokemonSet?  @relation("Subsets", fields: [parentSetId], references: [id])
-  subsets       PokemonSet[] @relation("Subsets")
-  isBoosterPack Boolean      @default(true) // New field with default value
+  parentSet     PokemonSet?   @relation("Subsets", fields: [parentSetId], references: [id])
+  subsets       PokemonSet[]  @relation("Subsets")
+  isBoosterPack Boolean       @default(true)
+  PokemonCards  PokemonCard[]
 
   @@unique([originalId, language])
+}
+
+model PokemonCard {
+  id         String     @id @default(cuid())
+  setId      String
+  set        PokemonSet @relation(fields: [setId], references: [id])
+  originalId String
+  variant    String     @default("normal")
+
+  name                   String
+  supertype              String
+  subtypes               String[]
+  hp                     Int?
+  types                  String[]
+  evolvesFrom            String?
+  flavorText             String?
+  number                 String
+  artist                 String?
+  rarity                 String?
+  nationalPokedexNumbers Int[]
+  imagesSmall            String // original URL
+  imagesLarge            String // original URL
+  localImageSmall        String? // local path after download
+  localImageLarge        String? // local path after download
+  retreatCost            String[]
+  convertedRetreatCost   Int?
+
+  abilities  PokemonCardAbility[]
+  attacks    PokemonCardAttack[]
+  weaknesses PokemonCardWeakness[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([setId, originalId, variant])
+}
+
+model PokemonCardAbility {
+  id     String      @id @default(cuid())
+  card   PokemonCard @relation(fields: [cardId], references: [id])
+  cardId String
+  name   String
+  text   String
+  type   String
+}
+
+model PokemonCardAttack {
+  id                  String      @id @default(cuid())
+  card                PokemonCard @relation(fields: [cardId], references: [id])
+  cardId              String
+  name                String
+  cost                String[]
+  convertedEnergyCost Int
+  damage              String?
+  text                String?
+}
+
+model PokemonCardWeakness {
+  id     String      @id @default(cuid())
+  card   PokemonCard @relation(fields: [cardId], references: [id])
+  cardId String
+  type   String
+  value  String
 }
