@@ -4,6 +4,7 @@ import delayPromise from "@/utils/delayPromise";
 import { PutObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "@/lib/r2client";
 import pLimit from "p-limit";
+import sharp from "sharp";
 
 const args = process.argv.slice(2);
 const forceUpload = args.includes("--force"); // Parse the --force flag
@@ -69,9 +70,9 @@ const limit = pLimit(CONCURRENCY_LIMIT);
 
       const tasks = [];
 
-      // Small Image
+      // Note: now we use .jpg instead of .png
       if (card.imagesSmall) {
-        const smallFilename = `${card.number}-${card.variant}-small.png`;
+        const smallFilename = `${card.number}-${card.variant}-small.jpg`;
         const imgFilePath = `${imgBasePath}/${card.set.language}/${card.set.originalId}/${smallFilename}`;
         tasks.push(
           limit(() =>
@@ -87,9 +88,8 @@ const limit = pLimit(CONCURRENCY_LIMIT);
         );
       }
 
-      // Large Image
       if (card.imagesLarge) {
-        const largeFilename = `${card.number}-${card.variant}-large.png`;
+        const largeFilename = `${card.number}-${card.variant}-large.jpg`;
         const imgFilePath = `${imgBasePath}/${card.set.language}/${card.set.originalId}/${largeFilename}`;
         tasks.push(
           limit(() =>
@@ -138,7 +138,7 @@ const limit = pLimit(CONCURRENCY_LIMIT);
             "warn",
             `❌ 404 Not Found: ${description}. Clearing DB field.`,
           );
-          await updateDb404(); // Update DB to empty string
+          await updateDb404();
           failedImages.push({
             id: "unknown",
             name: description,
@@ -152,16 +152,17 @@ const limit = pLimit(CONCURRENCY_LIMIT);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Get Content-Type dynamically from response headers
-        const contentType =
-          response.headers.get("Content-Type") || "application/octet-stream";
-        const imageBuffer = Buffer.from(await response.arrayBuffer());
+        // Convert image to JPG using sharp
+        const originalBuffer = Buffer.from(await response.arrayBuffer());
+        const jpgBuffer = await sharp(originalBuffer)
+          .jpeg({ quality: 85 })
+          .toBuffer();
 
-        // Upload to R2 with dynamic Content-Type
-        await uploadToR2(imgFilePath, imageBuffer, contentType);
+        // Upload to R2 as image/jpeg
+        await uploadToR2(imgFilePath, jpgBuffer, "image/jpeg");
         await updateDbSuccess();
 
-        customLog(`✅ Uploaded ${description} (${contentType})`);
+        customLog(`✅ Uploaded ${description} (image/jpeg)`);
         if (imgFilePath.includes("-small")) totalSmallImagesDownloaded++;
         if (imgFilePath.includes("-large")) totalLargeImagesDownloaded++;
         return;

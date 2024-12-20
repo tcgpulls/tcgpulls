@@ -20,6 +20,8 @@
     "pokemon:fetch-store-cards": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndStorePokemonSetCards.ts -- ",
     "pokemon:fetch-upload-cards-images": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndUploadToStoragePokemonSetCardsImages.ts -- ",
     "pokemon:clear-data": "dotenv -e .env.local -- tsx scripts/pokemon/clearPokemonData.ts",
+    "images:swap-png-to-jpg": "dotenv -e .env.local -- tsx scripts/convertAllPngToJpg.ts -- ",
+    "images:remove-unused-from-storage": "dotenv -e .env.local -- tsx scripts/removeUnusedImagesFromStorage.ts -- ",
     "prepare": "husky"
   },
   "dependencies": {
@@ -39,7 +41,8 @@
     "p-limit": "^6.1.0",
     "playwright": "^1.49.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",

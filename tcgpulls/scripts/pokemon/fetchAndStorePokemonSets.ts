@@ -2,9 +2,9 @@ import { fetchPokemonTcgApiSets } from "@/lib/PokemonTcgApi/fetchPokemonTcgApiSe
 import { prisma } from "@/lib/prisma";
 import { PokemonTCGSetT } from "@/types/PokemonTCG";
 import customLog from "@/utils/customLog";
+import pLimit from "p-limit";
 
 const languages = ["en"];
-
 const args = process.argv.slice(2);
 const force = args.includes("--force");
 const setIdArg = args.find((arg) => arg.startsWith("--setId="));
@@ -29,6 +29,10 @@ const isBoosterPackUtility = (set: PokemonTCGSetT) => {
     set.ptcgoCode.startsWith(prefix),
   );
 };
+
+// Adjust concurrency limit as needed
+const CONCURRENCY_LIMIT = 10;
+const limit = pLimit(CONCURRENCY_LIMIT);
 
 async function fetchAndStorePokemonSets() {
   let totalSetsProcessed = 0;
@@ -168,9 +172,13 @@ async function fetchAndStorePokemonSets() {
         }
       };
 
-      for (const set of filteredSets) {
-        await createOrUpdateSet(set);
-      }
+      // Create tasks for all sets in this language batch
+      const tasks = filteredSets.map((set) =>
+        limit(() => createOrUpdateSet(set)),
+      );
+
+      // Wait for all tasks (sets) to complete
+      await Promise.all(tasks);
 
       customLog(`🎉 Successfully processed sets for language: ${language}`);
     }

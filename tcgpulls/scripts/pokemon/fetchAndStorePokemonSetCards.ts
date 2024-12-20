@@ -1,6 +1,7 @@
 import { fetchPokemonTcgApiSetCards } from "@/lib/PokemonTcgApi/fetchPokemonTcgApiSetCards";
 import customLog from "@/utils/customLog";
 import { prisma } from "@/lib/prisma";
+import pLimit from "p-limit";
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -9,6 +10,9 @@ const setIdArg = args.find((arg) => arg.startsWith("--setId="));
 const cardIdArg = args.find((arg) => arg.startsWith("--cardId="));
 const specifiedSetId = setIdArg ? setIdArg.split("=")[1] : null;
 const specifiedCardId = cardIdArg ? cardIdArg.split("=")[1] : null;
+
+const CONCURRENCY_LIMIT = 10; // Adjust as needed
+const limit = pLimit(CONCURRENCY_LIMIT);
 
 async function fetchAndStorePokemonSetCards() {
   let totalSetsProcessed = 0;
@@ -71,6 +75,9 @@ async function fetchAndStorePokemonSetCards() {
         }
       }
 
+      // We'll accumulate tasks and run them concurrently
+      const tasks: Promise<void>[] = [];
+
       for (const card of cardsData) {
         const hp =
           card.hp && !isNaN(parseInt(card.hp)) ? parseInt(card.hp) : null;
@@ -99,106 +106,119 @@ async function fetchAndStorePokemonSetCards() {
         const variantKeys = card.tcgplayer?.prices
           ? Object.keys(card.tcgplayer.prices)
           : [];
-        const allVariants = [
-          "normal",
-          ...variantKeys.filter((k) => k !== "normal"),
-        ];
+
+        // Determine variants:
+        let allVariants;
+        if (variantKeys.length === 0) {
+          // No variants from tcgplayer
+          allVariants = ["normal"];
+        } else {
+          // Use them as is from tcgplayer
+          allVariants = variantKeys;
+        }
 
         for (const variantKey of allVariants) {
-          try {
-            // Check if card already exists
-            const existingCard = await prisma.pokemonCard.findUnique({
-              where: {
-                setId_originalId_variant: {
-                  setId: set.id,
-                  originalId: card.id,
-                  variant: variantKey,
-                },
-              },
-            });
+          tasks.push(
+            limit(async () => {
+              try {
+                // Check if card already exists
+                const existingCard = await prisma.pokemonCard.findUnique({
+                  where: {
+                    setId_originalId_variant: {
+                      setId: set.id,
+                      originalId: card.id,
+                      variant: variantKey,
+                    },
+                  },
+                });
 
-            if (existingCard && !force) {
-              customLog(
-                `⏭️ Skipping existing card: ${card.name} (${card.id} - ${variantKey}) in set: ${set.name}`,
-              );
-              totalCardsSkipped++;
-              continue;
-            }
+                if (existingCard && !force) {
+                  customLog(
+                    `⏭️ Skipping existing card: ${card.name} (${card.id} - ${variantKey}) in set: ${set.name}`,
+                  );
+                  totalCardsSkipped++;
+                  return;
+                }
 
-            // Force overwrite: delete existing relations
-            if (force && existingCard) {
-              await prisma.pokemonCardAbility.deleteMany({
-                where: { cardId: existingCard.id },
-              });
-              await prisma.pokemonCardAttack.deleteMany({
-                where: { cardId: existingCard.id },
-              });
-              await prisma.pokemonCardWeakness.deleteMany({
-                where: { cardId: existingCard.id },
-              });
-            }
+                // Force overwrite: delete existing relations
+                if (force && existingCard) {
+                  await prisma.pokemonCardAbility.deleteMany({
+                    where: { cardId: existingCard.id },
+                  });
+                  await prisma.pokemonCardAttack.deleteMany({
+                    where: { cardId: existingCard.id },
+                  });
+                  await prisma.pokemonCardWeakness.deleteMany({
+                    where: { cardId: existingCard.id },
+                  });
+                }
 
-            const abilitiesData = (card.abilities || []).map(
-              (ability: any) => ({
-                name: ability.name,
-                text: ability.text,
-                type: ability.type,
-              }),
-            );
+                const abilitiesData = (card.abilities || []).map(
+                  (ability: any) => ({
+                    name: ability.name,
+                    text: ability.text,
+                    type: ability.type,
+                  }),
+                );
 
-            const attacksData = (card.attacks || []).map((attack: any) => ({
-              name: attack.name,
-              cost: attack.cost || [],
-              convertedEnergyCost: attack.convertedEnergyCost,
-              damage: attack.damage || null,
-              text: attack.text || null,
-            }));
+                const attacksData = (card.attacks || []).map((attack: any) => ({
+                  name: attack.name,
+                  cost: attack.cost || [],
+                  convertedEnergyCost: attack.convertedEnergyCost,
+                  damage: attack.damage || null,
+                  text: attack.text || null,
+                }));
 
-            const weaknessesData = (card.weaknesses || []).map(
-              (weakness: any) => ({
-                type: weakness.type,
-                value: weakness.value,
-              }),
-            );
+                const weaknessesData = (card.weaknesses || []).map(
+                  (weakness: any) => ({
+                    type: weakness.type,
+                    value: weakness.value,
+                  }),
+                );
 
-            // Insert or update card
-            const upsertedCard = await prisma.pokemonCard.upsert({
-              where: {
-                setId_originalId_variant: {
-                  setId: set.id,
-                  originalId: card.id,
-                  variant: variantKey,
-                },
-              },
-              update: {
-                ...baseCardData,
-                variant: variantKey,
-                abilities: { create: abilitiesData },
-                attacks: { create: attacksData },
-                weaknesses: { create: weaknessesData },
-              },
-              create: {
-                ...baseCardData,
-                variant: variantKey,
-                abilities: { create: abilitiesData },
-                attacks: { create: attacksData },
-                weaknesses: { create: weaknessesData },
-              },
-            });
+                // Insert or update card
+                const upsertedCard = await prisma.pokemonCard.upsert({
+                  where: {
+                    setId_originalId_variant: {
+                      setId: set.id,
+                      originalId: card.id,
+                      variant: variantKey,
+                    },
+                  },
+                  update: {
+                    ...baseCardData,
+                    variant: variantKey,
+                    abilities: { create: abilitiesData },
+                    attacks: { create: attacksData },
+                    weaknesses: { create: weaknessesData },
+                  },
+                  create: {
+                    ...baseCardData,
+                    variant: variantKey,
+                    abilities: { create: abilitiesData },
+                    attacks: { create: attacksData },
+                    weaknesses: { create: weaknessesData },
+                  },
+                });
 
-            customLog(
-              `✅ Upserted card: ${set.name} - ${upsertedCard.name} (${variantKey})`,
-            );
-            totalCardsInserted++;
-          } catch (insertError) {
-            customLog(
-              "error",
-              `❌ Error inserting card: ${set.name} - ${card.name} (${variantKey}) (id: ${card.id})`,
-              insertError,
-            );
-          }
+                customLog(
+                  `✅ Upserted card: ${set.name} - ${upsertedCard.name} (${variantKey})`,
+                );
+                totalCardsInserted++;
+              } catch (insertError) {
+                customLog(
+                  "error",
+                  `❌ Error inserting card: ${set.name} - ${card.name} (${variantKey}) (id: ${card.id})`,
+                  insertError,
+                );
+              }
+            }),
+          );
         }
       }
+
+      // Wait for all tasks for this set to complete before moving on
+      await Promise.all(tasks);
 
       totalSetsProcessed++;
       customLog(`🎯 Finished processing set: ${set.name} (${set.originalId})`);
