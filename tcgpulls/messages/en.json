@@ -17,6 +17,9 @@
     "metadata": {
       "title": "tcgpulls.xyz",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
+    },
+    "footer": {
+      "copyright": "This website is not produced, endorsed, supported, or affiliated with Nintendo or The Pokémon Company."
     }
   },
   "landing_page": {

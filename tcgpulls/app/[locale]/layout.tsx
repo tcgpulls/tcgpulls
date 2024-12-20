@@ -25,8 +25,8 @@ const LocaleLayout = async ({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
-      <body className={`font-sans`}>
+    <html lang={locale} className={`min-h-screen`}>
+      <body className={`min-h-screen font-sans`}>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

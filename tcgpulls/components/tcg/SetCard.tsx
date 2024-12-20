@@ -14,7 +14,13 @@ const SetCard = ({ set, href }: Props) => {
     <Link href={href}>
       <Card isClickable={true}>
         <Image
-          src={set.logo ? set.logo : "https://placehold.co/300x200"}
+          src={
+            set.localLogo
+              ? set.localLogo
+              : set.logo
+                ? set.logo
+                : "https://placehold.co/300x200"
+          }
           className="w-full h-40 object-contain mb-4"
           alt={`${set.name} logo - ${set.originalId}`}
           width={300}
