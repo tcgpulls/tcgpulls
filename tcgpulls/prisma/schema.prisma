@@ -4,10 +4,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // or mysql / sqlite / cockroachdb
   url      = env("DATABASE_URL")
 }
 
+// =========================
+// User Models (Unchanged)
+// =========================
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -59,23 +62,121 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
+// =========================
+// PokemonSet
+// =========================
 model PokemonSet {
-  id            String       @id @default(cuid())
-  name          String
-  language      String
-  releaseDate   DateTime
-  originalId    String
-  printedTotal  Int
-  ptcgoCode     String?
-  series        String
-  total         Int
-  updatedAt     DateTime     @updatedAt
-  logo          String
-  symbol        String
-  parentSetId   String?
-  parentSet     PokemonSet?  @relation("Subsets", fields: [parentSetId], references: [id])
-  subsets       PokemonSet[] @relation("Subsets")
-  isBoosterPack Boolean      @default(true) // New field with default value
+  // Internal PK
+  id String @id @default(cuid())
 
-  @@unique([originalId, language])
+  // Name field (restored)
+  name String
+
+  // External TCG code, e.g. "swsh1"
+  setId        String
+  language     String
+  releaseDate  DateTime
+  printedTotal Int
+  ptcgoCode    String?
+  series       String
+  total        Int
+  updatedAt    DateTime @updatedAt
+  logo         String
+  symbol       String
+  localLogo    String?
+  localSymbol  String?
+
+  // Parent/subset relationship
+  parentSetId String?
+  parentSet   PokemonSet?  @relation("Subsets", fields: [parentSetId], references: [id])
+  subsets     PokemonSet[] @relation("Subsets")
+
+  isBoosterPack Boolean @default(true)
+
+  // Relation to PokemonCard
+  PokemonCards PokemonCard[]
+
+  // Ensure (setId, language) is unique
+  @@unique([setId, language])
+}
+
+// =========================
+// PokemonCard
+// =========================
+model PokemonCard {
+  // Internal PK
+  id String @id @default(cuid())
+
+  // External card code, e.g. "swsh4-25"
+  cardId String
+  setId  String
+  set    PokemonSet @relation(fields: [setId], references: [id])
+
+  variant                String   @default("normal")
+  name                   String
+  supertype              String
+  subtypes               String[]
+  hp                     Int?
+  types                  String[]
+  evolvesFrom            String?
+  flavorText             String?
+  number                 String
+  normalizedNumber       Int      @default(999)
+  artist                 String?
+  rarity                 String?
+  nationalPokedexNumbers Int[]
+  imagesSmall            String
+  imagesLarge            String
+  localImageSmall        String?
+  localImageLarge        String?
+  retreatCost            String[]
+  convertedRetreatCost   Int?
+  language               String
+
+  abilities  PokemonCardAbility[]
+  attacks    PokemonCardAttack[]
+  weaknesses PokemonCardWeakness[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // No duplicates for same (cardId, language, setId, variant)
+  @@unique([cardId, language, setId, variant])
+}
+
+// =========================
+// PokemonCardAbility
+// =========================
+model PokemonCardAbility {
+  id     String      @id @default(cuid())
+  card   PokemonCard @relation(fields: [cardId], references: [id])
+  cardId String
+  name   String
+  text   String
+  type   String
+}
+
+// =========================
+// PokemonCardAttack
+// =========================
+model PokemonCardAttack {
+  id                  String      @id @default(cuid())
+  card                PokemonCard @relation(fields: [cardId], references: [id])
+  cardId              String
+  name                String
+  cost                String[]
+  convertedEnergyCost Int
+  damage              String?
+  text                String?
+}
+
+// =========================
+// PokemonCardWeakness
+// =========================
+model PokemonCardWeakness {
+  id     String      @id @default(cuid())
+  card   PokemonCard @relation(fields: [cardId], references: [id])
+  cardId String
+  type   String
+  value  String
 }

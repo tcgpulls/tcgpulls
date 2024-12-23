@@ -1,25 +1,41 @@
 import { NextResponse } from "next/server";
 import { fetchPokemonSets } from "@/services/pokemon/fetchPokemonSets";
+import customLog from "@/utils/customLog";
+import { POKEMON_SUPPORTED_TCG_LANGUAGES } from "@/constants/tcg/pokemon";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   // Parse query parameters
-  const tcg_language = searchParams.get("tcg_language") || "en";
+  const tcgLang =
+    searchParams.get("tcgLang") || POKEMON_SUPPORTED_TCG_LANGUAGES[0];
+  const tcgCategory = searchParams.get("tcgCategory") || "sets";
+  const sortBy = searchParams.get("sortBy") || "releaseDate";
   const sortOrder = searchParams.get("sortOrder") === "asc" ? "asc" : "desc";
   const limit = parseInt(searchParams.get("limit") || "50", 10);
   const offset = parseInt(searchParams.get("offset") || "0", 10);
 
-  if (!tcg_language) {
+  if (!tcgLang) {
     return NextResponse.json(
-      { error: 'The "tcg_language" query parameter is required.' },
+      { error: 'The "tcgLang" query parameter is required.' },
       { status: 400 },
     );
   }
 
+  if (!tcgCategory) {
+    return NextResponse.json(
+      { error: 'The "tcgCategory" query parameter is required.' },
+      { status: 400 },
+    );
+  }
+
+  const isBoosterPack = tcgCategory === "booster-packs" ? true : null;
+
   try {
     const { sets, total } = await fetchPokemonSets({
-      language: tcg_language,
+      language: tcgLang,
+      isBoosterPack, // Only fetch booster packs
+      sortBy,
       sortOrder,
       limit,
       offset,
@@ -27,14 +43,14 @@ export async function GET(request: Request) {
 
     if (sets.length === 0) {
       return NextResponse.json(
-        { message: `No sets found for language: ${tcg_language}` },
+        { message: `No sets found for language: ${tcgLang}` },
         { status: 404 },
       );
     }
 
     return NextResponse.json({ data: sets, total });
   } catch (error) {
-    console.error("Error fetching Pokémon sets:", error);
+    customLog("error", "Error fetching Pokémon sets:", error);
     return NextResponse.json(
       { error: "Failed to fetch Pokémon sets from database." },
       { status: 500 },
