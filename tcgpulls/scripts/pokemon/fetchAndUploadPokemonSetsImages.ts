@@ -6,7 +6,7 @@ import { s3Client } from "@/lib/r2client";
 import pLimit from "p-limit";
 
 const args = process.argv.slice(2);
-const forceImageDownload = args.includes("--force");
+const forceImageDownload = args.includes("--force-update");
 
 const MAX_RETRIES = 3;
 const DELAY_PROMISE = 500;
@@ -29,43 +29,54 @@ const limit = pLimit(CONCURRENCY_LIMIT);
       limit(async () => {
         if (!set.logo && !set.symbol) return;
 
-        const imgBasePath = `img/tcg/pokemon/sets/${set.language}/${set.originalId}`;
+        // Use set.setId instead of setId
+        const imgBasePath = `img/tcg/pokemon/sets/${set.language}/${set.setId}`;
         let logoSkipped = false;
         let symbolSkipped = false;
 
         // Logo
         if (set.logo) {
           const logoKey = `${imgBasePath}/logo.png`;
-          if (await shouldUpload(logoKey)) {
+          const shouldUploadLogo = await shouldUpload(logoKey);
+          if (shouldUploadLogo) {
             try {
               await downloadAndUploadImage(
                 set.logo,
                 logoKey,
                 () =>
                   updateDatabase(
-                    set.originalId,
+                    set.setId,
                     set.language,
                     "localLogo",
                     `/${logoKey}`,
                   ),
-                () =>
-                  updateDatabase(set.originalId, set.language, "localLogo", ""),
-                `⬇️ Logo for set: ${set.name} - ${set.originalId}`,
+                () => updateDatabase(set.setId, set.language, "localLogo", ""),
+                `⬇️ Logo for set: ${set.name} - ${set.setId}`,
               );
               totalLogosUploaded++;
             } catch (err) {
               failedImages.push({
-                id: set.originalId,
+                id: set.setId,
                 type: "logo",
                 url: set.logo,
               });
               customLog(
                 "error",
-                `❌ Failed to upload logo for set: ${set.name} - ${set.originalId}`,
+                `❌ Failed to upload logo for set: ${set.name} - ${set.setId}`,
                 err,
               );
             }
           } else {
+            // We still want to update the DB path if skipping
+            await updateDatabase(
+              set.setId,
+              set.language,
+              "localLogo",
+              `/${logoKey}`,
+            );
+            customLog(
+              `✅ (No Download) Updated localLogo -> /${logoKey} for set: ${set.name} - ${set.setId}`,
+            );
             totalLogosSkipped++;
             logoSkipped = true;
           }
@@ -74,41 +85,47 @@ const limit = pLimit(CONCURRENCY_LIMIT);
         // Symbol
         if (set.symbol) {
           const symbolKey = `${imgBasePath}/symbol.png`;
-          if (await shouldUpload(symbolKey)) {
+          const shouldUploadSymbol = await shouldUpload(symbolKey);
+          if (shouldUploadSymbol) {
             try {
               await downloadAndUploadImage(
                 set.symbol,
                 symbolKey,
                 () =>
                   updateDatabase(
-                    set.originalId,
+                    set.setId,
                     set.language,
                     "localSymbol",
                     `/${symbolKey}`,
                   ),
                 () =>
-                  updateDatabase(
-                    set.originalId,
-                    set.language,
-                    "localSymbol",
-                    "",
-                  ),
-                `⬇️ Symbol for set: ${set.name} - ${set.originalId}`,
+                  updateDatabase(set.setId, set.language, "localSymbol", ""),
+                `⬇️ Symbol for set: ${set.name} - ${set.setId}`,
               );
               totalSymbolsUploaded++;
             } catch (err) {
               failedImages.push({
-                id: set.originalId,
+                id: set.setId,
                 type: "symbol",
                 url: set.symbol,
               });
               customLog(
                 "error",
-                `❌ Failed to upload symbol for set: ${set.name} - ${set.originalId}`,
+                `❌ Failed to upload symbol for set: ${set.name} - ${set.setId}`,
                 err,
               );
             }
           } else {
+            // We still want to update the DB path if skipping
+            await updateDatabase(
+              set.setId,
+              set.language,
+              "localSymbol",
+              `/${symbolKey}`,
+            );
+            customLog(
+              `✅ (No Download) Updated localSymbol -> /${symbolKey} for set: ${set.name} - ${set.setId}`,
+            );
             totalSymbolsSkipped++;
             symbolSkipped = true;
           }
@@ -116,12 +133,12 @@ const limit = pLimit(CONCURRENCY_LIMIT);
 
         if (logoSkipped) {
           customLog(
-            `⏭️ Logo already exists for set: ${set.name} - ${set.originalId}`,
+            `⏭️ Logo already exists for set: ${set.name} - ${set.setId}`,
           );
         }
         if (symbolSkipped) {
           customLog(
-            `⏭️ Symbol already exists for set: ${set.name} - ${set.originalId}`,
+            `⏭️ Symbol already exists for set: ${set.name} - ${set.setId}`,
           );
         }
       }),
@@ -236,16 +253,17 @@ const limit = pLimit(CONCURRENCY_LIMIT);
     );
   }
 
+  // Use (setId, language) instead of setId for updating DB
   async function updateDatabase(
-    originalId: string,
+    tcgSetId: string,
     language: string,
     field: string,
     value: string,
   ) {
     await prisma.pokemonSet.update({
       where: {
-        originalId_language: {
-          originalId,
+        setId_language: {
+          setId: tcgSetId,
           language,
         },
       },
@@ -254,9 +272,9 @@ const limit = pLimit(CONCURRENCY_LIMIT);
       },
     });
     if (value === "") {
-      customLog(`⚠️ Cleared ${field} for set ID: ${originalId}`);
+      customLog(`⚠️ Cleared ${field} for set ID: ${tcgSetId}`);
     } else {
-      customLog(`✅ Updated ${field} -> ${value} for set ID: ${originalId}`);
+      customLog(`✅ Updated ${field} -> ${value} for set ID: ${tcgSetId}`);
     }
   }
 })();
