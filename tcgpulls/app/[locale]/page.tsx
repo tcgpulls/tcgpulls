@@ -7,7 +7,7 @@ import Footer from "@/components/misc/Footer";
 import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
 
 const HomePage = async () => {
-  const t = await getTranslations("landing_page");
+  const t = await getTranslations("landing-page");
   return (
     <div className={`flex flex-col justify-between min-h-screen`}>
       <main>
@@ -32,7 +32,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({
     locale,
-    namespace: "landing_page.metadata",
+    namespace: "landing-page.metadata",
   });
 
   return {

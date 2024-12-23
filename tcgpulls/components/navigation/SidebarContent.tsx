@@ -16,6 +16,7 @@ import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
 import { useTranslations } from "use-intl";
 import { ReactNode } from "react";
 import { usePathname } from "@/i18n/routing";
+import useTcgLanguage from "@/hooks/context/useTcgLanguage";
 
 type SidebarItem = {
   href: string;
@@ -34,6 +35,7 @@ type SidebarConfig = Array<SidebarItem | SidebarSection>;
 const SidebarContent = () => {
   const t = useTranslations("common");
   const pathname = usePathname();
+  const { currentTcgLanguage } = useTcgLanguage();
 
   // Sidebar configuration
   const sidebarItems: SidebarConfig = [
@@ -46,17 +48,17 @@ const SidebarContent = () => {
       heading: t("tcg"),
       items: [
         {
-          href: "/app/tcg/pokemon",
-          label: t("tcg_pokemon_short"),
+          href: `/app/tcg/pokemon/${currentTcgLanguage}`,
+          label: t("tcg-pokemon-short"),
           icon: <RectangleStackIcon />,
         },
         {
-          href: "/app/tcg/pokemon/packs",
-          label: t("packs"),
+          href: `/app/tcg/pokemon/${currentTcgLanguage}/booster-packs`,
+          label: t("booster-packs"),
           className: "pl-8 text-xs text-zinc-300",
         },
         {
-          href: "/app/tcg/pokemon/sets",
+          href: `/app/tcg/pokemon/${currentTcgLanguage}/sets`,
           label: t("sets"),
           className: "pl-8 text-xs text-zinc-300",
         },
@@ -95,6 +97,7 @@ const SidebarContent = () => {
               <SidebarItem
                 href={section.href}
                 current={pathname === section.href}
+                className={section.className}
               >
                 {section.icon && section.icon}
                 <SidebarLabel>{section.label}</SidebarLabel>

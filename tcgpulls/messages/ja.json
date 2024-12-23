@@ -6,44 +6,50 @@
     "tcg": "トレーディングカードゲーム",
     "pack": "パック",
     "packs": "パック",
+    "booster-pack": "ブースターパック",
+    "booster-packs": "ブースターパック",
     "set": "弾",
     "sets": "弾",
     "pokemon": "ポケモン",
-    "one_piece": "ワンピース",
-    "tcg_pokemon": "ポケモンカードゲーム",
-    "tcg_pokemon_short": "ポケカ",
-    "tcg_one_piece": "ワンピースカードゲーム",
-    "tcg_one_piece_short": "ワンピカ",
+    "one-piece": "ワンピース",
+    "tcg-pokemon": "ポケモンカードゲーム",
+    "tcg-pokemon-short": "ポケカ",
+    "tcg-one-piece": "ワンピースカードゲーム",
+    "tcg-one-piece-short": "ワンピカ",
     "metadata": {
       "title": "tcgpulls.xyz",
       "description": "TCGパックの開封結果や出現率を一元管理！"
     },
     "footer": {
       "copyright": "本ウェブサイトは、任天堂または株式会社ポケモンによって制作、承認、サポート、または提携されているものではありません。"
+    },
+    "lang": {
+      "en_label": "英語",
+      "ja_label": "日本語"
     }
   },
-  "landing_page": {
+  "landing-page": {
     "title": "tcgpulls.xyzへようこそ",
     "metadata": {
       "title": "ホームページ - tcgpulls.xyz",
       "description": "TCGパックの開封結果や出現率を一元管理！"
     }
   },
-  "app_page": {
+  "app-page": {
     "title": "tcgpulls.xyzへようこそ",
     "metadata": {
       "title": "アップリ - tcgpulls.xyz",
       "description": "TCGパックの開封結果や出現率を一元管理！"
     }
   },
-  "tcg_page": {
+  "tcg-page": {
     "title": "トレーディングカードゲーム",
     "metadata": {
       "title": "拡張パック - tcgpulls.xyz",
       "description": "TCGパックの開封結果や出現率を一元管理！"
     }
   },
-  "sets_page": {
+  "sets-page": {
     "title": "拡張パック",
     "metadata": {
       "title": "拡張パック - tcgpulls.xyz",

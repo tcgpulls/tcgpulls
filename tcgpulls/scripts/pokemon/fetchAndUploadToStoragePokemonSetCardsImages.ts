@@ -7,7 +7,7 @@ import pLimit from "p-limit";
 import sharp from "sharp";
 
 const args = process.argv.slice(2);
-const forceUpload = args.includes("--force"); // Parse the --force flag
+const forceUpload = args.includes("--force-update");
 const BATCH_SIZE = 500;
 const MAX_RETRIES = 3;
 const DELAY_PROMISE = 500;
@@ -64,25 +64,35 @@ const limit = pLimit(CONCURRENCY_LIMIT);
   }
 
   async function processCards(cards: any[]) {
+    // We'll store images in: img/tcg/pokemon/sets/<language>/<setId>/
     const imgBasePath = "img/tcg/pokemon/sets";
+
     const uploadTasks = cards.flatMap((card) => {
       if (!card.imagesSmall && !card.imagesLarge) return [];
 
       const tasks = [];
 
-      // Note: now we use .jpg instead of .png
+      // We’ll place small/large images in the folder named after card.set.setId
+      // e.g., /img/tcg/pokemon/sets/en/swsh1/45-normal-small.jpg
       if (card.imagesSmall) {
         const smallFilename = `${card.number}-${card.variant}-small.jpg`;
-        const imgFilePath = `${imgBasePath}/${card.set.language}/${card.set.originalId}/${smallFilename}`;
+        const imgFilePath = `${imgBasePath}/${card.set.language}/${card.set.setId}/${smallFilename}`;
         tasks.push(
           limit(() =>
             downloadAndUploadImage(
               card.imagesSmall,
               imgFilePath,
-              () =>
-                updateDatabase(card.id, "localImageSmall", `/${imgFilePath}`),
-              () => updateDatabase(card.id, "localImageSmall", ""), // Empty string for 404
-              `Small image: ${smallFilename} for card: ${card.set.originalId} - ${card.name}`,
+              async () => {
+                await updateDatabase(
+                  card.id,
+                  "localImageSmall",
+                  `/${imgFilePath}`,
+                );
+              },
+              async () => {
+                await updateDatabase(card.id, "localImageSmall", "");
+              },
+              `Small image: ${smallFilename} for card: ${card.set.setId} - ${card.name}`,
             ),
           ),
         );
@@ -90,16 +100,23 @@ const limit = pLimit(CONCURRENCY_LIMIT);
 
       if (card.imagesLarge) {
         const largeFilename = `${card.number}-${card.variant}-large.jpg`;
-        const imgFilePath = `${imgBasePath}/${card.set.language}/${card.set.originalId}/${largeFilename}`;
+        const imgFilePath = `${imgBasePath}/${card.set.language}/${card.set.setId}/${largeFilename}`;
         tasks.push(
           limit(() =>
             downloadAndUploadImage(
               card.imagesLarge,
               imgFilePath,
-              () =>
-                updateDatabase(card.id, "localImageLarge", `/${imgFilePath}`),
-              () => updateDatabase(card.id, "localImageLarge", ""), // Empty string for 404
-              `Large image: ${largeFilename} for card: ${card.set.originalId} - ${card.name}`,
+              async () => {
+                await updateDatabase(
+                  card.id,
+                  "localImageLarge",
+                  `/${imgFilePath}`,
+                );
+              },
+              async () => {
+                await updateDatabase(card.id, "localImageLarge", "");
+              },
+              `Large image: ${largeFilename} for card: ${card.set.setId} - ${card.name}`,
             ),
           ),
         );
@@ -120,11 +137,15 @@ const limit = pLimit(CONCURRENCY_LIMIT);
   ) {
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
-        // Check if the file exists unless --force is used
+        // Check if file already exists on R2 unless --force-update is used
         if (!forceUpload) {
           const exists = await checkIfFileExists(imgFilePath);
           if (exists) {
-            customLog(`⏭️ Skipping upload for ${description} (already exists)`);
+            customLog(
+              `⏭️ Skipping upload for ${description} (already exists). Updating DB path.`,
+            );
+            // Even if we skip, still update the DB path
+            await updateDbSuccess();
             return;
           }
         }
@@ -132,7 +153,6 @@ const limit = pLimit(CONCURRENCY_LIMIT);
         customLog(`⬇️ Downloading ${description}`);
         const response = await fetch(url);
 
-        // Handle 404 case
         if (response.status === 404) {
           customLog(
             "warn",
@@ -152,13 +172,13 @@ const limit = pLimit(CONCURRENCY_LIMIT);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Convert image to JPG using sharp
+        // Convert to JPG using sharp
         const originalBuffer = Buffer.from(await response.arrayBuffer());
         const jpgBuffer = await sharp(originalBuffer)
           .jpeg({ quality: 85 })
           .toBuffer();
 
-        // Upload to R2 as image/jpeg
+        // Upload to R2
         await uploadToR2(imgFilePath, jpgBuffer, "image/jpeg");
         await updateDbSuccess();
 
@@ -190,7 +210,6 @@ const limit = pLimit(CONCURRENCY_LIMIT);
 
   async function uploadToR2(key: string, data: Buffer, contentType: string) {
     const bucketName = process.env.R2_BUCKET_NAME;
-
     if (!bucketName) {
       throw new Error(
         "❌ R2_BUCKET_NAME is not set in the environment variables.",
@@ -198,7 +217,6 @@ const limit = pLimit(CONCURRENCY_LIMIT);
     }
 
     console.log(`⬆️ Uploading to bucket: ${bucketName}, key: ${key}`);
-
     await s3Client.send(
       new PutObjectCommand({
         Bucket: bucketName,
@@ -211,7 +229,6 @@ const limit = pLimit(CONCURRENCY_LIMIT);
 
   async function checkIfFileExists(key: string): Promise<boolean> {
     const bucketName = process.env.R2_BUCKET_NAME;
-
     if (!bucketName) {
       throw new Error(
         "❌ R2_BUCKET_NAME is not set in the environment variables.",
@@ -234,11 +251,13 @@ const limit = pLimit(CONCURRENCY_LIMIT);
     }
   }
 
+  // For cards, we update by internal PK "id"
   async function updateDatabase(cardId: string, field: string, value: string) {
     await prisma.pokemonCard.update({
       where: { id: cardId },
       data: { [field]: value },
     });
+
     if (value === "") {
       customLog(`⚠️ Cleared ${field} for card ID: ${cardId}`);
     } else {
