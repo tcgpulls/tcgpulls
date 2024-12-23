@@ -15,9 +15,9 @@ const TcgLangPage = async ({ params }: Props) => {
 
   return (
     <div className={`flex flex-col gap-4`}>
-      <Link href={`/app/tcg/pokemon/${tcgLang}/packs`}>
+      <Link href={`/app/tcg/pokemon/${tcgLang}/booster-packs`}>
         <Card isClickable={true}>
-          <p>{t("common.packs")}</p>
+          <p>{t("common.booster-packs")}</p>
         </Card>
       </Link>
       <Link href={`/app/tcg/pokemon/${tcgLang}/sets`}>

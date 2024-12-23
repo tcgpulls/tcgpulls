@@ -1,3 +1,5 @@
+"use server";
+
 import { cookies } from "next/headers";
 import { POKEMON_SUPPORTED_TCG_LANGUAGES } from "@/constants/tcg/pokemon";
 
