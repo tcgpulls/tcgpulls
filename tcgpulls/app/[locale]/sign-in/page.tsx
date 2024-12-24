@@ -2,13 +2,15 @@ import { signIn, providerMap } from "@/auth";
 import { AuthError } from "next-auth";
 import { Heading } from "@/components/catalyst-ui/heading";
 import { Button } from "@/components/catalyst-ui/button";
+import { SearchParamsT, UrlParamsT } from "@/types/Params";
 
 type Props = {
-  params: { locale: string };
-  searchParams: { callbackUrl: string | undefined };
+  params: UrlParamsT;
+  searchParams: SearchParamsT;
 };
 
 export default async function SignInPage({ params, searchParams }: Props) {
+  const { locale } = await params;
   const { callbackUrl } = await searchParams;
 
   return (
@@ -24,7 +26,7 @@ export default async function SignInPage({ params, searchParams }: Props) {
               "use server";
               try {
                 await signIn(provider.id, {
-                  redirectTo: callbackUrl ?? `/${params.locale}/app`,
+                  redirectTo: callbackUrl ?? `/${locale}/app`,
                 });
               } catch (error) {
                 if (error instanceof AuthError) {

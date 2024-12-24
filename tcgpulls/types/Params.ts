@@ -12,7 +12,7 @@ export type UrlParamsKeyT = {
 export type UrlParamsT = Promise<Partial<UrlParamsKeyT>>;
 
 export type SearchParamsKeyT = {
-  page: string;
+  callbackUrl: string | undefined;
 };
 
 export type SearchParamsT = Promise<Partial<SearchParamsKeyT>>;
