@@ -33,10 +33,18 @@ function chunkArray<T>(arr: T[], chunkSize: number): T[][] {
   return chunks;
 }
 
+/**
+ * Processes a single set for a given language, optionally for a single cardId.
+ * @param set  - A single set object from the DB
+ * @param language - One of the supported languages
+ * @param specifiedCardId - Optional cardId to filter
+ * @param counters - An object with { totalCardsInserted, totalCardsSkipped }
+ */
 async function processOneSetAndLanguage(
   set: any,
   language: string,
-  specifiedCardId?: string | null,
+  specifiedCardId: string | null | undefined,
+  counters: { totalCardsInserted: number; totalCardsSkipped: number },
 ) {
   customLog(
     `\n🚀 Processing set: ${set.name} (TCG Code: ${set.setId}, Language: ${language})`,
@@ -127,10 +135,14 @@ async function processOneSetAndLanguage(
             });
 
             if (existingCard) {
+              // We are updating (so "skipping" a new insert)
+              counters.totalCardsSkipped++;
               customLog(
                 `🔄 Updating existing card: ${card.name} (${card.id} - ${variantKey}) in set: ${set.name}`,
               );
             } else {
+              // We are creating a new card
+              counters.totalCardsInserted++;
               customLog(
                 `✨ Creating new card: ${card.name} (${card.id} - ${variantKey}) in set: ${set.name}`,
               );
@@ -208,9 +220,12 @@ async function processOneSetAndLanguage(
 }
 
 async function fetchAndStorePokemonSetCards() {
+  // Keep counters here so we can display final totals
   let totalSetsProcessed = 0;
-  let totalCardsInserted = 0; // If you need a count, you can track it in the upsert logic or code
-  let totalCardsSkipped = 0; // Unused but you can implement logic for skipping
+  const counters = {
+    totalCardsInserted: 0,
+    totalCardsSkipped: 0,
+  };
 
   try {
     // 1) Fetch all sets from DB
@@ -231,17 +246,21 @@ async function fetchAndStorePokemonSetCards() {
     }
 
     // -- Here is where we do a "chunked" approach for concurrency of sets. --
-    // We'll break the sets into groups of CONCURRENCY_LIMIT.
     const setChunks = chunkArray(sets, CONCURRENCY_LIMIT);
 
     for (const setChunk of setChunks) {
       // For each chunk, we process sets in parallel (up to CONCURRENCY_LIMIT),
-      // but we do not move on to the next chunk until all of these finish.
+      // but do not move on to the next chunk until all are finished.
       await Promise.all(
         setChunk.flatMap((set) => {
-          // We do a .flatMap() because we also want to process multiple languages in parallel
+          // .flatMap() because we process multiple languages in parallel too
           return POKEMON_SUPPORTED_LANGUAGES.map(async (language) => {
-            await processOneSetAndLanguage(set, language, specifiedCardId);
+            await processOneSetAndLanguage(
+              set,
+              language,
+              specifiedCardId,
+              counters,
+            );
             totalSetsProcessed++;
           });
         }),
@@ -251,8 +270,8 @@ async function fetchAndStorePokemonSetCards() {
     // Final Summary
     customLog("\n--- Card Insertion Summary ---");
     customLog(`✅ Total Sets Processed: ${totalSetsProcessed}`);
-    customLog(`✅ Total Cards Inserted: ${totalCardsInserted}`);
-    customLog(`⏭️ Total Cards Skipped: ${totalCardsSkipped}`);
+    customLog(`✅ Total Cards Inserted: ${counters.totalCardsInserted}`);
+    customLog(`⏭️ Total Cards Skipped: ${counters.totalCardsSkipped}`);
   } catch (error) {
     customLog("error", "❌ Error during fetching and storing cards", error);
   } finally {
