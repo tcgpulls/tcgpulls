@@ -10,7 +10,7 @@ const Card = ({ children, isClickable = false }: Props) => {
   return (
     <div
       className={classNames(
-        "bg-zinc-800 rounded-lg shadow-md p-4 transition-transform",
+        "bg-zinc-800 rounded-xl shadow-md p-4 transition-transform",
         {
           "hover:shadow-xl hover:-translate-y-0.5 cursor-pointer": isClickable,
           "cursor-default": !isClickable,

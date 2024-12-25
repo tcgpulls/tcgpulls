@@ -8,6 +8,7 @@ import sharp from "sharp";
 
 const args = process.argv.slice(2);
 const forceUpload = args.includes("--force-update");
+const onlyMissingLocals = args.includes("--only-missing-locals");
 const BATCH_SIZE = 500;
 const MAX_RETRIES = 3;
 const DELAY_PROMISE = 500;
@@ -26,12 +27,23 @@ const limit = pLimit(CONCURRENCY_LIMIT);
   }[] = [];
   let offset = 0;
 
-  const totalCards = await prisma.pokemonCard.count();
+  const totalCards = await prisma.pokemonCard.count({
+    where: onlyMissingLocals
+      ? {
+          OR: [{ localImageSmall: null }, { localImageLarge: null }],
+        }
+      : {},
+  });
   customLog(`🔍 Total cards to process: ${totalCards}`);
 
   try {
     while (true) {
       const cards = await prisma.pokemonCard.findMany({
+        where: onlyMissingLocals
+          ? {
+              OR: [{ localImageSmall: null }, { localImageLarge: null }],
+            }
+          : {},
         include: { set: true },
         skip: offset,
         take: BATCH_SIZE,
