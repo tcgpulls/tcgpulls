@@ -3,6 +3,7 @@ import customLog from "@/utils/customLog";
 import { prisma } from "@/lib/prisma";
 import pLimit from "p-limit";
 import { POKEMON_SUPPORTED_LANGUAGES } from "@/constants/tcg/pokemon";
+import { SPELLED_NUMBERS } from "@/constants/utils";
 
 // Command line arguments
 const args = process.argv.slice(2);
@@ -16,12 +17,44 @@ const CARD_CONCURRENCY_LIMIT = 10; // <= concurrency for upserting cards within 
 const limitCardLevel = pLimit(CARD_CONCURRENCY_LIMIT);
 
 /**
- * Extracts the numeric portion of a string (e.g., "HHGS13" → 13).
- * Non-numeric values return Number.MAX_SAFE_INTEGER to push them to the end.
+ * Replaces the old normalizeNumber with a "smart" version:
+ * 1. If there's a digit, parse it.
+ * 2. Else check spelled-out words (ONE, TWO, etc.).
+ * 3. Else handle single/multi-letter codes (e.g. "A"→1, "B"→2, "AA"→27).
+ * 4. Else fallback to 9999.
  */
 function normalizeNumber(numStr: string): number {
-  const match = numStr.match(/\d+/);
-  return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
+  // 1) Check if there's a standard digit inside
+  const numericMatch = numStr.match(/\d+/);
+  if (numericMatch) {
+    return parseInt(numericMatch[0], 10);
+  }
+
+  // Convert to uppercase for spelled-numbers or letter handling
+  const upper = numStr.toUpperCase();
+
+  // 2) Check spelled-out mapping, e.g. "ONE", "TWO", etc.
+  if (SPELLED_NUMBERS[upper] !== undefined) {
+    return SPELLED_NUMBERS[upper];
+  }
+
+  // 3) Single letter scenario, like "A", "B", "E"
+  if (/^[A-Z]$/.test(upper)) {
+    return upper.charCodeAt(0) - 64; // 'A' = 65 → 1, 'B' = 66 → 2, ...
+  }
+
+  // 3b) Multi-letter scenario, e.g. "AA" → 27, "AB" → 28
+  if (/^[A-Z]+$/.test(upper)) {
+    let result = 0;
+    for (const ch of upper) {
+      const val = ch.charCodeAt(0) - 64; // 'A'=1 ... 'Z'=26
+      result = result * 26 + val;
+    }
+    return result;
+  }
+
+  // 4) Fallback if all else fails
+  return 9999;
 }
 
 // Utility to chunk an array into smaller arrays (batches) of given size
@@ -35,16 +68,17 @@ function chunkArray<T>(arr: T[], chunkSize: number): T[][] {
 
 /**
  * Processes a single set for a given language, optionally for a single cardId.
- * @param set  - A single set object from the DB
- * @param language - One of the supported languages
- * @param specifiedCardId - Optional cardId to filter
- * @param counters - An object with { totalCardsInserted, totalCardsSkipped }
+ * Fetches the external cards, upserts them into PokemonCard, and logs any errors.
  */
 async function processOneSetAndLanguage(
   set: any,
   language: string,
   specifiedCardId: string | null | undefined,
-  counters: { totalCardsInserted: number; totalCardsSkipped: number },
+  counters: {
+    totalCardsInserted: number;
+    totalCardsSkipped: number;
+    errorCardIds: string[];
+  },
 ) {
   customLog(
     `\n🚀 Processing set: ${set.name} (TCG Code: ${set.setId}, Language: ${language})`,
@@ -102,7 +136,7 @@ async function processOneSetAndLanguage(
       evolvesFrom: card.evolvesFrom || null,
       flavorText: card.flavorText || null,
       number: card.number,
-      normalizedNumber, // normalized
+      normalizedNumber, // replaced to the new logic
       artist: card.artist || null,
       rarity: card.rarity || null,
       nationalPokedexNumbers: card.nationalPokedexNumbers || [],
@@ -200,6 +234,8 @@ async function processOneSetAndLanguage(
               `✅ Upserted card: ${set.name} - ${card.name} (${variantKey})`,
             );
           } catch (insertError) {
+            // If there's an error, we track which card ID it failed on
+            counters.errorCardIds.push(card.id);
             customLog(
               "error",
               `❌ Error inserting card: ${set.name} - ${card.name} (${variantKey}) (cardId: ${card.id})`,
@@ -225,6 +261,7 @@ async function fetchAndStorePokemonSetCards() {
   const counters = {
     totalCardsInserted: 0,
     totalCardsSkipped: 0,
+    errorCardIds: [] as string[], // <--- NEW: track which cardIDs had errors
   };
 
   try {
@@ -272,6 +309,16 @@ async function fetchAndStorePokemonSetCards() {
     customLog(`✅ Total Sets Processed: ${totalSetsProcessed}`);
     customLog(`✅ Total Cards Inserted: ${counters.totalCardsInserted}`);
     customLog(`⏭️ Total Cards Skipped: ${counters.totalCardsSkipped}`);
+
+    // If any cards had errors, list them
+    if (counters.errorCardIds.length > 0) {
+      customLog(
+        "warn",
+        `❌ The following external card IDs had insert/upsert errors:\n   ${counters.errorCardIds.join(
+          ", ",
+        )}`,
+      );
+    }
   } catch (error) {
     customLog("error", "❌ Error during fetching and storing cards", error);
   } finally {

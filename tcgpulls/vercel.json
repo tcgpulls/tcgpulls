@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/pokemon/fetch-prices",
+      "schedule": "0 10 * * *"
+    }
+  ]
+}

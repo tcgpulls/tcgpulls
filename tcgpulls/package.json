@@ -21,7 +21,9 @@
     "pokemon:fetch-upload-sets-images": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndUploadPokemonSetsImages.ts",
     "pokemon:fetch-store-cards": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndStorePokemonSetCards.ts",
     "pokemon:fetch-upload-cards-images": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndUploadToStoragePokemonSetCardsImages.ts",
+    "pokemon:fetch-store-prices": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndStorePokemonCardPrices.ts",
     "pokemon:clear-data": "dotenv -e .env.local -- tsx scripts/pokemon/clearPokemonData.ts",
+    "pokemon:clear-price-history": "dotenv -e .env.local -- tsx scripts/pokemon/clearPokemonCardPriceHistory.ts",
     "images:swap-png-to-jpg": "dotenv -e .env.local -- tsx scripts/images/convertAllPngToJpg.ts",
     "images:remove-unused-from-storage": "dotenv -e .env.local -- tsx scripts/images/removeUnusedImagesFromStorage.ts",
     "prepare": "husky"
