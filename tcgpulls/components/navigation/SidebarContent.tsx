@@ -17,6 +17,7 @@ import { useTranslations } from "use-intl";
 import { ReactNode } from "react";
 import { usePathname } from "@/i18n/routing";
 import useTcgLanguage from "@/hooks/context/useTcgLanguage";
+import AuthButton from "@/components/misc/AuthButton";
 
 type SidebarItem = {
   href: string;
@@ -108,6 +109,9 @@ const SidebarContent = () => {
       </SidebarBody>
       <SidebarFooter>
         <SidebarSection>
+          <div>
+            <AuthButton />
+          </div>
           <div className="flex justify-end">
             <LanguageSwitcher />
           </div>

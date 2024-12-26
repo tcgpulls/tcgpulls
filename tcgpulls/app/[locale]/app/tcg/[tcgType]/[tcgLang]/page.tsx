@@ -10,7 +10,6 @@ type Props = {
 
 const TcgLangPage = async ({ params }: Props) => {
   const { tcgLang } = await params;
-  console.log("----------------TCG LANG----------------", tcgLang);
   const t = await getTranslations();
 
   return (

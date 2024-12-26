@@ -36,7 +36,7 @@ const InfiniteList = <T,>({
           </div>
         );
       })}
-      {loading && <p>Loading...</p>}
+      {loading && <p className={`text-center`}>Loading...</p>}
     </>
   );
 };

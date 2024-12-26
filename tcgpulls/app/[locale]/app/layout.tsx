@@ -5,6 +5,7 @@ import SidebarContent from "@/components/navigation/SidebarContent";
 import Footer from "@/components/misc/Footer";
 import { UrlParamsT } from "@/types/Params";
 import TcgLanguageContextWrapper from "@/components/context/TcgLanguageContextWrapper";
+import { SessionProvider } from "next-auth/react";
 
 const AppLayout = async ({
   children,
@@ -21,12 +22,14 @@ const AppLayout = async ({
 
   return (
     <TcgLanguageContextWrapper>
-      <SidebarLayout sidebar={<SidebarContent />} navbar={<NavbarContent />}>
-        <div className={`min-h-full flex flex-col justify-between flex-1`}>
-          <div>{children}</div>
-          <Footer />
-        </div>
-      </SidebarLayout>
+      <SessionProvider>
+        <SidebarLayout sidebar={<SidebarContent />} navbar={<NavbarContent />}>
+          <div className={`min-h-full flex flex-col justify-between flex-1`}>
+            <div>{children}</div>
+            <Footer />
+          </div>
+        </SidebarLayout>
+      </SessionProvider>
     </TcgLanguageContextWrapper>
   );
 };
