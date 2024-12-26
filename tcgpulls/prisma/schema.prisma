@@ -137,8 +137,9 @@ model PokemonCard {
   attacks    PokemonCardAttack[]
   weaknesses PokemonCardWeakness[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  PokemonCardPriceHistory PokemonCardPriceHistory[]
 
   // No duplicates for same (cardId, language, setId, variant)
   @@unique([cardId, language, setId, variant])
@@ -179,4 +180,19 @@ model PokemonCardWeakness {
   cardId String
   type   String
   value  String
+}
+
+// =========================
+// PokemonCardPriceHistory
+// =========================
+model PokemonCardPriceHistory {
+  id             String      @id @default(cuid())
+  card           PokemonCard @relation(fields: [cardId], references: [id])
+  cardId         String
+  fetchedAt      DateTime    @default(now())
+  variant        String
+  tcgplayerData  Json?
+  cardmarketData Json?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }

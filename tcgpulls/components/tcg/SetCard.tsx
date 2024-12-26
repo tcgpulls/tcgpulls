@@ -27,9 +27,12 @@ const SetCard = ({ set, href }: Props) => {
           width={300}
           height={200}
         />
-        <h2 className="font-semibold text-sm text-center text-white">
-          {set.name}
-        </h2>
+        <div className={`flex flex-col items-center gap-1`}>
+          <h2 className="font-semibold text-sm text-center text-white">
+            {set.name}
+          </h2>
+          <p className={`text-xs`}>({set.setId})</p>
+        </div>
       </Card>
     </Link>
   );
