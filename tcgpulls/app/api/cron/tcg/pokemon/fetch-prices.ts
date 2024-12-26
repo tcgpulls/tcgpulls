@@ -1,15 +1,13 @@
-// app/api/cron/pokemon/fetch-prices.ts
-
-import type { NextApiRequest, NextApiResponse } from "next";
 import customLog from "@/utils/customLog";
 import { fetchAndStorePokemonPrices } from "@/scripts/pokemon/fetchAndStorePokemonCardPrices";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
-    if (req.query.secret !== process.env.CRON_SECRET) {
+    if (!req.headers["x-vercel-cron"]) {
       return res.status(401).json({ status: "Unauthorized" });
     }
 

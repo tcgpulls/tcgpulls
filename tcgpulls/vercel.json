@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/tcg/pokemon/fetch-prices",
-      "schedule": "0 11 * * *"
+      "schedule": "0 16 * * *"
     }
   ]
 }
