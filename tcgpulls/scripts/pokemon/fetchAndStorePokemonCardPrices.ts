@@ -3,8 +3,6 @@ import customLog from "@/utils/customLog";
 import { prisma } from "@/lib/prisma";
 import pLimit from "p-limit";
 import { POKEMON_SUPPORTED_LANGUAGES } from "@/constants/tcg/pokemon";
-import { Prisma } from "@prisma/client";
-import PokemonCardPriceHistoryCreateManyInput = Prisma.PokemonCardPriceHistoryCreateManyInput;
 
 // Command line arguments (optional)
 const args = process.argv.slice(2);
@@ -16,6 +14,7 @@ const specifiedCardId = cardIdArg ? cardIdArg.split("=")[1] : null;
 // Concurrency settings
 const SET_CONCURRENCY_LIMIT = 5; // how many sets are processed in parallel
 const CARD_CONCURRENCY_LIMIT = 10; // concurrency for handling price history within each set
+const limitCardLevel = pLimit(CARD_CONCURRENCY_LIMIT);
 
 /** Utility to chunk an array into smaller batches of given size */
 function chunkArray<T>(arr: T[], chunkSize: number): T[][] {
@@ -30,7 +29,6 @@ function chunkArray<T>(arr: T[], chunkSize: number): T[][] {
  * Fetches the external API for one set + language,
  * then inserts daily price rows into PokemonCardPriceHistory.
  */
-
 async function processOneSetAndLanguage(
   set: any,
   language: string,
@@ -38,47 +36,60 @@ async function processOneSetAndLanguage(
   counters: {
     totalPriceEntriesInserted: number;
     totalCardsWithoutDbMatch: number;
-    unmatchedCardIds: string[];
+    unmatchedCardIds: string[]; // <-- NEW: we store card IDs not found in DB
   },
 ) {
   customLog(
     `\n⏳ Fetching price data for set: ${set.name} (TCG Code: ${set.setId}, Language: ${language})`,
   );
 
+  // 1) Fetch external cards from the Pokémon TCG API
+  let cardsData: any[];
   try {
-    // 1. Fetch external cards from the Pokémon TCG API
-    const cardsData = await fetchPokemonTcgApiSetCards(language, set.setId);
-    if (!Array.isArray(cardsData) || cardsData.length === 0) {
+    cardsData = await fetchPokemonTcgApiSetCards(language, set.setId);
+    if (!Array.isArray(cardsData)) {
       customLog(
         "warn",
         `⚠️ No card data returned for set: ${set.setId}, language: ${language}`,
       );
       return;
     }
+  } catch (error) {
+    customLog(
+      "error",
+      `❌ Failed to fetch card data for set ${set.setId}, language: ${language}`,
+      error,
+    );
+    return;
+  }
 
-    // 2. Filter by specifiedCardId if applicable
-    const filteredCardsData = specifiedCardId
-      ? cardsData.filter((c) => c.id === specifiedCardId)
-      : cardsData;
-
-    if (filteredCardsData.length === 0) {
+  // 2) Optional filter by a specific cardId
+  if (specifiedCardId) {
+    cardsData = cardsData.filter((c) => c.id === specifiedCardId);
+    if (cardsData.length === 0) {
       customLog(
         "warn",
-        `⚠️ No cards match specifiedCardId=${specifiedCardId}. Skipping.`,
+        `⚠️ No fetched card matches --cardId=${specifiedCardId}. Skipping.`,
       );
       return;
+    } else {
+      customLog(`🎯 Filtering for only specified cardId: ${specifiedCardId}`);
     }
+  }
 
-    // 3. Use pLimit for processing each fetched card
-    const limitCardLevel = pLimit(CARD_CONCURRENCY_LIMIT);
-    const priceHistoryEntries: PokemonCardPriceHistoryCreateManyInput[] = []; // Collect entries for batch insertion
+  // 3) For each fetched card, find all matching DB variants and create a PriceHistory row
+  const priceTasks: Array<Promise<void>> = [];
 
-    await Promise.all(
-      filteredCardsData.map((fetchedCard) =>
-        limitCardLevel(async () => {
-          const externalCardId = fetchedCard.id;
+  for (const fetchedCard of cardsData) {
+    const externalCardId = fetchedCard.id;
 
-          // Find matching DB cards
+    priceTasks.push(
+      limitCardLevel(async () => {
+        try {
+          // We find all matching DB cards (one for each variant) by:
+          //   - same external cardId
+          //   - same setId (internal PK: set.id)
+          //   - same language
           const matchingDbCards = await prisma.pokemonCard.findMany({
             where: {
               cardId: externalCardId,
@@ -89,52 +100,55 @@ async function processOneSetAndLanguage(
 
           if (matchingDbCards.length === 0) {
             counters.totalCardsWithoutDbMatch++;
-            counters.unmatchedCardIds.push(externalCardId);
+            counters.unmatchedCardIds.push(externalCardId); // <-- store for summary
             customLog(
               "warn",
-              `⚠️ No matching DB cards for externalCardId=${externalCardId}, setId=${set.id}, language=${language}`,
+              `⚠️ No matching DB cards found for externalCardId=${externalCardId}, setId=${set.id}, language=${language}`,
             );
             return;
           }
 
-          // Create price history entries for each matching card
+          // 3.1 For each matching DB variant, create a new PriceHistory row
           for (const dbCard of matchingDbCards) {
-            priceHistoryEntries.push({
-              cardId: dbCard.id,
-              variant: dbCard.variant,
-              fetchedAt: new Date(),
-              tcgplayerData: fetchedCard.tcgplayer
-                ? { ...fetchedCard.tcgplayer }
-                : null,
-              cardmarketData: fetchedCard.cardmarket
-                ? { ...fetchedCard.cardmarket }
-                : null,
+            await prisma.pokemonCardPriceHistory.create({
+              data: {
+                // Required fields
+                cardId: dbCard.id, // references the PokemonCard PK
+                variant: dbCard.variant, // match the variant in the DB
+                fetchedAt: new Date(), // explicitly set fetched time
+
+                // Full JSON objects
+                tcgplayerData: fetchedCard.tcgplayer
+                  ? { ...fetchedCard.tcgplayer }
+                  : null,
+                cardmarketData: fetchedCard.cardmarket
+                  ? { ...fetchedCard.cardmarket }
+                  : null,
+              },
             });
+
+            counters.totalPriceEntriesInserted++;
+            customLog(
+              `💾 Inserted price history for DB card variant [${dbCard.variant}] (cardId: ${dbCard.id})`,
+            );
           }
-        }),
-      ),
-    );
-
-    // 4. Use a single transaction to insert all data for this language
-    if (priceHistoryEntries.length > 0) {
-      await prisma.$transaction([
-        prisma.pokemonCardPriceHistory.createMany({
-          data: priceHistoryEntries,
-        }),
-      ]);
-
-      counters.totalPriceEntriesInserted += priceHistoryEntries.length;
-      customLog(
-        `💾 Successfully inserted ${priceHistoryEntries.length} price history entries for set ${set.name} (${language})`,
-      );
-    }
-  } catch (error) {
-    customLog(
-      "error",
-      `❌ Error processing set ${set.name} (Language: ${language})`,
-      error,
+        } catch (err) {
+          customLog(
+            "error",
+            `❌ Error creating price history for externalCardId=${externalCardId}`,
+            err,
+          );
+        }
+      }),
     );
   }
+
+  // 4) Wait until all price insertions are done
+  await Promise.all(priceTasks);
+
+  customLog(
+    `✅ Finished price data for set: ${set.name} (TCG Code: ${set.setId}, Lang: ${language})`,
+  );
 }
 
 /**
