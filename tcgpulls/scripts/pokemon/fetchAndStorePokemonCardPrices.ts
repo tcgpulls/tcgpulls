@@ -36,7 +36,7 @@ async function processOneSetAndLanguage(
   counters: {
     totalPriceEntriesInserted: number;
     totalCardsWithoutDbMatch: number;
-    unmatchedCardIds: string[]; // <-- NEW: we store card IDs not found in DB
+    unmatchedCardIds: string[];
   },
 ) {
   customLog(
