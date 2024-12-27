@@ -16,7 +16,6 @@ const specifiedCardId = cardIdArg ? cardIdArg.split("=")[1] : null;
 // Concurrency settings
 const SET_CONCURRENCY_LIMIT = 5; // how many sets are processed in parallel
 const CARD_CONCURRENCY_LIMIT = 10; // concurrency for handling price history within each set
-const limitCardLevel = pLimit(CARD_CONCURRENCY_LIMIT);
 
 /** Utility to chunk an array into smaller batches of given size */
 function chunkArray<T>(arr: T[], chunkSize: number): T[][] {
