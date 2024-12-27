@@ -12,9 +12,12 @@ export async function GET(req: Request) {
     await fetchAndStorePokemonPrices();
     customLog("info", "[fetch-prices] Finished successfully.");
 
-    NextResponse.json({ status: 200, message: "Prices updated successfully" });
+    return NextResponse.json({
+      status: 200,
+      message: "Prices updated successfully",
+    });
   } catch (error) {
     customLog("error", "[fetch-prices] Error during cron job", error);
-    NextResponse.json({ status: 500, message: String(error) });
+    return NextResponse.json({ status: 500, message: String(error) });
   }
 }
