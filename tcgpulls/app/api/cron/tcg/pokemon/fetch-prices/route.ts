@@ -9,8 +9,9 @@ export async function GET(req: Request) {
   console.log("RUNNING CRON JOB");
   try {
     console.log("TRYING CRON JOB");
-    if (!req.headers.get("x-vercel-cron")) {
-      console.log("THIS IS NOT A VERCEL CRON JOB");
+    const authHeader = req.headers.get("authorization");
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      console.error("[fetch-prices] Unauthorized request");
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
