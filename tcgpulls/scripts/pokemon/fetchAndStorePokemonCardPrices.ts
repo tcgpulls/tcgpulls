@@ -129,6 +129,7 @@ export async function fetchAndStorePokemonPrices() {
     unmatchedCardIds: [] as string[],
   };
   let totalSetsProcessed = 0;
+  console.log("Fetching and storing Pokemon card prices...");
 
   try {
     const sets = await prisma.pokemonSet.findMany();
