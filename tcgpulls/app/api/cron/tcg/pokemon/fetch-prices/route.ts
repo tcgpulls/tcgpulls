@@ -2,9 +2,14 @@ import customLog from "@/utils/customLog";
 import { fetchAndStorePokemonPrices } from "@/scripts/pokemon/fetchAndStorePokemonCardPrices";
 import { NextResponse } from "next/server";
 
+console.log("ENABLE_LOGGING:", process.env.ENABLE_LOGGING);
+
 export async function GET(req: Request) {
+  console.log("RUNNING CRON JOB");
   try {
+    console.log("TRYING CRON JOB");
     if (!req.headers.get("x-vercel-cron")) {
+      console.log("THIS IS VERCEL CRON JOB");
       return NextResponse.json({ status: 401, message: "Unauthorized" });
     }
 
