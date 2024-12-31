@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/cron/tcg/pokemon/fetch-prices": {
+    "api/cron/**/*.ts": {
       "maxDuration": 60
     }
   },
