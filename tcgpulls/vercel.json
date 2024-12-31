@@ -1,8 +1,13 @@
 {
+  "functions": {
+    "app/api/cron/**/*.js": {
+      "maxDuration": 60
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/tcg/pokemon/fetch-prices",
-      "schedule": "0 10 * * *"
+      "schedule": "0 */2 * * *"
     }
   ]
 }

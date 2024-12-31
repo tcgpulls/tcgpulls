@@ -1,34 +1,33 @@
-export const runtime = "nodejs";
-
 import { fetchAndStorePokemonPrices } from "@/scripts/pokemon/fetchAndStorePokemonCardPrices";
 import { NextResponse } from "next/server";
-
-console.log("ENABLE_LOGGING:", process.env.ENABLE_LOGGING);
+import customLog from "@/utils/customLog";
 
 export async function GET(req: Request) {
-  console.log("RUNNING CRON JOB");
   try {
-    console.log("TRYING CRON JOB");
     const authHeader = req.headers.get("authorization");
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      console.error("[fetch-prices] Unauthorized request");
+      customLog("error", "[fetch-prices] Unauthorized request");
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    console.info("[fetch-prices] Starting cron job...");
-    await fetchAndStorePokemonPrices();
-    console.info("[fetch-prices] Finished successfully.");
+    customLog("info", "[fetch-prices] Starting cron job...");
 
+    // Optionally read a chunk size from ENV or default to 10
+    const chunkSize = parseInt(
+      process.env.POKEMON_SET_PRICES_CRON_CHUNK_SIZE || "10",
+      10,
+    );
+
+    // Call your function with chunkSize
+    await fetchAndStorePokemonPrices(chunkSize);
+
+    customLog("info", "[fetch-prices] Finished successfully.");
     return NextResponse.json(
-      {
-        message: "Prices updated successfully",
-      },
-      {
-        status: 200,
-      },
+      { message: "Prices updated successfully" },
+      { status: 200 },
     );
   } catch (error) {
-    console.error("[fetch-prices] Error during cron job", error);
+    customLog("error", "[fetch-prices] Error during cron job", error);
     return NextResponse.json({ message: String(error) }, { status: 500 });
   }
 }

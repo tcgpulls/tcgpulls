@@ -91,18 +91,19 @@ model PokemonSet {
   name String
 
   // External TCG code, e.g. "swsh1"
-  setId        String
-  language     String
-  releaseDate  DateTime
-  printedTotal Int
-  ptcgoCode    String?
-  series       String
-  total        Int
-  updatedAt    DateTime @updatedAt
-  logo         String
-  symbol       String
-  localLogo    String?
-  localSymbol  String?
+  setId              String
+  language           String
+  releaseDate        DateTime
+  printedTotal       Int
+  ptcgoCode          String?
+  series             String
+  total              Int
+  updatedAt          DateTime  @updatedAt
+  lastPriceFetchDate DateTime?
+  logo               String
+  symbol             String
+  localLogo          String?
+  localSymbol        String?
 
   // Parent/subset relationship
   parentSetId String?

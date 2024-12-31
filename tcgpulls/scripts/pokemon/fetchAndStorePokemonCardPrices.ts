@@ -13,7 +13,10 @@ const specifiedSetId = setIdArg ? setIdArg.split("=")[1] : null;
 const specifiedCardId = cardIdArg ? cardIdArg.split("=")[1] : null;
 
 // Concurrency settings
-const SET_CONCURRENCY_LIMIT = 3; // Adjusted for smaller batches
+const SET_CONCURRENCY_LIMIT = parseInt(
+  process.env.POKEMON_SET_PRICES_CRON_CHUNK_SIZE || "10",
+  10,
+); // Adjusted for smaller batches
 const CARD_CONCURRENCY_LIMIT = 10; // Concurrency for handling cards
 const limitCardLevel = pLimit(CARD_CONCURRENCY_LIMIT);
 
@@ -118,33 +121,58 @@ async function processOneSetAndLanguage(
 }
 
 /**
- * Main function:
- *  - Fetch all sets from your DB (or filter by --setId).
- *  - Process them in chunks to avoid long-running queries.
+ * Main function to fetch and store Pokemon prices.
+ *
+ * @param {number} chunkSize - how many sets to process in this invocation
  */
-export async function fetchAndStorePokemonPrices() {
+export async function fetchAndStorePokemonPrices(chunkSize: number = 10) {
   const counters = {
     totalPriceEntriesInserted: 0,
     totalCardsWithoutDbMatch: 0,
     unmatchedCardIds: [] as string[],
   };
   let totalSetsProcessed = 0;
-  console.log("Fetching and storing Pokemon card prices...");
+  customLog("Fetching and storing Pokemon card prices...");
+
+  // Compute "today" in UTC (zero out time if you want true daily logic)
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
 
   try {
-    const sets = await prisma.pokemonSet.findMany();
-    customLog(`🔍 Found ${sets.length} sets in the database.`);
+    /**
+     * If we have a --setId param, we fetch *only* that set.
+     * Otherwise, we fetch up to `chunkSize` sets that are not yet updated today.
+     */
+    let sets: any[];
 
-    const filteredSets = specifiedSetId
-      ? sets.filter((s) => s.setId === specifiedSetId)
-      : sets;
+    if (specifiedSetId) {
+      sets = await prisma.pokemonSet.findMany({
+        where: { setId: specifiedSetId },
+      });
+      customLog(
+        `🔍 Found ${sets.length} sets matching setId=${specifiedSetId}.`,
+      );
+    } else {
+      sets = await prisma.pokemonSet.findMany({
+        where: {
+          OR: [
+            { lastPriceFetchDate: null },
+            { lastPriceFetchDate: { lt: today } },
+          ],
+        },
+        take: chunkSize, // only take a small batch
+      });
+      customLog(
+        `🔍 Found ${sets.length} sets that need an update (chunkSize=${chunkSize}).`,
+      );
+    }
 
-    if (filteredSets.length === 0) {
-      customLog("warn", `⚠️ No sets match --setId=${specifiedSetId}. Exiting.`);
+    if (sets.length === 0) {
+      customLog("info", "✅ No sets left to update. Already done for today.");
       return;
     }
 
-    const setChunks = chunkArray(filteredSets, SET_CONCURRENCY_LIMIT);
+    const setChunks = chunkArray(sets, SET_CONCURRENCY_LIMIT);
     for (const setChunk of setChunks) {
       await Promise.all(
         setChunk.map((set) =>
@@ -170,6 +198,18 @@ export async function fetchAndStorePokemonPrices() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
+    // Mark these sets as updated "now"
+    // so we don't re-fetch them again in another chunk run.
+    await prisma.pokemonSet.updateMany({
+      where: {
+        id: { in: sets.map((s) => s.id) },
+      },
+      data: {
+        lastPriceFetchDate: new Date(),
+      },
+    });
+
+    // Summary
     customLog("\n--- Price Insertion Summary ---");
     customLog(`✅ Total Sets Processed: ${totalSetsProcessed}`);
     customLog(
@@ -192,8 +232,14 @@ export async function fetchAndStorePokemonPrices() {
   }
 }
 
+// Keep CLI usage the same
 if (require.main === module) {
-  fetchAndStorePokemonPrices().catch((error) => {
+  const chunkSizeArg = args.find((arg) => arg.startsWith("--chunkSize="));
+  const chunkSize = chunkSizeArg
+    ? parseInt(chunkSizeArg.split("=")[1], 10)
+    : 10;
+
+  fetchAndStorePokemonPrices(chunkSize).catch((error) => {
     customLog("error", "❌ Error in fetchAndStorePokemonPrices script:", error);
     process.exit(1);
   });
