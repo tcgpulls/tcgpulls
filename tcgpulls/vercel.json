@@ -1,6 +1,6 @@
 {
   "functions": {
-    "app/api/cron/tcg/pokemon/fetch-prices/route.js": {
+    "app/api/cron/tcg/pokemon/fetch-prices/route.ts": {
       "maxDuration": 60
     }
   },
