@@ -8,10 +8,10 @@ type Props = {
 const CardsPage = async ({ params }: Props) => {
   // non visitable page
   // Access the locale from params
-  const { locale, tcgType, tcgLang } = await params;
+  const { locale, tcgBrand, tcgLang } = await params;
 
   // Redirect to `/[locale]/app`
-  redirect(`/${locale}/app/tcg/${tcgType}/${tcgLang}`);
+  redirect(`/${locale}/app/tcg/${tcgBrand}/${tcgLang}`);
 };
 
 export default CardsPage;

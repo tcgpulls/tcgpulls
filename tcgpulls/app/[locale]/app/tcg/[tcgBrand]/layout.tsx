@@ -11,14 +11,14 @@ const TcgTypeLayout = async ({
   children: ReactNode;
   params: UrlParamsT;
 }>) => {
-  const { tcgType } = await params;
+  const { tcgBrand } = await params;
   const t = await getTranslations();
 
   return (
     <>
       <div className={`mb-4`}>
         <PageHeader
-          title={t(`common.tcg-${tcgType}-short`)}
+          title={t(`common.tcg-${tcgBrand}-short`)}
           icon={<RectangleStackIcon />}
         />
       </div>

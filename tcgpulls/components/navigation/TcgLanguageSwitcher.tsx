@@ -1,6 +1,6 @@
 "use client";
 
-import { TcgCategoryT, TcgLangT, TcgTypeT } from "@/types/Tcg";
+import { TcgCategoryT, TcgLangT, TcgBrandT } from "@/types/Tcg";
 import { Link } from "@/i18n/routing";
 import { POKEMON_SUPPORTED_TCG_LANGUAGES } from "@/constants/tcg/pokemon";
 import useTcgLanguage from "@/hooks/context/useTcgLanguage";
@@ -8,11 +8,11 @@ import { useTranslations } from "use-intl";
 
 type Props = {
   tcgLang: TcgLangT;
-  tcgType: TcgTypeT;
+  tcgBrand: TcgBrandT;
   tcgCategory: TcgCategoryT;
 };
 
-const TcgLanguageSwitcher = ({ tcgLang, tcgType, tcgCategory }: Props) => {
+const TcgLanguageSwitcher = ({ tcgLang, tcgBrand, tcgCategory }: Props) => {
   const t = useTranslations();
   const { setCurrentTcgLanguage } = useTcgLanguage();
 
@@ -24,7 +24,7 @@ const TcgLanguageSwitcher = ({ tcgLang, tcgType, tcgCategory }: Props) => {
           <li key={supportedLang}>
             <Link
               onClick={() => setCurrentTcgLanguage(supportedLang)}
-              href={`/app/tcg/${tcgType}/${supportedLang}/${tcgCategory}`}
+              href={`/app/tcg/${tcgBrand}/${supportedLang}/${tcgCategory}`}
               className={`
                 inline-block
                 py-2

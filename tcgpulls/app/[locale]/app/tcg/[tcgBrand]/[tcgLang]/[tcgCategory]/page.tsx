@@ -4,6 +4,7 @@ import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
 import { Heading } from "@/components/catalyst-ui/heading";
 import { getTranslations } from "next-intl/server";
+import { Metadata } from "next";
 
 interface Props {
   params: UrlParamsT;
@@ -12,19 +13,19 @@ interface Props {
 const PAGE_SIZE = 24;
 
 const TcgTypeSetsPage = async ({ params }: Props) => {
-  const { tcgLang, tcgType, tcgCategory } = await params;
+  const { tcgLang, tcgBrand, tcgCategory } = await params;
   const t = await getTranslations();
   const sortBy = "releaseDate";
   const sortOrder = "desc";
 
-  if (!tcgType || !tcgCategory || !tcgLang) {
-    // Handle the case where tcgType is undefined
+  if (!tcgBrand || !tcgCategory || !tcgLang) {
+    // Handle the case where tcgBrand is undefined
     notFound();
   }
 
   const initialSets = await getSets({
     tcgLang,
-    tcgType,
+    tcgBrand,
     tcgCategory,
     offset: 0,
     limit: PAGE_SIZE,
@@ -38,7 +39,7 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
       <SetsList
         initialSets={initialSets}
         tcgLang={tcgLang}
-        tcgType={tcgType}
+        tcgBrand={tcgBrand}
         tcgCategory={tcgCategory}
         sortBy={sortBy}
         sortOrder={sortOrder}
@@ -48,3 +49,17 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
 };
 
 export default TcgTypeSetsPage;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: UrlParamsT;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "common.metadata" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}

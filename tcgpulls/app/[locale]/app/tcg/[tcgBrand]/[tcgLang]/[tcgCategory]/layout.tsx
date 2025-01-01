@@ -9,9 +9,9 @@ const TcgTypeLayout = async ({
   children: ReactNode;
   params: UrlParamsT;
 }>) => {
-  const { tcgLang, tcgType, tcgCategory } = await params;
+  const { tcgLang, tcgBrand, tcgCategory } = await params;
 
-  if (!tcgLang || !tcgType || !tcgCategory) {
+  if (!tcgLang || !tcgBrand || !tcgCategory) {
     return null;
   }
 
@@ -20,7 +20,7 @@ const TcgTypeLayout = async ({
       {/*<div className={`pt-8 pb-8`}>*/}
       {/*  <TcgLanguageSwitcher*/}
       {/*    tcgLang={tcgLang}*/}
-      {/*    tcgType={tcgType}*/}
+      {/*    tcgBrand={tcgBrand}*/}
       {/*    tcgCategory={tcgCategory}*/}
       {/*  />*/}
       {/*</div>*/}

@@ -48,7 +48,7 @@ export async function GET(
     }
 
     customLog("debug", "[setId]/route.ts: Found set, returning JSON.");
-    return NextResponse.json({ data: set });
+    return NextResponse.json({ data: set }, { status: 200 });
   } catch (error: unknown) {
     let errorMessage = "Unknown error in single-set route";
     if (error instanceof Error) {
