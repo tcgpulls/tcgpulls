@@ -48,7 +48,7 @@ export async function GET(
     }
 
     customLog("debug", "[cardId]/route.ts: Found card, returning JSON.");
-    return NextResponse.json({ data: card });
+    return NextResponse.json({ data: card }, { status: 200 });
   } catch (error: unknown) {
     let errorMessage = "Unknown error in single-card route";
     if (error instanceof Error) {

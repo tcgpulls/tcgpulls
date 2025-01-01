@@ -4,24 +4,26 @@ import { PokemonSet } from "@prisma/client";
 import axiosInstance from "@/utils/axiosInstance";
 import customLog from "@/utils/customLog";
 import { POKEMON_SUPPORTED_LANGUAGES } from "@/constants/tcg/pokemon";
-import { TcgTypeT } from "@/types/Tcg";
+import { TcgLangT, TcgBrandT } from "@/types/Tcg";
 
 interface FetchSetParams {
-  tcgType: TcgTypeT;
+  tcgBrand: TcgBrandT;
+  tcgLang: TcgLangT;
   setId: string;
 }
 
 export async function getSet({
-  tcgType,
+  tcgBrand,
+  tcgLang,
   setId,
 }: FetchSetParams): Promise<PokemonSet> {
   try {
-    customLog(`Fetching set for tcgType: ${tcgType}, setId: ${setId}`);
+    customLog(`Fetching set for tcgBrand: ${tcgBrand}, setId: ${setId}`);
     const response = await axiosInstance.get(
-      `/api/public/tcg/${tcgType}/sets/${setId}`,
+      `/api/public/tcg/${tcgBrand}/sets/${setId}`,
       {
         params: {
-          tcgLang: POKEMON_SUPPORTED_LANGUAGES[0],
+          tcgLang,
         },
       },
     );
@@ -33,7 +35,7 @@ export async function getSet({
       errorMessage = error.message;
     }
     customLog("error", `Error fetching set: ${errorMessage}`, {
-      tcgType,
+      tcgBrand,
       setId,
       error,
     });

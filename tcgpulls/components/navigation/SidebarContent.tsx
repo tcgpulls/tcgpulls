@@ -109,10 +109,8 @@ const SidebarContent = () => {
       </SidebarBody>
       <SidebarFooter>
         <SidebarSection>
-          <div>
+          <div className="flex justify-between">
             <AuthButton />
-          </div>
-          <div className="flex justify-end">
             <LanguageSwitcher />
           </div>
         </SidebarSection>

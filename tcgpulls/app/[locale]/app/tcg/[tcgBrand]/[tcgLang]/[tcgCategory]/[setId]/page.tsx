@@ -12,16 +12,16 @@ interface Props {
 const PAGE_SIZE = 24;
 
 const SetCardsPage = async ({ params }: Props) => {
-  const { setId, tcgLang, tcgType } = await params;
+  const { setId, tcgLang, tcgBrand } = await params;
   const sortBy = "normalizedNumber";
   const sortOrder = "asc";
 
-  if (!setId || !tcgType || !tcgLang) {
+  if (!setId || !tcgBrand || !tcgLang) {
     notFound();
   }
 
   // Fetch the set information using the getSet action
-  const set = await getSet({ tcgType, setId });
+  const set = await getSet({ tcgBrand, tcgLang, setId });
 
   if (!set) {
     notFound();
@@ -30,7 +30,7 @@ const SetCardsPage = async ({ params }: Props) => {
   // Fetch the initial cards for the set
   const initialCards = await getCards({
     tcgLang,
-    tcgType,
+    tcgBrand,
     setIds: [setId],
     offset: 0,
     limit: PAGE_SIZE,
@@ -44,7 +44,7 @@ const SetCardsPage = async ({ params }: Props) => {
       <CardsList
         initialCards={initialCards}
         tcgLang={tcgLang}
-        tcgType={tcgType}
+        tcgBrand={tcgBrand}
         setId={setId}
         sortBy={sortBy}
         sortOrder={sortOrder}

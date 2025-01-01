@@ -11,13 +11,13 @@ import {
   TcgLangT,
   TcgSortByT,
   TcgSortOrderT,
-  TcgTypeT,
+  TcgBrandT,
 } from "@/types/Tcg";
 
 interface SetsListProps {
   initialSets: PokemonSet[];
   tcgLang: TcgLangT;
-  tcgType: TcgTypeT;
+  tcgBrand: TcgBrandT;
   tcgCategory: TcgCategoryT;
   sortBy: TcgSortByT;
   sortOrder: TcgSortOrderT;
@@ -28,7 +28,7 @@ const PAGE_SIZE = 24;
 export function SetsList({
   initialSets,
   tcgLang,
-  tcgType,
+  tcgBrand,
   tcgCategory,
   sortBy,
   sortOrder,
@@ -36,7 +36,7 @@ export function SetsList({
   const fetchMoreSets = async (offset: number) => {
     return await getSets({
       tcgLang,
-      tcgType,
+      tcgBrand,
       tcgCategory,
       offset,
       limit: PAGE_SIZE,
@@ -55,7 +55,7 @@ export function SetsList({
           <SetCard
             key={set.id}
             set={set}
-            href={`/app/tcg/${tcgType}/${tcgLang}/${tcgCategory}/${set.setId}`}
+            href={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${set.setId}`}
           />
         )}
       />

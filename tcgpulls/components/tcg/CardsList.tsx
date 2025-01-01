@@ -6,12 +6,12 @@ import InfiniteList from "@/components/misc/InfiniteList";
 import { PokemonCard } from "@prisma/client";
 import CardCard from "@/components/tcg/CardCard";
 import { getCards } from "@/actions/getCards";
-import { TcgLangT, TcgSortOrderT, TcgTypeT } from "@/types/Tcg";
+import { TcgLangT, TcgSortOrderT, TcgBrandT } from "@/types/Tcg";
 
 interface CardsListProps {
   initialCards: PokemonCard[];
   tcgLang: TcgLangT;
-  tcgType: TcgTypeT;
+  tcgBrand: TcgBrandT;
   setId: string;
   sortBy: string;
   sortOrder: TcgSortOrderT;
@@ -22,7 +22,7 @@ const PAGE_SIZE = 24;
 export function CardsList({
   initialCards,
   tcgLang,
-  tcgType,
+  tcgBrand,
   setId,
   sortBy,
   sortOrder,
@@ -30,7 +30,7 @@ export function CardsList({
   const fetchMoreCards = async (offset: number) => {
     return await getCards({
       tcgLang,
-      tcgType,
+      tcgBrand,
       setIds: [setId],
       offset,
       limit: PAGE_SIZE,
@@ -49,7 +49,7 @@ export function CardsList({
           <CardCard
             key={card.id}
             card={card}
-            href={`/app/tcg/pokemon/cards/${card.cardId}`}
+            href={`/app/tcg/pokemon/${tcgLang}/cards/${card.cardId}`}
           />
         )}
       />

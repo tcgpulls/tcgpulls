@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 type Props = {
   title: string;
-  description?: string;
+  description?: ReactNode;
   icon?: ReactNode;
 };
 
@@ -14,7 +14,7 @@ const PageHeader = ({ title, description, icon }: Props) => {
         {icon && <div className={`w-6 h-6`}>{icon}</div>}
         {title}
       </Heading>
-      {description && <p className="text-zinc-500">{description}</p>}
+      {description && <div className="text-zinc-500">{description}</div>}
     </div>
   );
 };

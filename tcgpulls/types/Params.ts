@@ -1,12 +1,13 @@
 import { Locale } from "@/i18n/routing";
-import { TcgCategoryT, TcgLangT, TcgTypeT } from "@/types/Tcg";
+import { TcgCategoryT, TcgLangT, TcgBrandT } from "@/types/Tcg";
 
 export type UrlParamsKeyT = {
   locale: Locale;
-  tcgType: TcgTypeT;
+  tcgBrand: TcgBrandT;
   tcgLang: TcgLangT;
   tcgCategory: TcgCategoryT;
   setId: string;
+  cardId: string;
 };
 
 export type UrlParamsT = Promise<Partial<UrlParamsKeyT>>;

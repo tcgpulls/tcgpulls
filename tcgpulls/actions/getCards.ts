@@ -3,11 +3,11 @@
 import { PokemonCard } from "@prisma/client";
 import axiosInstance from "@/utils/axiosInstance";
 import customLog from "@/utils/customLog";
-import { TcgSortOrderT, TcgTypeT } from "@/types/Tcg";
+import { TcgSortOrderT, TcgBrandT } from "@/types/Tcg";
 
 interface FetchCardsParams {
   tcgLang: string;
-  tcgType: TcgTypeT;
+  tcgBrand: TcgBrandT;
   setIds: string[];
   offset: number;
   limit: number;
@@ -17,7 +17,7 @@ interface FetchCardsParams {
 
 export async function getCards({
   tcgLang,
-  tcgType,
+  tcgBrand,
   setIds,
   offset,
   limit,
@@ -30,7 +30,7 @@ export async function getCards({
     );
 
     const response = await axiosInstance.get(
-      `/api/public/tcg/${tcgType}/cards`,
+      `/api/public/tcg/${tcgBrand}/cards`,
       {
         params: {
           tcgLang, // e.g. "en"
