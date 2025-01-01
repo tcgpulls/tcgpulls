@@ -3,26 +3,21 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // or mysql / sqlite / cockroachdb
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// =========================
-// Authentication
-// =========================
 model User {
   id            String          @id @default(cuid())
   name          String?
   email         String          @unique
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   accounts      Account[]
-  sessions      Session[]
-  // Optional for WebAuthn support
   Authenticator Authenticator[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sessions      Session[]
 }
 
 model Account {
@@ -37,11 +32,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -50,10 +43,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -64,7 +56,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -74,23 +65,14 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
 }
 
-// =========================
-// PokemonSet
-// =========================
 model PokemonSet {
-  // Internal PK
-  id String @id @default(cuid())
-
-  // Name field (restored)
-  name String
-
-  // External TCG code, e.g. "swsh1"
+  id                 String        @id @default(cuid())
+  name               String
   setId              String
   language           String
   releaseDate        DateTime
@@ -98,112 +80,84 @@ model PokemonSet {
   ptcgoCode          String?
   series             String
   total              Int
-  updatedAt          DateTime  @updatedAt
-  lastPriceFetchDate DateTime?
+  updatedAt          DateTime      @updatedAt
   logo               String
   symbol             String
   localLogo          String?
   localSymbol        String?
+  parentSetId        String?
+  isBoosterPack      Boolean       @default(true)
+  lastPriceFetchDate DateTime?
+  PokemonCards       PokemonCard[]
+  parentSet          PokemonSet?   @relation("Subsets", fields: [parentSetId], references: [id])
+  subsets            PokemonSet[]  @relation("Subsets")
 
-  // Parent/subset relationship
-  parentSetId String?
-  parentSet   PokemonSet?  @relation("Subsets", fields: [parentSetId], references: [id])
-  subsets     PokemonSet[] @relation("Subsets")
-
-  isBoosterPack Boolean @default(true)
-
-  // Relation to PokemonCard
-  PokemonCards PokemonCard[]
-
-  // Ensure (setId, language) is unique
   @@unique([setId, language])
 }
 
-// =========================
-// PokemonCard
-// =========================
 model PokemonCard {
-  // Internal PK
-  id String @id @default(cuid())
-
-  // External card code, e.g. "swsh4-25"
-  cardId String
-  setId  String
-  set    PokemonSet @relation(fields: [setId], references: [id])
-
-  variant                String   @default("normal")
-  name                   String
-  supertype              String
-  subtypes               String[]
-  hp                     Int?
-  types                  String[]
-  evolvesFrom            String?
-  flavorText             String?
-  number                 String
-  normalizedNumber       Int      @default(999)
-  artist                 String?
-  rarity                 String?
-  nationalPokedexNumbers Int[]
-  imagesSmall            String
-  imagesLarge            String
-  localImageSmall        String?
-  localImageLarge        String?
-  retreatCost            String[]
-  convertedRetreatCost   Int?
-  language               String
-
-  abilities  PokemonCardAbility[]
-  attacks    PokemonCardAttack[]
-  weaknesses PokemonCardWeakness[]
-
+  id                      String                    @id @default(cuid())
+  cardId                  String
+  setId                   String
+  variant                 String                    @default("normal")
+  name                    String
+  supertype               String
+  subtypes                String[]
+  hp                      Int?
+  types                   String[]
+  evolvesFrom             String?
+  flavorText              String?
+  number                  String
+  normalizedNumber        Int                       @default(999)
+  artist                  String?
+  rarity                  String?
+  nationalPokedexNumbers  Int[]
+  imagesSmall             String
+  imagesLarge             String
+  localImageSmall         String?
+  localImageLarge         String?
+  retreatCost             String[]
+  convertedRetreatCost    Int?
+  language                String
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
+  set                     PokemonSet                @relation(fields: [setId], references: [id])
+  abilities               PokemonCardAbility[]
+  attacks                 PokemonCardAttack[]
   PokemonCardPriceHistory PokemonCardPriceHistory[]
+  weaknesses              PokemonCardWeakness[]
 
-  // No duplicates for same (cardId, language, setId, variant)
   @@unique([cardId, language, setId, variant])
 }
 
-// =========================
-// PokemonCardAbility
-// =========================
 model PokemonCardAbility {
   id     String      @id @default(cuid())
-  card   PokemonCard @relation(fields: [cardId], references: [id])
   cardId String
   name   String
   text   String
   type   String
+  card   PokemonCard @relation(fields: [cardId], references: [id])
 }
 
-// =========================
-// PokemonCardAttack
-// =========================
 model PokemonCardAttack {
   id                  String      @id @default(cuid())
-  card                PokemonCard @relation(fields: [cardId], references: [id])
   cardId              String
   name                String
   cost                String[]
   convertedEnergyCost Int
   damage              String?
   text                String?
+  card                PokemonCard @relation(fields: [cardId], references: [id])
 }
 
-// =========================
-// PokemonCardWeakness
-// =========================
 model PokemonCardWeakness {
   id     String      @id @default(cuid())
-  card   PokemonCard @relation(fields: [cardId], references: [id])
   cardId String
   type   String
   value  String
+  card   PokemonCard @relation(fields: [cardId], references: [id])
 }
 
-// =========================
-// PokemonCardPriceHistory
-// =========================
 model PokemonCardPriceHistory {
   id             String      @id @default(cuid())
   card           PokemonCard @relation(fields: [cardId], references: [id])
@@ -214,4 +168,7 @@ model PokemonCardPriceHistory {
   cardmarketData Json?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
+  priceDate      DateTime    @default(now())
+
+  @@unique([cardId, variant, priceDate])
 }

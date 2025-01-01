@@ -32,6 +32,8 @@ function chunkArray<T>(arr: T[], chunkSize: number): T[][] {
 /**
  * Fetches the external API for one set + language,
  * then inserts daily price rows into PokemonCardPriceHistory.
+ *
+ * @returns {boolean} true if everything succeeded, false if any failure occurred
  */
 async function processOneSetAndLanguage(
   set: any,
@@ -42,21 +44,28 @@ async function processOneSetAndLanguage(
     totalCardsWithoutDbMatch: number;
     unmatchedCardIds: string[];
   },
-) {
+): Promise<boolean> {
   customLog(
     `\n⏳ Fetching price data for set: ${set.name} (TCG Code: ${set.setId}, Language: ${language})`,
   );
 
   try {
+    // We'll create a date truncated to midnight for "one entry per day"
+    const priceDate = new Date();
+    priceDate.setUTCHours(0, 0, 0, 0);
+
+    // 1) Fetch data
     const cardsData = await fetchPokemonTcgApiSetCards(language, set.setId);
     if (!Array.isArray(cardsData) || cardsData.length === 0) {
       customLog(
         "warn",
         `⚠️ No card data returned for set: ${set.setId}, language: ${language}`,
       );
-      return;
+      // Fail => skip updating lastPriceFetchDate
+      return false;
     }
 
+    // 2) Filter if specified card
     const filteredCardsData = specifiedCardId
       ? cardsData.filter((c) => c.id === specifiedCardId)
       : cardsData;
@@ -66,9 +75,10 @@ async function processOneSetAndLanguage(
         "warn",
         `⚠️ No fetched card matches --cardId=${specifiedCardId}. Skipping.`,
       );
-      return;
+      return false;
     }
 
+    // 3) Build the price history entries
     const priceHistoryEntries: Prisma.PokemonCardPriceHistoryCreateManyInput[] =
       [];
     await Promise.all(
@@ -85,38 +95,53 @@ async function processOneSetAndLanguage(
           if (matchingDbCards.length === 0) {
             counters.totalCardsWithoutDbMatch++;
             counters.unmatchedCardIds.push(fetchedCard.id);
+            // Could treat this as a "soft" fail or a "hard" fail.
+            // If you want ANY mismatch to fail the entire set, return false.
+            // For minimal changes, let's just continue but set is still partial success.
+            // If you DO want to fail, you'd do: return false;
             return;
           }
 
+          // Add to our batch
           for (const dbCard of matchingDbCards) {
             priceHistoryEntries.push({
+              // Important: "cardId" (the PK from PokemonCard table)
               cardId: dbCard.id,
               variant: dbCard.variant,
               fetchedAt: new Date(),
               tcgplayerData: fetchedCard.tcgplayer || null,
               cardmarketData: fetchedCard.cardmarket || null,
+              // NEW: daily price date
+              priceDate,
             });
           }
         }),
       ),
     );
 
+    // 4) Insert if we have anything
     if (priceHistoryEntries.length > 0) {
       await prisma.pokemonCardPriceHistory.createMany({
         data: priceHistoryEntries,
-        skipDuplicates: true,
+        skipDuplicates: true, // combined with DB unique constraint => no duplicates
       });
       counters.totalPriceEntriesInserted += priceHistoryEntries.length;
       customLog(
         `💾 Inserted ${priceHistoryEntries.length} price history entries for set: ${set.name} (${language})`,
       );
+    } else {
+      // If we never inserted anything => consider that a failure so we retry next time
+      return false;
     }
+
+    return true; // success
   } catch (error) {
     customLog(
       "error",
       `❌ Error processing set: ${set.name} (Language: ${language})`,
       error,
     );
+    return false;
   }
 }
 
@@ -173,16 +198,29 @@ export async function fetchAndStorePokemonPrices(chunkSize: number = 10) {
     }
 
     const setChunks = chunkArray(sets, SET_CONCURRENCY_LIMIT);
+    // We'll track if ANY set in this entire run fails
+    let anySetFailed = false;
+
     for (const setChunk of setChunks) {
+      // If you prefer chunk-level logic, you can track chunkFailed instead.
+      // Minimally, let's track "did the chunk fail" to skip updating lastPriceFetchDate for that chunk.
+      let chunkFailed = false;
+
       await Promise.all(
         setChunk.map((set) =>
           Promise.all(
             POKEMON_SUPPORTED_LANGUAGES.map((language) =>
+              // Use .then(...) to get the boolean return
               processOneSetAndLanguage(set, language, specifiedCardId, counters)
-                .then(() => {
+                .then((success) => {
                   totalSetsProcessed++;
+                  if (!success) {
+                    chunkFailed = true;
+                  }
                 })
                 .catch((err) => {
+                  // If we ever catch an error => chunk is a failure
+                  chunkFailed = true;
                   customLog(
                     "error",
                     `❌ Error in processOneSetAndLanguage for setId=${set.setId}, language=${language}`,
@@ -194,20 +232,24 @@ export async function fetchAndStorePokemonPrices(chunkSize: number = 10) {
         ),
       );
 
+      if (chunkFailed) {
+        // Mark the entire chunk as a failure => skip updating lastPriceFetchDate
+        anySetFailed = true;
+      } else {
+        // If the chunk was fully successful, update lastPriceFetchDate for these sets
+        await prisma.pokemonSet.updateMany({
+          where: {
+            id: { in: setChunk.map((s) => s.id) },
+          },
+          data: {
+            lastPriceFetchDate: new Date(),
+          },
+        });
+      }
+
       // Add a delay between chunks to prevent resource exhaustion
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-
-    // Mark these sets as updated "now"
-    // so we don't re-fetch them again in another chunk run.
-    await prisma.pokemonSet.updateMany({
-      where: {
-        id: { in: sets.map((s) => s.id) },
-      },
-      data: {
-        lastPriceFetchDate: new Date(),
-      },
-    });
 
     // Summary
     customLog("\n--- Price Insertion Summary ---");
@@ -224,6 +266,15 @@ export async function fetchAndStorePokemonPrices(chunkSize: number = 10) {
         "warn",
         `🔎 Unmatched externalCardIds:\n${counters.unmatchedCardIds.join(", ")}`,
       );
+    }
+
+    if (anySetFailed) {
+      customLog(
+        "warn",
+        "⚠️ Some sets failed and were NOT marked as updated. They will be retried on the next cron run.",
+      );
+    } else {
+      customLog("info", "✅ All sets successfully updated!");
     }
   } catch (error) {
     customLog("error", "❌ Error during fetching and storing prices", error);
