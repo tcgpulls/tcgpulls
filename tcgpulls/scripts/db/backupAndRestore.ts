@@ -139,7 +139,8 @@ function restoreDatabase(config: PostgresConfig) {
     `-U ${config.user}`,
     "--clean",
     "--no-owner",
-    "--if-exists", // <--- Key addition to ignore missing objects
+    "--if-exists",
+    "--no-acl",
     `-d ${config.database}`,
     DUMP_FILE_PATH,
   ].join(" ");
