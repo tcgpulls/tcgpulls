@@ -30,7 +30,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # env files (can opt-in for committing if needed)
-.env.local
+../.env.local
 
 # vercel
 .vercel
@@ -38,6 +38,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# db dump
-backup.dump

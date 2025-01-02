@@ -1,9 +1,9 @@
-import { fetchPokemonTcgApiSetCards } from "@/lib/PokemonTcgApi/fetchPokemonTcgApiSetCards";
-import customLog from "@/utils/customLog";
-import { prisma } from "@/lib/prisma";
+import { fetchPokemonTcgApiSetCards } from "tcgpulls/lib/PokemonTcgApi/fetchPokemonTcgApiSetCards";
+import customLog from "tcgpulls/utils/customLog";
+import { prisma } from "@tcg/prisma";
 import pLimit from "p-limit";
-import { POKEMON_SUPPORTED_LANGUAGES } from "@/constants/tcg/pokemon";
-import { SPELLED_NUMBERS } from "@/constants/utils";
+import { POKEMON_SUPPORTED_LANGUAGES } from "tcgpulls/constants/tcg/pokemon";
+import { SPELLED_NUMBERS } from "tcgpulls/constants/utils";
 
 // Command line arguments
 const args = process.argv.slice(2);

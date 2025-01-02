@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@tcg/prisma";
 import customLog from "@/utils/customLog";
 import { POKEMON_CARDS_SORT_OPTIONS } from "@/constants/tcg/pokemon";
 import { TcgSortOrderT } from "@/types/Tcg";

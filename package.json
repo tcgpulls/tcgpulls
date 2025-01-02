@@ -10,7 +10,13 @@
     "type": "git",
     "url": "git+https://github.com/achampagnedev/tcgpulls.git"
   },
-  "author": "Alexandre Champagne",
+  "workspaces": [
+    "tcgpulls",
+    "tcgpulls-admin",
+    "packages/prisma",
+    "packages/scripts"
+  ],
+  "author": "tcgpulls",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/achampagnedev/tcgpulls/issues"

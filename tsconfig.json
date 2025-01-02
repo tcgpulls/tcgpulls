@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@tcg/prisma": ["packages/prisma"],
+      "@/*": ["tcgpulls/*"]
+    }
+  },
+  "include": [
+    "packages/scripts/**/*",
+    "packages/prisma/**/*",
+    "tcgpulls/**/*",
+    "tcgpulls-admin/**/*"
+  ]
+}

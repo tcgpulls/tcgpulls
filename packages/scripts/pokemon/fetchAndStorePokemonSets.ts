@@ -1,12 +1,12 @@
-import { fetchPokemonTcgApiSets } from "@/lib/PokemonTcgApi/fetchPokemonTcgApiSets";
-import { prisma } from "@/lib/prisma";
-import customLog from "@/utils/customLog";
+import { fetchPokemonTcgApiSets } from "tcgpulls/lib/PokemonTcgApi/fetchPokemonTcgApiSets";
+import { prisma } from "@tcg/prisma";
+import customLog from "tcgpulls/utils/customLog";
 import pLimit from "p-limit";
 import {
   POKEMON_SETS_WITH_SUBSETS,
   POKEMON_SUPPORTED_LANGUAGES,
-} from "@/constants/tcg/pokemon";
-import { PokemonTcgApiSetT } from "@/types/Pokemon";
+} from "tcgpulls/constants/tcg/pokemon";
+import { PokemonTcgApiSetT } from "tcgpulls/types/Pokemon";
 
 const args = process.argv.slice(2);
 const force = args.includes("--force-update");

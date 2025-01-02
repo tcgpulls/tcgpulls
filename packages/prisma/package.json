@@ -1,0 +1,25 @@
+{
+  "name": "@tcg/prisma",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "Alexandre Champagne",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "generate": "dotenv -e ../../.env.local -- prisma generate",
+    "studio": "dotenv -e ../../.env.local -- prisma studio",
+    "db:migrate-dev": "dotenv -e ../../.env.local -- prisma migrate dev",
+    "db:pull": "dotenv -e ../../.env.local -- prisma db pull",
+    "db:push": "dotenv -e ../../.env.local -- prisma db push",
+    "db:reset": "dotenv -e ../../.env.local -- prisma migrate reset --force"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.1.0"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.4.4",
+    "prisma": "^6.1.0"
+  }
+}

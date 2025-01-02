@@ -1,5 +1,5 @@
-import { s3Client } from "@/lib/r2client";
-import { prisma } from "@/lib/prisma";
+import { s3Client } from "tcgpulls/lib/r2client";
+import { prisma } from "@tcg/prisma";
 import {
   ListObjectsV2Command,
   GetObjectCommand,
@@ -8,7 +8,7 @@ import {
 } from "@aws-sdk/client-s3";
 import sharp from "sharp";
 import pLimit from "p-limit";
-import customLog from "@/utils/customLog";
+import customLog from "tcgpulls/utils/customLog";
 
 (async () => {
   const bucketName = process.env.R2_BUCKET_NAME;

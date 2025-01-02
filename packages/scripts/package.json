@@ -1,0 +1,35 @@
+{
+  "name": "@tcg/scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "Alexandre Champagne",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "db:backup-and-deploy": "dotenv -e .env.local -- tsx packages/scripts/db/backupAndRestore.ts",
+    "pokemon:fetch-store-sets": "dotenv -e .env.local -- npx tsx packages/scripts/pokemon/fetchAndStorePokemonSets.ts",
+    "pokemon:fetch-upload-sets-images": "dotenv -e .env.local -- npx tsx packages/scripts/pokemon/fetchAndUploadPokemonSetsImages.ts",
+    "pokemon:fetch-store-cards": "dotenv -e .env.local -- npx tsx packages/scripts/pokemon/fetchAndStorePokemonSetCards.ts",
+    "pokemon:fetch-upload-cards-images": "dotenv -e .env.local -- npx tsx packages/scripts/pokemon/fetchAndUploadToStoragePokemonSetCardsImages.ts",
+    "pokemon:fetch-store-prices": "dotenv -e .env.local -- npx tsx packages/scripts/pokemon/fetchAndStorePokemonCardPrices.ts",
+    "pokemon:clear-data": "dotenv -e .env.local -- tsx packages/scripts/pokemon/clearPokemonData.ts",
+    "pokemon:clear-price-history": "dotenv -e .env.local -- tsx packages/scripts/pokemon/clearPokemonCardPriceHistory.ts",
+    "images:swap-png-to-jpg": "dotenv -e .env.local -- tsx packages/scripts/images/convertAllPngToJpg.ts",
+    "images:remove-unused-from-storage": "dotenv -e .env.local -- tsx packages/scripts/images/removeUnusedImagesFromStorage.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.714.0",
+    "@aws-sdk/lib-storage": "^3.714.0",
+    "axios": "^1.7.9",
+    "dotenv-cli": "^7.4.4",
+    "p-limit": "^6.1.0",
+    "sharp": "^0.33.5",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.4.4"
+  }
+}

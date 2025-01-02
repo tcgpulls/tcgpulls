@@ -1,4 +1,4 @@
-import { fetchAndStorePokemonPrices } from "@/scripts/pokemon/fetchAndStorePokemonCardPrices";
+import { fetchAndStorePokemonPrices } from "@tcg/scripts/pokemon/fetchAndStorePokemonCardPrices";
 import { NextResponse } from "next/server";
 import customLog from "@/utils/customLog";
 
