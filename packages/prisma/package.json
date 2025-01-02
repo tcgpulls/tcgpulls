@@ -6,7 +6,6 @@
   "license": "ISC",
   "author": "Alexandre Champagne",
   "type": "commonjs",
-  "main": "index.js",
   "scripts": {
     "generate": "dotenv -e ../../.env.local -- prisma generate",
     "studio": "dotenv -e ../../.env.local -- prisma studio",
