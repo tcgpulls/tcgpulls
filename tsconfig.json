@@ -1,8 +1,21 @@
 {
   "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@tcg/prisma": ["packages/prisma"],
+      "@tcg/scripts/*": ["packages/scripts/*"],
+      "@tcg/prisma": ["packages/prisma/index.ts"],
       "@/*": ["tcgpulls/*"]
     }
   },
