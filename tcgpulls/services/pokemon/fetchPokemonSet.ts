@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@tcg/prisma";
 import customLog from "@/utils/customLog";
 
 interface FetchPokemonSetArgs {

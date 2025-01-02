@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import customLog from "@/utils/customLog";
-import delayPromise from "@/utils/delayPromise";
+import { prisma } from "@tcg/prisma";
+import customLog from "tcgpulls/utils/customLog";
+import delayPromise from "tcgpulls/utils/delayPromise";
 import { PutObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "@/lib/r2client";
+import { s3Client } from "tcgpulls/lib/r2client";
 import pLimit from "p-limit";
 
 const args = process.argv.slice(2);
@@ -25,7 +25,7 @@ const limit = pLimit(CONCURRENCY_LIMIT);
     const sets = await prisma.pokemonSet.findMany();
     customLog(`🔍 Found ${sets.length} sets in the database.`);
 
-    const uploadTasks = sets.map((set) =>
+    const uploadTasks = sets.map((set: (typeof sets)[number]) =>
       limit(async () => {
         if (!set.logo && !set.symbol) return;
 

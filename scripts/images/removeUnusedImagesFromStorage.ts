@@ -1,8 +1,8 @@
-import { s3Client } from "@/lib/r2client";
-import { prisma } from "@/lib/prisma";
+import { s3Client } from "tcgpulls/lib/r2client";
+import { prisma } from "@tcg/prisma";
 import { ListObjectsV2Command, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import pLimit from "p-limit";
-import customLog from "@/utils/customLog";
+import customLog from "tcgpulls/utils/customLog";
 
 (async () => {
   const bucketName = process.env.R2_BUCKET_NAME;
@@ -31,7 +31,7 @@ import customLog from "@/utils/customLog";
     },
   });
 
-  cards.forEach((card) => {
+  cards.forEach((card: (typeof cards)[number]) => {
     if (card.localImageSmall) referencedImages.add(card.localImageSmall);
     if (card.localImageLarge) referencedImages.add(card.localImageLarge);
   });

@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import customLog from "@/utils/customLog";
-import delayPromise from "@/utils/delayPromise";
+import { prisma } from "@tcg/prisma";
+import customLog from "tcgpulls/utils/customLog";
+import delayPromise from "tcgpulls/utils/delayPromise";
 import { PutObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "@/lib/r2client";
+import { s3Client } from "tcgpulls/lib/r2client";
 import pLimit from "p-limit";
 import sharp from "sharp";
 

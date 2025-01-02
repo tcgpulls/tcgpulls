@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import customLog from "@/utils/customLog";
+import { prisma } from "@tcg/prisma";
+import customLog from "tcgpulls/utils/customLog";
 
 async function clearPokemonCardPriceHistory() {
   try {
