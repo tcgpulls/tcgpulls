@@ -4,17 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky",
-    "db:backup-and-deploy": "dotenv -e .env.local -- tsx scripts/db/backupAndRestore.ts",
-    "pokemon:fetch-store-sets": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndStorePokemonSets.ts",
-    "pokemon:fetch-upload-sets-images": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndUploadPokemonSetsImages.ts",
-    "pokemon:fetch-store-cards": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndStorePokemonSetCards.ts",
-    "pokemon:fetch-upload-cards-images": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndUploadToStoragePokemonSetCardsImages.ts",
-    "pokemon:fetch-store-prices": "dotenv -e .env.local -- npx tsx scripts/pokemon/fetchAndStorePokemonCardPrices.ts",
-    "pokemon:clear-data": "dotenv -e .env.local -- tsx scripts/pokemon/clearPokemonData.ts",
-    "pokemon:clear-price-history": "dotenv -e .env.local -- tsx scripts/pokemon/clearPokemonCardPriceHistory.ts",
-    "images:swap-png-to-jpg": "dotenv -e .env.local -- tsx scripts/images/convertAllPngToJpg.ts",
-    "images:remove-unused-from-storage": "dotenv -e .env.local -- tsx scripts/images/removeUnusedImagesFromStorage.ts"
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -23,7 +13,8 @@
   "workspaces": [
     "tcgpulls",
     "tcgpulls-admin",
-    "packages/prisma"
+    "packages/prisma",
+    "packages/scripts"
   ],
   "author": "tcgpulls",
   "license": "ISC",
@@ -32,16 +23,6 @@
   },
   "homepage": "https://github.com/achampagnedev/tcgpulls#readme",
   "description": "",
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.714.0",
-    "@aws-sdk/lib-storage": "^3.714.0",
-    "axios": "^1.7.9",
-    "dotenv-cli": "^7.4.4",
-    "p-limit": "^6.1.0",
-    "sharp": "^0.33.5",
-    "ts-node": "^10.9.2",
-    "tsx": "^4.19.2"
-  },
   "devDependencies": {
     "husky": "^9.1.7"
   }

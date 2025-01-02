@@ -7,7 +7,7 @@
     }
   },
   "include": [
-    "scripts/**/*",
+    "packages/scripts/**/*",
     "packages/prisma/**/*",
     "tcgpulls/**/*",
     "tcgpulls-admin/**/*"
