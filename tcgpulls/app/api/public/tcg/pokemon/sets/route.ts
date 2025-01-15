@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchPokemonSets } from "@/services/pokemon/fetchPokemonSets";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 import { POKEMON_SUPPORTED_TCG_LANGUAGES } from "@/constants/tcg/pokemon";
 
 export async function GET(request: Request) {
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ data: sets, total });
   } catch (error) {
-    customLog("error", "Error fetching Pokémon sets:", error);
+    serverLog("error", "Error fetching Pokémon sets:", error);
     return NextResponse.json(
       { error: "Failed to fetch Pokémon sets from database." },
       { status: 500 },

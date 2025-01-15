@@ -12,6 +12,7 @@ export const POKEMON_SETS_WITH_SUBSETS: { [mainSetId: string]: string } = {
   swsh12: "swsh12tg",
   swsh12pt5: "swsh12pt5gg",
 };
+
 export const POKEMON_SETS_SORT_OPTIONS = ["releaseDate", "name"];
 
 // CARDS CONSTANTS

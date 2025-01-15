@@ -2,7 +2,7 @@
 
 import { PokemonCard } from "@prisma/client";
 import axiosInstance from "@/utils/axiosInstance";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 import { TcgBrandT } from "@/types/Tcg";
 
 interface FetchCardParams {
@@ -17,7 +17,7 @@ export async function getCard({
   cardId,
 }: FetchCardParams): Promise<PokemonCard> {
   try {
-    customLog(`Fetching card for tcgBrand: ${tcgBrand}, cardId: ${cardId}`);
+    serverLog(`Fetching card for tcgBrand: ${tcgBrand}, cardId: ${cardId}`);
     const response = await axiosInstance.get(
       `/api/public/tcg/${tcgBrand}/cards/${cardId}`,
       {
@@ -26,14 +26,14 @@ export async function getCard({
         },
       },
     );
-    customLog(`Successfully fetched card: ${response.data.data.cardId}`);
+    serverLog(`Successfully fetched card: ${response.data.data.cardId}`);
     return response.data.data;
   } catch (error: unknown) {
     let errorMessage = "Unknown error in getCard";
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    customLog("error", `Error fetching card: ${errorMessage}`, {
+    serverLog("error", `Error fetching card: ${errorMessage}`, {
       tcgBrand,
       tcgLang,
       cardId,

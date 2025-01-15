@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 import { fetchPokemonSet } from "@/services/pokemon/fetchPokemonSet";
 
 export async function GET(
@@ -23,7 +23,7 @@ export async function GET(
     );
   }
 
-  customLog("debug", "[setId]/route.ts: GET request received", {
+  serverLog("debug", "[setId]/route.ts: GET request received", {
     setId,
     tcgLang,
   });
@@ -47,7 +47,7 @@ export async function GET(
       );
     }
 
-    customLog("debug", "[setId]/route.ts: Found set, returning JSON.");
+    serverLog("debug", "[setId]/route.ts: Found set, returning JSON.");
     return NextResponse.json({ data: set }, { status: 200 });
   } catch (error: unknown) {
     let errorMessage = "Unknown error in single-set route";
@@ -55,7 +55,7 @@ export async function GET(
       errorMessage = error.message;
     }
 
-    customLog("error", "Error fetching single Pokémon set:", errorMessage);
+    serverLog("error", "Error fetching single Pokémon set:", errorMessage);
     return NextResponse.json(
       { error: "Failed to fetch single Pokémon set from the database." },
       { status: 500 },

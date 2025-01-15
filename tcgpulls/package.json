@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "dotenv -e ../.env.local -- next dev",
-    "build": "dotenv -e ../.env.local -- npm --workspace ../packages/prisma run generate && next build",
-    "start": "dotenv -e ../.env.local -- next start",
+    "dev": "dotenv -e .env -- next dev",
+    "build": "dotenv -e .env -- npm --workspace ../packages/prisma run generate && next build",
+    "start": "dotenv -e .env -- next start",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -13,8 +13,6 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@tcg/prisma": "1.0.0",
-    "@tcg/scripts": "1.0.0",
     "@auth/prisma-adapter": "^2.7.4",
     "@formatjs/intl-localematcher": "^0.5.9",
     "@headlessui/react": "^2.2.0",

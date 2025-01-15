@@ -18,7 +18,6 @@ const CardPage = async ({ params }: Props) => {
 
   // Fetch the set information using the getSet action
   const card = await getCard({ tcgBrand, tcgLang, cardId });
-  console.log(card);
 
   if (!card) {
     notFound();

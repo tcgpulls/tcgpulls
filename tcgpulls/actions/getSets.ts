@@ -3,7 +3,7 @@
 
 import { PokemonSet } from "@prisma/client";
 import axiosInstance from "@/utils/axiosInstance";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 import { TcgCategoryT, TcgLangT, TcgSortOrderT, TcgBrandT } from "@/types/Tcg";
 
 interface FetchSetsParams {
@@ -26,7 +26,7 @@ export async function getSets({
   sortOrder,
 }: FetchSetsParams): Promise<PokemonSet[]> {
   try {
-    customLog(
+    serverLog(
       `Fetching sets for tcgBrand: ${tcgBrand}, offset: ${offset}, limit: ${limit}`,
     );
     const response = await axiosInstance.get(
@@ -42,10 +42,10 @@ export async function getSets({
         },
       },
     );
-    customLog(`Successfully fetched ${response.data.data.length} sets.`);
+    serverLog(`Successfully fetched ${response.data.data.length} sets.`);
     return response.data.data;
   } catch (error: any) {
-    customLog("error", `Error fetching sets: ${error.message}`, {
+    serverLog("error", `Error fetching sets: ${error.message}`, {
       tcgBrand,
       offset,
       limit,
