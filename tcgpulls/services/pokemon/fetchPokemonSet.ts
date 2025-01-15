@@ -1,5 +1,5 @@
 import { prisma } from "@tcg/prisma";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 
 interface FetchPokemonSetArgs {
   setId: string;
@@ -22,21 +22,21 @@ export async function fetchPokemonSet({
     });
 
     if (!set) {
-      customLog(
+      serverLog(
         "info",
         `fetchPokemonSet: No set found for setId=${setId}, language=${language}`,
       );
       return null;
     }
 
-    customLog("debug", "fetchPokemonSet: Found set:", set.setId);
+    serverLog("debug", "fetchPokemonSet: Found set:", set.setId);
     return set;
   } catch (error: unknown) {
     let errorMessage = "Prisma query failed (unknown error)";
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    customLog("error", "fetchPokemonSet: Prisma query failed:", errorMessage);
+    serverLog("error", "fetchPokemonSet: Prisma query failed:", errorMessage);
     throw new Error("Failed to fetch single Pokémon set from the database.");
   }
 }

@@ -1,5 +1,5 @@
 import { prisma } from "@tcg/prisma";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 import { POKEMON_CARDS_SORT_OPTIONS } from "@/constants/tcg/pokemon";
 import { TcgSortOrderT } from "@/types/Tcg";
 
@@ -28,7 +28,7 @@ export async function fetchPokemonCards({
     whereClause.set = { setId: { in: setIds } };
   }
 
-  customLog("debug", "Prisma Query Where Clause:", whereClause);
+  serverLog("debug", "Prisma Query Where Clause:", whereClause);
 
   try {
     // Validate the sortBy key to ensure it's a valid field in the schema
@@ -37,10 +37,10 @@ export async function fetchPokemonCards({
     }
 
     const total = await prisma.pokemonCard.count({ where: whereClause });
-    customLog("debug", `fetchPokemonCards: Total matching cards = ${total}`);
+    serverLog("debug", `fetchPokemonCards: Total matching cards = ${total}`);
 
     if (total === 0) {
-      customLog(
+      serverLog(
         "info",
         `fetchPokemonCards: No cards found for language=${tcgLang}, setIds=[${setIds.join(", ")}]`,
       );
@@ -54,7 +54,7 @@ export async function fetchPokemonCards({
       skip: offset,
     });
 
-    customLog(
+    serverLog(
       "debug",
       `fetchPokemonCards: Fetched ${cards.length} cards from DB`,
     );
@@ -65,7 +65,7 @@ export async function fetchPokemonCards({
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    customLog("error", "fetchPokemonCards: Prisma query failed:", errorMessage);
+    serverLog("error", "fetchPokemonCards: Prisma query failed:", errorMessage);
     throw new Error("Failed to fetch Pokémon cards from the database.");
   }
 }

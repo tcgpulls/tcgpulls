@@ -1,5 +1,5 @@
 import { prisma } from "@tcg/prisma";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 
 interface FetchPokemonCardArgs {
   cardId: string;
@@ -22,21 +22,21 @@ export async function fetchPokemonCard({
     });
 
     if (!card) {
-      customLog(
+      serverLog(
         "info",
         `fetchPokemonCard: No card found for cardId=${cardId}, language=${language}`,
       );
       return null;
     }
 
-    customLog("debug", "fetchPokemonCard: Found card:", card.cardId);
+    serverLog("debug", "fetchPokemonCard: Found card:", card.cardId);
     return card;
   } catch (error: unknown) {
     let errorMessage = "Prisma query failed (unknown error)";
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    customLog("error", "fetchPokemonCard: Prisma query failed:", errorMessage);
+    serverLog("error", "fetchPokemonCard: Prisma query failed:", errorMessage);
     throw new Error("Failed to fetch single Pokémon card from the database.");
   }
 }

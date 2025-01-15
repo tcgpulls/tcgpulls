@@ -2,7 +2,7 @@
 
 import { PokemonCard } from "@prisma/client";
 import axiosInstance from "@/utils/axiosInstance";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 import { TcgSortOrderT, TcgBrandT } from "@/types/Tcg";
 
 interface FetchCardsParams {
@@ -25,7 +25,7 @@ export async function getCards({
   sortOrder,
 }: FetchCardsParams): Promise<PokemonCard[]> {
   try {
-    customLog(
+    serverLog(
       `getCards: Fetching cards for setIds=[${setIds.join(", ")}], offset=${offset}, limit=${limit}`,
     );
 
@@ -43,7 +43,7 @@ export async function getCards({
       },
     );
 
-    customLog(
+    serverLog(
       `getCards: API returned ${response.data.data.length} cards successfully.`,
     );
     return response.data.data;
@@ -52,7 +52,7 @@ export async function getCards({
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    customLog("error", `getCards: Error fetching cards: ${errorMessage}`, {
+    serverLog("error", `getCards: Error fetching cards: ${errorMessage}`, {
       setIds,
       offset,
       limit,

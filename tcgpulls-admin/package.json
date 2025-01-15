@@ -3,15 +3,35 @@
   "version": "1.0.3",
   "private": true,
   "scripts": {
+    "build": "keystone build",
     "dev": "keystone dev",
-    "start": "keystone start",
-    "build": "keystone build"
+    "postinstall": "keystone postinstall",
+    "generate": "keystone prisma migrate dev",
+    "start": "keystone start --with-migrations",
+    "deploy": "keystone build && keystone prisma migrate deploy",
+    "seed": "tsx ./seed.ts",
+    "storage:empty": "tsx ./scripts/storage/emptyStorage.ts",
+    "pokemon:fetch-sets": "tsx ./scripts/pokemon/fetchAndStorePokemonSets.ts",
+    "pokemon:fetch-sets-images": "tsx ./scripts/pokemon/fetchAndUploadPokemonSetsImages.ts",
+    "pokemon:fetch-sets-and-images": "npm run pokemon:fetch-sets && npm run pokemon:fetch-sets-images",
+    "pokemon:fetch-cards": "tsx ./scripts/pokemon/fetchAndStorePokemonSetsCards.ts",
+    "pokemon:fetch-cards-images": "tsx ./scripts/pokemon/fetchAndUploadToStoragePokemonSetCardsImages.ts",
+    "pokemon:fetch-cards-and-images": "npm run pokemon:fetch-cards && npm run pokemon:fetch-cards-images"
   },
   "dependencies": {
-    "@tcg/prisma": "1.0.0",
-    "@keystone-6/auth": "^8.0.0",
-    "@keystone-6/core": "^6.0.0",
-    "@keystone-6/fields-document": "^9.0.0",
-    "typescript": "^5.5.0"
+    "@aws-sdk/client-s3": "^3.726.1",
+    "@keystone-6/auth": "^8.1.0",
+    "@keystone-6/core": "^6.3.1",
+    "@keystone-6/fields-document": "^9.1.1",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "p-limit": "^6.2.0",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
   }
 }

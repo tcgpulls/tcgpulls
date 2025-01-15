@@ -1,5 +1,5 @@
 import { prisma } from "@tcg/prisma";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 import { POKEMON_SETS_SORT_OPTIONS } from "@/constants/tcg/pokemon";
 import { TcgSortOrderT } from "@/types/Tcg";
 
@@ -26,7 +26,7 @@ export async function fetchPokemonSets({
     whereClause.isBoosterPack = isBoosterPack;
   }
 
-  customLog(
+  serverLog(
     "debug",
     "fetchPokemonSets: Prisma Query Where Clause:",
     whereClause,
@@ -40,11 +40,11 @@ export async function fetchPokemonSets({
 
     // Count the total matching sets
     const total = await prisma.pokemonSet.count({ where: whereClause });
-    customLog("debug", `fetchPokemonSets: Total matching sets = ${total}`);
+    serverLog("debug", `fetchPokemonSets: Total matching sets = ${total}`);
 
     // If none found, return early
     if (total === 0) {
-      customLog(
+      serverLog(
         "info",
         `fetchPokemonSets: No sets found for language=${language}, isBoosterPack=${isBoosterPack}`,
       );
@@ -59,7 +59,7 @@ export async function fetchPokemonSets({
       skip: offset,
     });
 
-    customLog("debug", `fetchPokemonSets: Fetched ${sets.length} sets from DB`);
+    serverLog("debug", `fetchPokemonSets: Fetched ${sets.length} sets from DB`);
 
     return { sets, total };
   } catch (error: unknown) {
@@ -67,7 +67,7 @@ export async function fetchPokemonSets({
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    customLog("error", "fetchPokemonSets: Prisma query failed:", errorMessage);
+    serverLog("error", "fetchPokemonSets: Prisma query failed:", errorMessage);
     throw new Error("Failed to fetch Pokémon sets from the database.");
   }
 }

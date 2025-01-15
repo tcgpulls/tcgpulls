@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchPokemonCards } from "@/services/pokemon/fetchPokemonCards";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 import {
   POKEMON_CARDS_SORT_OPTIONS,
   POKEMON_SUPPORTED_TCG_LANGUAGES,
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   const offset = parseInt(searchParams.get("offset") || "0", 10);
   const setIds = searchParams.get("setId")?.split(",").filter(Boolean) || [];
 
-  customLog("debug", "API Route Received Params:", {
+  serverLog("debug", "API Route Received Params:", {
     tcgLang,
     sortOrder,
     sortBy,
@@ -52,14 +52,14 @@ export async function GET(request: Request) {
       );
     }
 
-    customLog("debug", `Route: Found ${cards.length} cards. Returning JSON.`);
+    serverLog("debug", `Route: Found ${cards.length} cards. Returning JSON.`);
     return NextResponse.json({ data: cards, total });
   } catch (error: unknown) {
     let errorMessage = "Unknown error in route";
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    customLog("error", "Error fetching Pokémon cards:", errorMessage);
+    serverLog("error", "Error fetching Pokémon cards:", errorMessage);
     return NextResponse.json(
       { error: "Failed to fetch Pokémon cards from the database." },
       { status: 500 },

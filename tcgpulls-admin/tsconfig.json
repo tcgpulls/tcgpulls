@@ -2,9 +2,14 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
+    "jsx": "react",
+    "moduleResolution": "node",
     "strict": true,
     "noEmit": true,
+    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": ["global.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

@@ -16,11 +16,12 @@
     "paths": {
       "@tcg/scripts/*": ["packages/scripts/*"],
       "@tcg/prisma": ["packages/prisma/index.ts"],
+      "@tcg/prisma/*": ["packages/prisma/*"],
       "@/*": ["tcgpulls/*"]
     }
   },
   "include": [
-    "packages/scripts/**/*",
+    "tcgpulls-admin/scripts/**/*",
     "packages/prisma/**/*",
     "tcgpulls/**/*",
     "tcgpulls-admin/**/*"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 
 type Props<T> = {
   initialItems: T[];
@@ -28,7 +28,7 @@ const useInfiniteScroll = <T>({
       setItems((prevItems) => [...prevItems, ...newItems]);
       setHasMore(newItems.length === pageSize);
     } catch (error) {
-      customLog("error", "Error loading more items:", error);
+      serverLog("error", "Error loading more items:", error);
     } finally {
       setLoading(false);
     }

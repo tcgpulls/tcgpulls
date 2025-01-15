@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import customLog from "@/utils/customLog";
+import serverLog from "@/utils/serverLog";
 import { fetchPokemonCard } from "@/services/pokemon/fetchPokemonCard";
 
 export async function GET(
@@ -23,7 +23,7 @@ export async function GET(
     );
   }
 
-  customLog("debug", "[cardId]/route.ts: GET request received", {
+  serverLog("debug", "[cardId]/route.ts: GET request received", {
     cardId,
     tcgLang,
   });
@@ -47,7 +47,7 @@ export async function GET(
       );
     }
 
-    customLog("debug", "[cardId]/route.ts: Found card, returning JSON.");
+    serverLog("debug", "[cardId]/route.ts: Found card, returning JSON.");
     return NextResponse.json({ data: card }, { status: 200 });
   } catch (error: unknown) {
     let errorMessage = "Unknown error in single-card route";
@@ -55,7 +55,7 @@ export async function GET(
       errorMessage = error.message;
     }
 
-    customLog("error", "Error fetching single Pokémon card:", errorMessage);
+    serverLog("error", "Error fetching single Pokémon card:", errorMessage);
     return NextResponse.json(
       { error: "Failed to fetch single Pokémon card from the database." },
       { status: 500 },

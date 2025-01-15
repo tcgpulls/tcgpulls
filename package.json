@@ -10,12 +10,6 @@
     "type": "git",
     "url": "git+https://github.com/achampagnedev/tcgpulls.git"
   },
-  "workspaces": [
-    "tcgpulls",
-    "tcgpulls-admin",
-    "packages/prisma",
-    "packages/scripts"
-  ],
   "author": "tcgpulls",
   "license": "ISC",
   "bugs": {
