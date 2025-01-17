@@ -1,12 +1,13 @@
 import "dotenv/config";
 import pLimit from "p-limit";
 import sharp from "sharp";
-import { HeadObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 import getKeystoneContext from "../../getKeystoneContext";
 import serverLog from "../../utils/serverLog";
 import { s3Client } from "../../lib/r2client";
 import { POKEMON_R2_STORAGE_PATH } from "../../constants/tcg/pokemon";
+import fileExistsOnR2 from "../../utils/fileExistsOnR2";
 
 // -------------------
 // Command line flags
@@ -37,30 +38,6 @@ async function fetchAndConvertToJpg(url: string): Promise<Buffer> {
 
   // Convert to JPEG using sharp @85% quality
   return sharp(originalBuffer).jpeg({ quality: 85 }).toBuffer();
-}
-
-/**
- * Checks if a file with key `r2Key` already exists in your R2 bucket.
- */
-async function fileExistsOnR2(r2Key: string): Promise<boolean> {
-  const bucketName = process.env.R2_BUCKET_NAME;
-  if (!bucketName) {
-    throw new Error("❌ R2_BUCKET_NAME is not set in environment variables.");
-  }
-  try {
-    await s3Client.send(
-      new HeadObjectCommand({
-        Bucket: bucketName,
-        Key: r2Key,
-      }),
-    );
-    return true; // File exists
-  } catch (error: any) {
-    if (error.name === "NotFound") {
-      return false; // File does not exist
-    }
-    throw error; // Re-throw other errors
-  }
 }
 
 /**
@@ -146,6 +123,7 @@ async function fetchAndUploadPokemonCardsImages() {
         // We need fields used in logic + the parent set info
         query: `
           id
+          tcgCardId
           name
           number
           variant
@@ -179,7 +157,7 @@ async function fetchAndUploadPokemonCardsImages() {
 
         // We'll store images in: img/tcg/pokemon/sets/{language}/{tcgSetId}/cards/...
         const basePath = `${POKEMON_R2_STORAGE_PATH}/sets/${card.set.language}/${card.set.tcgSetId}/cards`;
-        const baseName = `${card.set.tcgCardId}-${card.variant}`;
+        const baseName = `${card.tcgCardId}-${card.variant}`;
 
         // Build concurrency-limited tasks
         const cardTasks: Array<Promise<void>> = [];

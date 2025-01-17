@@ -12,7 +12,7 @@ const CustomNavigation = ({ lists, authenticatedItem }: NavigationProps) => {
   return (
     <NavigationContainer authenticatedItem={authenticatedItem}>
       <Box paddingBottom="xlarge">
-        <NavItem href="/dashboard">Dashboard</NavItem>
+        <NavItem href="/">Dashboard</NavItem>
       </Box>
       <Box paddingBottom="xlarge">
         {displayedLists.map((group) => (

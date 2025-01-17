@@ -7,7 +7,7 @@ export type UrlParamsKeyT = {
   tcgLang: TcgLangT;
   tcgCategory: TcgCategoryT;
   setId: string;
-  cardId: string;
+  cardSlug: string;
 };
 
 export type UrlParamsT = Promise<Partial<UrlParamsKeyT>>;

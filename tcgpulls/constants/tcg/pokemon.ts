@@ -14,6 +14,8 @@ export const POKEMON_SETS_WITH_SUBSETS: { [mainSetId: string]: string } = {
 };
 
 export const POKEMON_SETS_SORT_OPTIONS = ["releaseDate", "name"];
+export const POKEMON_SETS_PAGE_SIZE = 24;
 
 // CARDS CONSTANTS
 export const POKEMON_CARDS_SORT_OPTIONS = ["normalizedNumber"];
+export const POKEMON_CARDS_PAGE_SIZE = 24;

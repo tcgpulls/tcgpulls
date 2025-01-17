@@ -1,10 +1,11 @@
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 import {
   integer,
   json,
   relationship,
   text,
   timestamp,
+  virtual,
 } from "@keystone-6/core/fields";
 import rules from "../../../accessControl";
 
@@ -22,6 +23,7 @@ const PokemonCard = list({
         "normalizedNumber",
       ],
     },
+    labelField: "displayName",
   },
   access: {
     operation: {
@@ -36,6 +38,19 @@ const PokemonCard = list({
     // EDITABLE FIELDS
     // ----------------------------
     name: text({ validation: { isRequired: true } }),
+    displayName: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        resolve(item) {
+          // item.name + " " + item.variant, or whatever format you prefer
+          return `${item.name} (${item.variant || "no variant"})`;
+        },
+      }),
+      ui: {
+        // probably read-only or hidden in the Admin UI—your choice
+        itemView: { fieldMode: "hidden" },
+      },
+    }),
     imageSmallStorageUrl: text(),
     imageLargeStorageUrl: text(),
 
