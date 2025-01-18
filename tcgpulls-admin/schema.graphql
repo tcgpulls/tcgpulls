@@ -281,6 +281,7 @@ input PokemonCardRelateToManyForCreateInput {
 type PokemonCard {
   id: ID!
   name: String
+  displayName: String
   imageSmallStorageUrl: String
   imageLargeStorageUrl: String
   tcgCardId: String

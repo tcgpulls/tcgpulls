@@ -5,7 +5,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const AuthButton = () => {
   const { data: session, status } = useSession();
-  console.log("session", session);
+  console.log(session);
 
   if (status === "loading") {
     return <Button disabled>Loading...</Button>;

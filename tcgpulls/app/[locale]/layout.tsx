@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
+import Providers from "@/components/Providers";
 
 const LocaleLayout = async ({
   children,
@@ -25,13 +26,13 @@ const LocaleLayout = async ({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`min-h-screen`}>
-      <body className={`min-h-screen font-sans`}>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider messages={messages}>
+      <Providers>
+        <html lang={locale} className={`min-h-screen`}>
+          <body className={`min-h-screen font-sans`}>{children}</body>
+        </html>
+      </Providers>
+    </NextIntlClientProvider>
   );
 };
 

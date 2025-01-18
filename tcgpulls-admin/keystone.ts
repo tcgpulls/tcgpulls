@@ -22,6 +22,7 @@ export default withAuth(
   config({
     server: {
       port: 4000,
+      cors: { origin: [`${process.env.APP_CORS_ORIGIN}`], credentials: true },
     },
     db: {
       provider: "postgresql",

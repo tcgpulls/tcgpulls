@@ -17,6 +17,7 @@
 
 import { execSync } from "child_process";
 import * as path from "path";
+import serverLog from "../../utils/serverLog";
 
 // --------------------------------------------------
 // 1) Parse CLI arguments
@@ -40,14 +41,16 @@ if (!fromConnStr) {
 }
 
 if (!fromConnStr) {
-  console.error(
+  serverLog(
+    "error",
     "ERROR: No source DB specified. Provide --from=<connectionString> or set DATABASE_URL.",
   );
   process.exit(1);
 }
 
 if (!toConnStr) {
-  console.error(
+  serverLog(
+    "error",
     "ERROR: Missing --to=<connectionString> parameter (target DB).",
   );
   process.exit(1);
@@ -80,7 +83,7 @@ function parsePostgresConnectionString(connStr: string): PostgresConfig {
       sslmode,
     };
   } catch (error) {
-    console.error("Invalid Postgres connection string:", connStr);
+    serverLog("error", "Invalid Postgres connection string:", connStr);
     throw error;
   }
 }
@@ -98,7 +101,7 @@ const DUMP_FILE_PATH = path.join(__dirname, "backup.dump");
  * Uses pg_dump with a custom format (-Fc) to create a .dump file
  */
 function backupDatabase(config: PostgresConfig) {
-  console.log(`>>> Backing up source database: ${config.database}`);
+  serverLog(`>>> Backing up source database: ${config.database}`);
 
   const pgDumpCmd = [
     "pg_dump",
@@ -119,7 +122,7 @@ function backupDatabase(config: PostgresConfig) {
   }
 
   execSync(pgDumpCmd, { stdio: "inherit", env: envVars });
-  console.log(`>>> Backup created at: ${DUMP_FILE_PATH}`);
+  serverLog(`>>> Backup created at: ${DUMP_FILE_PATH}`);
 }
 
 /**
@@ -128,9 +131,7 @@ function backupDatabase(config: PostgresConfig) {
  * We add `--if-exists` to avoid "does not exist" errors on drop statements.
  */
 function restoreDatabase(config: PostgresConfig) {
-  console.log(
-    `\n>>> Restoring backup into target database: ${config.database}`,
-  );
+  serverLog(`\n>>> Restoring backup into target database: ${config.database}`);
 
   const pgRestoreCmd = [
     "pg_restore",
@@ -155,7 +156,7 @@ function restoreDatabase(config: PostgresConfig) {
 
   execSync(pgRestoreCmd, { stdio: "inherit", env: envVars });
 
-  console.log(">>> Backup successfully restored to target database!");
+  serverLog(">>> Backup successfully restored to target database!");
 }
 
 // --------------------------------------------------
@@ -165,11 +166,11 @@ function main() {
   try {
     backupDatabase(fromConfig);
     restoreDatabase(toConfig);
-    console.log(
+    serverLog(
       "\n>>> Done! The target DB now contains data/schema from the source DB.\n",
     );
   } catch (error) {
-    console.error("ERROR during backup/restore process:", error);
+    serverLog("error", "ERROR during backup/restore process:", error);
     process.exit(1);
   }
 }

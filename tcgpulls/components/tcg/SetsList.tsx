@@ -3,27 +3,28 @@
 import React from "react";
 import SetCard from "@/components/tcg/SetCard";
 import CardsGrid from "@/components/misc/CardsGrid";
-import { PokemonSet } from "@prisma/client";
-import { getSets } from "@/actions/getSets";
 import InfiniteList from "@/components/misc/InfiniteList";
 import {
+  TcgBrandT,
   TcgCategoryT,
   TcgLangT,
   TcgSortByT,
   TcgSortOrderT,
-  TcgBrandT,
 } from "@/types/Tcg";
+import {
+  PokemonSetItemFragment,
+  useGetPokemonSetsQuery,
+} from "@/graphql/generated";
+import { POKEMON_SETS_PAGE_SIZE } from "@/constants/tcg/pokemon";
 
 interface SetsListProps {
-  initialSets: PokemonSet[];
+  initialSets: PokemonSetItemFragment[];
   tcgLang: TcgLangT;
   tcgBrand: TcgBrandT;
   tcgCategory: TcgCategoryT;
   sortBy: TcgSortByT;
   sortOrder: TcgSortOrderT;
 }
-
-const PAGE_SIZE = 24;
 
 export function SetsList({
   initialSets,
@@ -33,29 +34,47 @@ export function SetsList({
   sortBy,
   sortOrder,
 }: SetsListProps) {
+  const { data, loading, fetchMore } = useGetPokemonSetsQuery({
+    variables: {
+      where: {
+        language: { equals: tcgLang },
+        ...(tcgCategory === "booster-packs" && {
+          isBoosterPack: { equals: true },
+        }),
+      },
+      orderBy: [{ [sortBy]: sortOrder }],
+      take: POKEMON_SETS_PAGE_SIZE,
+      skip: 0,
+    },
+  });
+
   const fetchMoreSets = async (offset: number) => {
-    return await getSets({
-      tcgLang,
-      tcgBrand,
-      tcgCategory,
-      offset,
-      limit: PAGE_SIZE,
-      sortBy,
-      sortOrder,
+    // use the `fetchMore` from Apollo
+    const { data: moreData } = await fetchMore({
+      variables: { skip: offset },
     });
+    return moreData?.pokemonSets ?? [];
   };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!data?.pokemonSets) {
+    return <p>No sets found</p>;
+  }
 
   return (
     <CardsGrid>
-      <InfiniteList<PokemonSet>
+      <InfiniteList<PokemonSetItemFragment>
         initialItems={initialSets}
         fetchMore={fetchMoreSets}
-        pageSize={PAGE_SIZE}
+        pageSize={POKEMON_SETS_PAGE_SIZE}
         renderItem={(set) => (
           <SetCard
             key={set.id}
             set={set}
-            href={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${set.setId}`}
+            href={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${set.tcgSetId}`}
           />
         )}
       />

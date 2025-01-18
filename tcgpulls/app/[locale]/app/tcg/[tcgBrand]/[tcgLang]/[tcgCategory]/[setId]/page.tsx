@@ -1,53 +1,94 @@
-import { getCards } from "@/actions/getCards";
-import { getSet } from "@/actions/getSet";
 import PageHeader from "@/components/misc/PageHeader";
 import CardsList from "@/components/tcg/CardsList";
 import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
+import { POKEMON_CARDS_PAGE_SIZE } from "@/constants/tcg/pokemon";
+import {
+  GetPokemonCardsQuery,
+  GetPokemonCardsQueryVariables,
+  GetPokemonSetQuery,
+  GetPokemonSetQueryVariables,
+  OrderDirection,
+} from "@/graphql/generated";
+import client from "@/lib/apolloClient";
+import { GET_POKEMON_CARDS } from "@/graphql/tcg/pokemon/cards/queries";
+import { GET_POKEMON_SET } from "@/graphql/tcg/pokemon/sets/queries";
 
 interface Props {
   params: UrlParamsT;
 }
 
-const PAGE_SIZE = 24;
-
 const SetCardsPage = async ({ params }: Props) => {
   const { setId, tcgLang, tcgBrand } = await params;
-  const sortBy = "normalizedNumber";
-  const sortOrder = "asc";
 
+  // Validate
   if (!setId || !tcgBrand || !tcgLang) {
     notFound();
   }
 
-  // Fetch the set information using the getSet action
-  const set = await getSet({ tcgBrand, tcgLang, setId });
+  const { data: setData, error: setError } = await client.query<
+    GetPokemonSetQuery,
+    GetPokemonSetQueryVariables
+  >({
+    query: GET_POKEMON_SET,
+    variables: {
+      where: {
+        tcgSetId_language: `${setId}-${tcgLang}`,
+      },
+    },
+  });
 
-  if (!set) {
-    notFound();
+  if (setError) {
+    return <p>Error fetching set: {setError.message}</p>;
   }
 
-  // Fetch the initial cards for the set
-  const initialCards = await getCards({
-    tcgLang,
-    tcgBrand,
-    setIds: [setId],
-    offset: 0,
-    limit: PAGE_SIZE,
-    sortOrder,
-    sortBy,
+  const set = setData?.pokemonSet;
+  if (!set) {
+    return <p>No set found</p>;
+  }
+
+  // 2) Define your desired sorting
+  const sortBy = "normalizedNumber";
+  const sortOrder = OrderDirection.Asc;
+
+  // 3) Fetch initial cards from GraphQL
+  const { data: cardsData, error: cardsError } = await client.query<
+    GetPokemonCardsQuery,
+    GetPokemonCardsQueryVariables
+  >({
+    query: GET_POKEMON_CARDS,
+    variables: {
+      where: {
+        set: {
+          tcgSetId: { equals: setId },
+          language: { equals: tcgLang },
+        },
+      },
+      orderBy: [{ [sortBy]: sortOrder }],
+      take: POKEMON_CARDS_PAGE_SIZE,
+      skip: 0,
+    },
   });
+
+  if (cardsError) {
+    return <p>Error: {cardsError.message}</p>;
+  }
+
+  if (!cardsData?.pokemonCards) {
+    return <p>No cards found</p>;
+  }
 
   return (
     <>
-      <PageHeader title={`${set.name} (${set.setId})`} />
+      <PageHeader title={`${set.name} (${set.tcgSetId})`} />
       <CardsList
-        initialCards={initialCards}
+        key={`${sortBy}-${sortOrder}`}
+        initialCards={cardsData.pokemonCards}
         tcgLang={tcgLang}
         tcgBrand={tcgBrand}
         setId={setId}
         sortBy={sortBy}
-        sortOrder={sortOrder}
+        sortOrder={sortOrder} // or convert to "asc"/"desc" if needed
       />
     </>
   );

@@ -1,13 +1,15 @@
 import Card from "@/components/misc/Card";
-import { PokemonCard } from "@prisma/client";
 import { Link } from "@/components/catalyst-ui/link";
 import { Href } from "@react-types/shared";
 import Image from "next/image";
-import { assetsUrl } from "@/utils/assetsUrl";
 import camelCaseToWords from "@/utils/camelCaseToWords";
+import { GetPokemonCardsQuery } from "@/graphql/generated";
+import { assetsUrl } from "@/utils/assetsUrl";
+
+type PokemonCardItem = NonNullable<GetPokemonCardsQuery["pokemonCards"]>[0];
 
 type Props = {
-  card: PokemonCard;
+  card: PokemonCardItem;
   href: Href;
 };
 
@@ -17,10 +19,10 @@ const CardCard = ({ card, href }: Props) => {
       <Card isClickable={true}>
         <Image
           src={
-            card.localImageSmall
-              ? assetsUrl(card.localImageSmall)
-              : card.imagesSmall
-                ? card.imagesSmall
+            card.imageSmallStorageUrl
+              ? assetsUrl(card.imageSmallStorageUrl)
+              : card.imageSmallApiUrl
+                ? card.imageSmallApiUrl
                 : "https://placehold.co/300x200"
           }
           className="w-full object-contain mb-4 rounded-xl"
@@ -32,7 +34,7 @@ const CardCard = ({ card, href }: Props) => {
           <h2 className="font-semibold text-sm text-center text-white">
             {card.name} - {card.number}
           </h2>
-          <p className={`text-xs`}>({camelCaseToWords(card.variant)})</p>
+          <p className={`text-xs`}>({camelCaseToWords(card.variant!)})</p>
         </div>
       </Card>
     </Link>
