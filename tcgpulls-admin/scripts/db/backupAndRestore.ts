@@ -15,6 +15,7 @@
  * The --to parameter is mandatory.
  */
 
+import "dotenv/config";
 import { execSync } from "child_process";
 import * as path from "path";
 import serverLog from "../../utils/serverLog";
