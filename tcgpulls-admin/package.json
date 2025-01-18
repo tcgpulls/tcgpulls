@@ -11,6 +11,7 @@
     "deploy": "keystone build && keystone prisma migrate deploy",
     "seed": "tsx ./seed.ts",
     "storage:empty": "tsx ./scripts/storage/emptyStorage.ts",
+    "db:backup-and-restore": "tsx ./scripts/db/backupAndRestore.ts",
     "pokemon:fetch-sets": "tsx ./scripts/pokemon/fetchAndStorePokemonSets.ts",
     "pokemon:fetch-sets-images": "tsx ./scripts/pokemon/fetchAndUploadPokemonSetsImages.ts",
     "pokemon:fetch-sets-and-images": "npm run pokemon:fetch-sets && npm run pokemon:fetch-sets-images",
