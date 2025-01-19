@@ -1,3 +1,4 @@
+import "dotenv/config";
 import pLimit from "p-limit";
 
 // Import your Keystone context creator
@@ -18,8 +19,12 @@ const specifiedSetId = setIdArg ? setIdArg.split("=")[1] : null;
 const specifiedCardId = cardIdArg ? cardIdArg.split("=")[1] : null;
 
 // Concurrency limits
-const SET_CONCURRENCY_LIMIT = 5; // how many sets are processed in parallel
-const CARD_CONCURRENCY_LIMIT = 10; // how many card upserts per set in parallel
+const SET_CONCURRENCY_LIMIT = process.env.POKEMON_SETS_CONCURRENCY
+  ? parseInt(process.env.POKEMON_SETS_CONCURRENCY, 5)
+  : 10; // how many sets are processed in parallel
+const CARD_CONCURRENCY_LIMIT = process.env.POKEMON_CARDS_CONCURRENCY
+  ? parseInt(process.env.POKEMON_CARDS_CONCURRENCY, 10)
+  : 10; // how many card upserts per set in parallel
 
 /**
  * Replaces the old `normalizeNumber` logic with a "smart" version:

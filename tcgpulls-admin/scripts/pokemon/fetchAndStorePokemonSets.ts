@@ -1,3 +1,4 @@
+import "dotenv/config";
 import pLimit from "p-limit";
 import {
   POKEMON_R2_STORAGE_PATH,
@@ -51,7 +52,9 @@ function isBoosterPackUtility(set: PokemonTcgApiSetT) {
   );
 }
 
-const CONCURRENCY_LIMIT = 10;
+const CONCURRENCY_LIMIT = process.env.POKEMON_SETS_CONCURRENCY
+  ? parseInt(process.env.POKEMON_SETS_CONCURRENCY, 10)
+  : 5;
 const limit = pLimit(CONCURRENCY_LIMIT);
 
 async function fetchAndStorePokemonSets() {
