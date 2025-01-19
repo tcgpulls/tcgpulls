@@ -19,7 +19,7 @@
     "pokemon:fetch-cards-images": "tsx ./scripts/pokemon/fetchAndUploadToStoragePokemonSetCardsImages.ts",
     "pokemon:fetch-cards-and-images": "npm run pokemon:fetch-cards && npm run pokemon:fetch-cards-images",
     "pokemon:fetch-sets-and-cards": "npm run pokemon:fetch-sets && npm run pokemon:fetch-cards",
-    "pokemon:fetch-cards-prices": "tsx ./scripts/pokemon/fetchAndStorePokemonSetsCardsPrices.ts"
+    "pokemon:fetch-cards-prices": "tsx ./scripts/pokemon/fetchAndStorePokemonCardPrices.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.726.1",
