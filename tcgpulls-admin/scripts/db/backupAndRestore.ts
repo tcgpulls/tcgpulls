@@ -1,5 +1,10 @@
 #!/usr/bin/env ts-node
 
+import "dotenv/config";
+import { execSync } from "child_process";
+import * as path from "path";
+import serverLog from "../../utils/serverLog";
+
 /**
  * backupAndRestore.ts
  *
@@ -8,21 +13,24 @@
  *
  * Usage:
  *   ts-node backupAndRestore.ts \
- *     --from=postgresql://user:pass@localhost:5432/my_local_db \
- *     --to=postgres://another_user:another_pass@remotehost:5432/remote_db?sslmode=require
+ *     --from=postgresql://user:pass@remotehost:5432/remote_db \
+ *     --to=postgresql://postgres:superpass@localhost:5432/postgres
  *
- * If --from is omitted, it falls back to process.env.DATABASE_URL.
- * The --to parameter is mandatory.
+ * In this example, the --to user is "postgres" with superuser privileges,
+ * and the database is just "postgres". We'll let pg_restore create the
+ * actual target DB from the dump.
  */
 
-import "dotenv/config";
-import { execSync } from "child_process";
-import * as path from "path";
-import serverLog from "../../utils/serverLog";
+interface PostgresConfig {
+  user: string;
+  password: string;
+  host: string;
+  port: string;
+  database: string;
+  sslmode?: string | null;
+}
 
-// --------------------------------------------------
-// 1) Parse CLI arguments
-// --------------------------------------------------
+// Parse CLI arguments
 const args = process.argv.slice(2);
 
 let fromConnStr = "";
@@ -36,7 +44,6 @@ args.forEach((arg) => {
   }
 });
 
-// If --from not provided, fall back to DATABASE_URL
 if (!fromConnStr) {
   fromConnStr = process.env.DATABASE_URL || "";
 }
@@ -57,50 +64,27 @@ if (!toConnStr) {
   process.exit(1);
 }
 
-// --------------------------------------------------
-// 2) Parse connection strings
-// --------------------------------------------------
-interface PostgresConfig {
-  user: string;
-  password: string;
-  host: string;
-  port: string;
-  database: string;
-  sslmode?: string | null;
-}
-
+// Helper to parse Postgres connection strings
 function parsePostgresConnectionString(connStr: string): PostgresConfig {
-  try {
-    const url = new URL(connStr);
-    const database = url.pathname.replace(/^\/+/, "") || "";
-    const sslmode = url.searchParams.get("sslmode");
+  const url = new URL(connStr);
+  const database = url.pathname.replace(/^\/+/, "") || "";
+  const sslmode = url.searchParams.get("sslmode");
 
-    return {
-      user: decodeURIComponent(url.username || ""),
-      password: decodeURIComponent(url.password || ""),
-      host: url.hostname || "localhost",
-      port: url.port || "5432",
-      database,
-      sslmode,
-    };
-  } catch (error) {
-    serverLog("error", "Invalid Postgres connection string:", connStr);
-    throw error;
-  }
+  return {
+    user: decodeURIComponent(url.username || ""),
+    password: decodeURIComponent(url.password || ""),
+    host: url.hostname || "localhost",
+    port: url.port || "5432",
+    database,
+    sslmode,
+  };
 }
 
 const fromConfig = parsePostgresConnectionString(fromConnStr);
 const toConfig = parsePostgresConnectionString(toConnStr);
 
-// --------------------------------------------------
-// 3) Define backup / restore helpers
-// --------------------------------------------------
 const DUMP_FILE_PATH = path.join(__dirname, "backup.dump");
 
-/**
- * backupDatabase(config)
- * Uses pg_dump with a custom format (-Fc) to create a .dump file
- */
 function backupDatabase(config: PostgresConfig) {
   serverLog(`>>> Backing up source database: ${config.database}`);
 
@@ -109,7 +93,7 @@ function backupDatabase(config: PostgresConfig) {
     `-h ${config.host}`,
     `-p ${config.port}`,
     `-U ${config.user}`,
-    "-Fc", // custom format
+    "-Fc",
     `-f ${DUMP_FILE_PATH}`,
     config.database,
   ].join(" ");
@@ -126,23 +110,29 @@ function backupDatabase(config: PostgresConfig) {
   serverLog(`>>> Backup created at: ${DUMP_FILE_PATH}`);
 }
 
-/**
- * restoreDatabase(config)
- * Uses pg_restore to restore the dump file to the target DB.
- * We add `--if-exists` to avoid "does not exist" errors on drop statements.
- */
 function restoreDatabase(config: PostgresConfig) {
+  // Note: We connect to `config.database` in the connection string, but if you want
+  // to ALWAYS restore to `postgres` (the DB name) for the superuser, you can do so.
   serverLog(`\n>>> Restoring backup into target database: ${config.database}`);
+
+  // This is the KEY difference:
+  //  - We use `--create` so pg_restore will create the target DB inside 'postgres'.
+  //  - We must connect to *some* existing database (often 'postgres'), not the DB we want to create.
+  //  - If your `toConfig.database` is "postgres", you might want the real DB name to come from the dump file itself.
+  //    If the dump includes the CREATE DATABASE statement, it will create that automatically.
+  //    Alternatively, you can manually specify the DB you want in the dump or restore steps.
 
   const pgRestoreCmd = [
     "pg_restore",
     `-h ${config.host}`,
     `-p ${config.port}`,
-    `-U ${config.user}`,
+    `-U ${config.user}`, // we expect this user to be superuser
     "--clean",
+    "--create", // let pg_restore create the target DB
     "--no-owner",
     "--if-exists",
     "--no-acl",
+    // We'll connect to config.database, typically "postgres" in a superuser scenario.
     `-d ${config.database}`,
     DUMP_FILE_PATH,
   ].join(" ");
@@ -160,9 +150,6 @@ function restoreDatabase(config: PostgresConfig) {
   serverLog(">>> Backup successfully restored to target database!");
 }
 
-// --------------------------------------------------
-// 4) Main Execution Flow
-// --------------------------------------------------
 function main() {
   try {
     backupDatabase(fromConfig);
