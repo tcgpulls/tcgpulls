@@ -5,6 +5,7 @@
 // Keystone imports the default export of this file, expecting a Keystone configuration object
 //   you can find out more at https://keystonejs.com/docs/apis/config
 import "dotenv/config";
+import { CorsOptions } from "cors";
 
 import { config } from "@keystone-6/core";
 
@@ -18,11 +19,41 @@ import { withAuth, session } from "./auth";
 // we'll also import our access control functions from a separate file
 import rules from "./accessControl";
 
+const originRegexes = [
+  /^http:\/\/localhost:\d+$/, // local dev
+  /^https:\/\/.*tcgpulls\.vercel\.app$/, // ephemeral previews
+  /^https:\/\/(www\.)?tcgpulls\.xyz$/, // production domain
+];
+
+const originStrings = [process.env.APP_ORIGIN_CORS ?? ""]; // our custom env var
+
+// Our custom function has signature: (origin, callback) => void
+const corsOptions: CorsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) {
+      // no origin means server-to-server request; allow it, or block if you prefer
+      return callback(null, true);
+    }
+
+    // Check if origin matches any of our whitelisted origins
+    const isAllowed =
+      originRegexes.some((rx) => rx.test(origin)) ||
+      originStrings.includes(origin);
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    }
+  },
+  credentials: true,
+};
+
 export default withAuth(
   config({
     server: {
       port: 4000,
-      cors: { origin: [`${process.env.APP_CORS_ORIGIN}`], credentials: true },
+      cors: corsOptions,
     },
     db: {
       provider: "postgresql",
