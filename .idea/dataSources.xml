@@ -13,7 +13,7 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="tcgpulls-local" uuid="1e927748-230e-4d90-8ead-31894187b525">
+    <data-source source="LOCAL" name="tcgpulls-local" uuid="5af0ff81-8b0b-4234-b756-fbbae21332d4">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
