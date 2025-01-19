@@ -5,7 +5,10 @@ import getKeystoneContext from "../../getKeystoneContext";
 import { SPELLED_NUMBERS } from "../../constants/utils";
 import serverLog from "../../utils/serverLog";
 import { fetchPokemonTcgApiSetCards } from "../../lib/PokemonTcgApi/fetchPokemonTcgApiSetCards";
-import { POKEMON_SUPPORTED_LANGUAGES } from "../../constants/tcg/pokemon";
+import {
+  POKEMON_R2_STORAGE_PATH,
+  POKEMON_SUPPORTED_LANGUAGES,
+} from "../../constants/tcg/pokemon";
 
 // Command line arguments
 const args = process.argv.slice(2);
@@ -189,6 +192,10 @@ async function processOneSetAndLanguage(
               }),
             );
 
+            // We'll store images in: img/tcg/pokemon/sets/{language}/{tcgSetId}/cards/...
+            const baseImagePath = `${POKEMON_R2_STORAGE_PATH}/sets/${set.language}/${set.tcgSetId}/cards`;
+            const baseImageName = `${card.id}-${variantKey}`;
+
             await ksContext.db.PokemonCard.createOne({
               data: {
                 name: card.name,
@@ -210,6 +217,8 @@ async function processOneSetAndLanguage(
                 nationalPokedexNumbers: card.nationalPokedexNumbers || [],
                 imageSmallApiUrl: card.images?.small || "",
                 imageLargeApiUrl: card.images?.large || "",
+                imageSmallStorageUrl: `${baseImagePath}/${baseImageName}-small.jpg`,
+                imageLargeStorageUrl: `${baseImagePath}/${baseImageName}-large.jpg`,
                 retreatCost: card.retreatCost || [],
                 convertedRetreatCost,
                 // Link to the parent set

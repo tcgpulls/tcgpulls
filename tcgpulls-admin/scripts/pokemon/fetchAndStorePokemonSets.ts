@@ -1,5 +1,6 @@
 import pLimit from "p-limit";
 import {
+  POKEMON_R2_STORAGE_PATH,
   POKEMON_SETS_NON_BOOSTER,
   POKEMON_SETS_WITH_SUBSETS,
   POKEMON_SUPPORTED_LANGUAGES,
@@ -126,6 +127,7 @@ async function fetchAndStorePokemonSets() {
           // If this set is recognized as a subset, find its parent's TCG code
           const parentSetTcgId = findParentSetTCGId(apiSet.id);
           const parentSetTcgId_language = `${parentSetTcgId}-${language}`;
+          const baseImagePath = `${POKEMON_R2_STORAGE_PATH}/sets/${language}/${apiSet.id}`;
 
           // See if set already exists in DB
           const existingSet = await ksContext.db.PokemonSet.findOne({
@@ -154,6 +156,12 @@ async function fetchAndStorePokemonSets() {
             series: apiSet.series,
             logoApiUrl: apiSet.images.logo ?? "",
             symbolApiUrl: apiSet.images.symbol ?? "",
+            logoStorageUrl: apiSet.images.logo
+              ? `${baseImagePath}/logo.png`
+              : null,
+            symbolStorageUrl: apiSet.images.logo
+              ? `${baseImagePath}/symbol.png`
+              : null,
             printedTotal: apiSet.printedTotal || 0,
             total: apiSet.total || 0,
             ptcgoCode: apiSet.ptcgoCode || null,
