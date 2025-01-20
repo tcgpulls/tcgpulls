@@ -22,6 +22,7 @@ import rules from "./accessControl";
 const originRegexes = [
   /^http:\/\/localhost:\d+$/, // local dev
   /^https:\/\/.*tcgpulls\.vercel\.app$/, // ephemeral previews
+  /^https:\/\/tcgpulls-admin-[A-Za-z0-9-]+\.herokuapp\.com$/,
   /^https:\/\/(www\.)?tcgpulls\.xyz$/, // production domain
 ];
 
