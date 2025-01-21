@@ -1,6 +1,6 @@
 import axios from "axios";
 import { headers as getHeaders } from "next/headers";
-import serverLog from "@/utils/serverLog";
+import serverLog from "./serverLog";
 
 const axiosInstance = axios.create({
   timeout: 10000,

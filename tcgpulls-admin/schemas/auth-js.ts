@@ -1,4 +1,4 @@
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 import {
   text,
   timestamp,
@@ -6,35 +6,81 @@ import {
   integer,
   checkbox,
   json,
+  virtual,
 } from "@keystone-6/core/fields";
 import type { Lists } from ".keystone/types";
 import rules from "../accessControl";
+import generateUniqueUsername from "../utils/generateUniqueUsername";
 
 const authJsLists: Lists = {
   User: list({
-    access: rules.isSuperAdmin,
+    access: rules.isSudoOrSuperAdmin,
     ui: {
       isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
+      listView: {
+        initialColumns: ["email", "name", "username", "lastLoginAt"],
+      },
     },
     fields: {
       name: text(),
+      username: text({
+        isIndexed: "unique",
+        validation: { isRequired: false },
+      }),
       email: text({ isIndexed: "unique", validation: { isRequired: true } }),
       emailVerified: timestamp(),
       image: text(),
+      lastLoginAt: timestamp(),
       createdAt: timestamp({ defaultValue: { kind: "now" } }),
       updatedAt: timestamp({ db: { updatedAt: true } }),
       accounts: relationship({ ref: "Account.user", many: true }),
       authenticators: relationship({ ref: "Authenticator.user", many: true }),
       sessions: relationship({ ref: "Session.user", many: true }),
     },
+    hooks: {
+      resolveInput: async ({ operation, resolvedData, context }) => {
+        // Only run on CREATE
+        if (operation === "create") {
+          // If the client provided a username, skip
+          if (!resolvedData.username) {
+            // Generate a unique username
+            resolvedData.username = await generateUniqueUsername(context);
+          }
+        }
+
+        return resolvedData;
+      },
+    },
   }),
   Account: list({
-    access: rules.isSuperAdmin,
+    access: rules.isSudoOrSuperAdmin,
     ui: {
       isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
+      listView: {
+        initialColumns: ["id", "userEmail", "user", "provider"],
+      },
     },
     fields: {
       user: relationship({ ref: "User.accounts" }),
+      userEmail: virtual({
+        field: graphql.field({
+          type: graphql.String,
+          resolve: async (item, args, context) => {
+            // 'item' is the Account item. 'item.userId' holds the related user ID
+            if (!item.userId) return null;
+
+            // find the user from the DB
+            const user = await context.query.User.findOne({
+              where: { id: item.userId.toString() },
+              query: "id email",
+            });
+            return user?.email ?? null;
+          },
+        }),
+        ui: {
+          listView: { fieldMode: "read" }, // so it's visible in list UI
+        },
+      }),
       type: text(),
       provider: text(),
       providerAccountId: text(),
@@ -51,7 +97,7 @@ const authJsLists: Lists = {
     // Composite key equivalent can be managed via hooks or database-level constraints
   }),
   Session: list({
-    access: rules.isSuperAdmin,
+    access: rules.isSudoOrSuperAdmin,
     ui: {
       isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
     },
@@ -67,7 +113,7 @@ const authJsLists: Lists = {
     },
   }),
   VerificationToken: list({
-    access: rules.isSuperAdmin,
+    access: rules.isSudoOrSuperAdmin,
     ui: {
       isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
     },
@@ -79,7 +125,7 @@ const authJsLists: Lists = {
     // Composite key equivalent can be managed via hooks or database-level constraints
   }),
   Authenticator: list({
-    access: rules.isSuperAdmin,
+    access: rules.isSudoOrSuperAdmin,
     ui: {
       isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
     },

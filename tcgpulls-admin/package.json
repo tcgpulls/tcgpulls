@@ -31,7 +31,8 @@
     "dotenv": "^16.4.7",
     "p-limit": "^6.2.0",
     "sharp": "^0.33.5",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "unique-username-generator": "^1.4.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
