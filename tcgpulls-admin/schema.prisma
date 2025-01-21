@@ -126,9 +126,11 @@ model PokemonCardWeakness {
 model User {
   id             String          @id @default(cuid())
   name           String          @default("")
+  username       String          @unique @default("")
   email          String          @unique @default("")
   emailVerified  DateTime?
   image          String          @default("")
+  lastLoginAt    DateTime?
   createdAt      DateTime?       @default(now())
   updatedAt      DateTime?       @updatedAt
   accounts       Account[]       @relation("Account_user")

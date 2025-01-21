@@ -763,9 +763,11 @@ input PokemonCardWeaknessCreateInput {
 type User {
   id: ID!
   name: String
+  username: String
   email: String
   emailVerified: DateTime
   image: String
+  lastLoginAt: DateTime
   createdAt: DateTime
   updatedAt: DateTime
   accounts(where: AccountWhereInput! = {}, orderBy: [AccountOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AccountWhereUniqueInput): [Account!]
@@ -778,6 +780,7 @@ type User {
 
 input UserWhereUniqueInput {
   id: ID
+  username: String
   email: String
 }
 
@@ -787,9 +790,11 @@ input UserWhereInput {
   NOT: [UserWhereInput!]
   id: IDFilter
   name: StringFilter
+  username: StringFilter
   email: StringFilter
   emailVerified: DateTimeNullableFilter
   image: StringFilter
+  lastLoginAt: DateTimeNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
   accounts: AccountManyRelationFilter
@@ -818,18 +823,22 @@ input SessionManyRelationFilter {
 input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  username: OrderDirection
   email: OrderDirection
   emailVerified: OrderDirection
   image: OrderDirection
+  lastLoginAt: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input UserUpdateInput {
   name: String
+  username: String
   email: String
   emailVerified: DateTime
   image: String
+  lastLoginAt: DateTime
   createdAt: DateTime
   updatedAt: DateTime
   accounts: AccountRelateToManyForUpdateInput
@@ -865,9 +874,11 @@ input UserUpdateArgs {
 
 input UserCreateInput {
   name: String
+  username: String
   email: String
   emailVerified: DateTime
   image: String
+  lastLoginAt: DateTime
   createdAt: DateTime
   updatedAt: DateTime
   accounts: AccountRelateToManyForCreateInput
@@ -893,6 +904,7 @@ input SessionRelateToManyForCreateInput {
 type Account {
   id: ID!
   user: User
+  userEmail: String
   type: String
   provider: String
   providerAccountId: String

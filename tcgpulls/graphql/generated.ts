@@ -2214,10 +2214,12 @@ export type User = {
   emailVerified?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
   image?: Maybe<Scalars['String']['output']>;
+  lastLoginAt?: Maybe<Scalars['DateTime']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   sessions?: Maybe<Array<Session>>;
   sessionsCount?: Maybe<Scalars['Int']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -2269,9 +2271,11 @@ export type UserCreateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   emailVerified?: InputMaybe<Scalars['DateTime']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
+  lastLoginAt?: InputMaybe<Scalars['DateTime']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   sessions?: InputMaybe<SessionRelateToManyForCreateInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserOrderByInput = {
@@ -2280,8 +2284,10 @@ export type UserOrderByInput = {
   emailVerified?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   image?: InputMaybe<OrderDirection>;
+  lastLoginAt?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
   updatedAt?: InputMaybe<OrderDirection>;
+  username?: InputMaybe<OrderDirection>;
 };
 
 export type UserRelateToOneForCreateInput = {
@@ -2307,9 +2313,11 @@ export type UserUpdateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   emailVerified?: InputMaybe<Scalars['DateTime']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
+  lastLoginAt?: InputMaybe<Scalars['DateTime']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   sessions?: InputMaybe<SessionRelateToManyForUpdateInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserWhereInput = {
@@ -2323,14 +2331,17 @@ export type UserWhereInput = {
   emailVerified?: InputMaybe<DateTimeNullableFilter>;
   id?: InputMaybe<IdFilter>;
   image?: InputMaybe<StringFilter>;
+  lastLoginAt?: InputMaybe<DateTimeNullableFilter>;
   name?: InputMaybe<StringFilter>;
   sessions?: InputMaybe<SessionManyRelationFilter>;
   updatedAt?: InputMaybe<DateTimeNullableFilter>;
+  username?: InputMaybe<StringFilter>;
 };
 
 export type UserWhereUniqueInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type VerificationToken = {

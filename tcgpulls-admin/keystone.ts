@@ -14,7 +14,7 @@ import lists from "./schemas/schema";
 
 // authentication is configured separately here too, but you might move this elsewhere
 // when you write your list-level access control functions, as they typically rely on session data
-import { withAuth, session } from "./auth";
+import { session, withAuth } from "./auth";
 
 // we'll also import our access control functions from a separate file
 import rules from "./accessControl";
@@ -55,6 +55,24 @@ export default withAuth(
     server: {
       port: 4000,
       cors: corsOptions,
+      extendExpressApp: (app, commonContext) => {
+        app.use("/api/graphql", async (req, res, next) => {
+          try {
+            const authHeader = req.headers.authorization || "";
+            let context = await commonContext.withRequest(req, res);
+
+            if (authHeader === `Bearer ${process.env.KEYSTONE_ADMIN_TOKEN}`) {
+              (req as any).isSudoContext = true;
+              context = context.sudo();
+            }
+
+            (req as any).context = context;
+          } catch (err) {
+            console.error("Error in extendExpressApp middleware:", err);
+          }
+          return next();
+        });
+      },
     },
     db: {
       provider: "postgresql",

@@ -1,9 +1,23 @@
 // accessControl.ts
 import { KeystoneSessionT } from "./types/Keystone";
 
+const isSudo = ({ context }: { context: any }) => {
+  return Boolean((context.req as any)?.isSudoContext);
+};
+
 const isSuperAdmin = ({ session }: { session?: KeystoneSessionT }) => {
   const role = session?.data.role.value;
   return role === "super-admin";
+};
+
+const isSudoOrSuperAdmin = ({
+  session,
+  context,
+}: {
+  session?: KeystoneSessionT;
+  context: any;
+}) => {
+  return isSudo({ context }) || isSuperAdmin({ session });
 };
 
 const isAdmin = ({ session }: { session?: KeystoneSessionT }) => {
@@ -27,7 +41,9 @@ const isViewer = ({ session }: { session?: KeystoneSessionT }) => {
 };
 
 const rules = {
+  isSudo,
   isSuperAdmin,
+  isSudoOrSuperAdmin,
   isAdmin,
   isEditor,
   isViewer,
