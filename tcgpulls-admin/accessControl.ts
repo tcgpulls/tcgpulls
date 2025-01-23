@@ -15,8 +15,10 @@ const isSudoOrSuperAdmin = ({
   context,
 }: {
   session?: KeystoneSessionT;
-  context: any;
+  context?: any;
 }) => {
+  if (!session) return isSudo({ context });
+  if (!context) return isSuperAdmin({ session });
   return isSudo({ context }) || isSuperAdmin({ session });
 };
 

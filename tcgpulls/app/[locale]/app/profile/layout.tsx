@@ -9,7 +9,7 @@ type Props = {
 
 const AccountLayout = async ({ children, params }: Props) => {
   const { locale } = await params;
-  await requireAuthOrRedirect({ redirectRoute: `/${locale}/app/account` });
+  await requireAuthOrRedirect({ redirectRoute: `/${locale}/app/profile` });
 
   return <div>{children}</div>;
 };

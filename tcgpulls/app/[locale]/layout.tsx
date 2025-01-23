@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import "./globals.css";
+import "../../globals.css";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";

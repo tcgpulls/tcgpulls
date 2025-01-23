@@ -4,7 +4,7 @@
     "loading": "Loading",
     "back": "Back",
     "home": "Home",
-    "account": "Account",
+    "profile": "Profile",
     "tcg": "Trading Card Games",
     "pack": "Pack",
     "packs": "Packs",
@@ -48,10 +48,10 @@
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     }
   },
-  "account-page": {
-    "title": "Account",
+  "profile-page": {
+    "title": "Profile",
     "metadata": {
-      "title": "Account - tcgpulls.xyz",
+      "title": "Profile - tcgpulls.xyz",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     }
   },

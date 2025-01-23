@@ -1,4 +1,3 @@
-import { Heading } from "@/components/catalyst-ui/heading";
 import { ReactNode } from "react";
 import { ChevronLeftIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
@@ -9,15 +8,23 @@ type Props = {
   icon?: ReactNode;
   withBackButton?: boolean;
   previousUrl?: string;
+  size?: "small" | "medium" | "large";
 };
 
-const PageHeader = ({
+const Header = ({
   title,
   description,
   icon,
+  size = "medium",
   withBackButton,
   previousUrl = "",
 }: Props) => {
+  const titleSizes: Record<string, string> = {
+    small: "text-lg",
+    medium: "text-2xl",
+    large: "text-3xl",
+  };
+
   return (
     <div className={`pb-6`}>
       <div
@@ -25,18 +32,18 @@ const PageHeader = ({
       >
         <Link
           href={previousUrl}
-          className={`rounded-full bg-zinc-600 text-zinc-100 ${previousUrl !== "" && "hover:text-zinc-300 hover:bg-zinc-700"}`}
+          className={`rounded-full bg-primary-600 text-primary-100 ${previousUrl !== "" && "hover:text-primary-300 hover:bg-primary-700"}`}
         >
           {withBackButton && <ChevronLeftIcon className={`w-7 h-7`} />}
         </Link>
-        <Heading className={`flex gap-4 items-center`}>
+        <h1 className={`flex gap-4 items-center ${titleSizes[size]} font-bold`}>
           {icon && <div className={`w-6 h-6`}>{icon}</div>}
           {title}
-        </Heading>
+        </h1>
       </div>
-      {description && <div className="text-zinc-500">{description}</div>}
+      {description && <div className="text-primary-500">{description}</div>}
     </div>
   );
 };
 
-export default PageHeader;
+export default Header;

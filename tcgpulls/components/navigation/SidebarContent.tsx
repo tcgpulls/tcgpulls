@@ -50,8 +50,8 @@ const SidebarContent = () => {
       icon: <HomeIcon />,
     },
     {
-      href: "/app/account",
-      label: t("account"),
+      href: "/app/profile",
+      label: t("profile"),
       icon: <UserCircleIcon />,
     },
     {
@@ -65,12 +65,12 @@ const SidebarContent = () => {
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/booster-packs`,
           label: t("booster-packs"),
-          className: "pl-8 text-xs text-zinc-300",
+          className: "pl-8 text-xs text-primary-300",
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/sets`,
           label: t("sets"),
-          className: "pl-8 text-xs text-zinc-300",
+          className: "pl-8 text-xs text-primary-300",
         },
       ],
     },

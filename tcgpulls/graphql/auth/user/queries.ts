@@ -46,6 +46,15 @@ export const UPDATE_USER = gql`
   }
 `;
 
+export const UPDATE_USER_PROFILE = gql`
+  mutation UpdateUser($id: ID!, $data: UserUpdateInput!) {
+    updateUser(where: { id: $id }, data: $data) {
+      id
+      username
+    }
+  }
+`;
+
 export const UPDATE_USER_LASTLOGIN = gql`
   mutation UpdateUserLastLogin($id: ID!, $data: UserUpdateInput!) {
     updateUser(where: { id: $id }, data: $data) {
