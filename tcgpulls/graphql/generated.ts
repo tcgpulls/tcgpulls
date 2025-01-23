@@ -2209,6 +2209,7 @@ export type User = {
   access?: Maybe<UserAccessType>;
   accounts?: Maybe<Array<Account>>;
   accountsCount?: Maybe<Scalars['Int']['output']>;
+  active?: Maybe<Scalars['Boolean']['output']>;
   authenticators?: Maybe<Array<Authenticator>>;
   authenticatorsCount?: Maybe<Scalars['Int']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
@@ -2281,6 +2282,7 @@ export type UserAccessTypeNullableFilter = {
 export type UserCreateInput = {
   access?: InputMaybe<UserAccessType>;
   accounts?: InputMaybe<AccountRelateToManyForCreateInput>;
+  active?: InputMaybe<Scalars['Boolean']['input']>;
   authenticators?: InputMaybe<AuthenticatorRelateToManyForCreateInput>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -2295,6 +2297,7 @@ export type UserCreateInput = {
 
 export type UserOrderByInput = {
   access?: InputMaybe<OrderDirection>;
+  active?: InputMaybe<OrderDirection>;
   createdAt?: InputMaybe<OrderDirection>;
   email?: InputMaybe<OrderDirection>;
   emailVerified?: InputMaybe<OrderDirection>;
@@ -2325,6 +2328,7 @@ export type UserUpdateArgs = {
 export type UserUpdateInput = {
   access?: InputMaybe<UserAccessType>;
   accounts?: InputMaybe<AccountRelateToManyForUpdateInput>;
+  active?: InputMaybe<Scalars['Boolean']['input']>;
   authenticators?: InputMaybe<AuthenticatorRelateToManyForUpdateInput>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -2343,6 +2347,7 @@ export type UserWhereInput = {
   OR?: InputMaybe<Array<UserWhereInput>>;
   access?: InputMaybe<UserAccessTypeNullableFilter>;
   accounts?: InputMaybe<AccountManyRelationFilter>;
+  active?: InputMaybe<BooleanFilter>;
   authenticators?: InputMaybe<AuthenticatorManyRelationFilter>;
   createdAt?: InputMaybe<DateTimeNullableFilter>;
   email?: InputMaybe<StringFilter>;

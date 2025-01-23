@@ -1,10 +1,16 @@
 import { ReactNode } from "react";
+import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
+import { UrlParamsT } from "@/types/Params";
 
 type Props = {
   children: ReactNode;
+  params: UrlParamsT;
 };
 
-const AccountLayout = ({ children }: Props) => {
+const AccountLayout = async ({ children, params }: Props) => {
+  const { locale } = await params;
+  await requireAuthOrRedirect({ redirectRoute: `/${locale}/app/account` });
+
   return <div>{children}</div>;
 };
 

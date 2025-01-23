@@ -2,10 +2,10 @@ import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
 import PageHeader from "@/components/misc/PageHeader";
-import { requireAuth } from "@/lib/helpers/requireAuth";
+import { auth } from "@/auth";
 
 const AccountPage = async () => {
-  const session = await requireAuth();
+  const session = await auth();
   const t = await getTranslations();
 
   const sessionText = JSON.stringify(session);

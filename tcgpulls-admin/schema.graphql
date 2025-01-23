@@ -771,6 +771,7 @@ type User {
   createdAt: DateTime
   updatedAt: DateTime
   access: UserAccessType
+  active: Boolean
   accounts(where: AccountWhereInput! = {}, orderBy: [AccountOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AccountWhereUniqueInput): [Account!]
   accountsCount(where: AccountWhereInput! = {}): Int
   authenticators(where: AuthenticatorWhereInput! = {}, orderBy: [AuthenticatorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AuthenticatorWhereUniqueInput): [Authenticator!]
@@ -804,6 +805,7 @@ input UserWhereInput {
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
   access: UserAccessTypeNullableFilter
+  active: BooleanFilter
   accounts: AccountManyRelationFilter
   authenticators: AuthenticatorManyRelationFilter
   sessions: SessionManyRelationFilter
@@ -845,6 +847,7 @@ input UserOrderByInput {
   createdAt: OrderDirection
   updatedAt: OrderDirection
   access: OrderDirection
+  active: OrderDirection
 }
 
 input UserUpdateInput {
@@ -857,6 +860,7 @@ input UserUpdateInput {
   createdAt: DateTime
   updatedAt: DateTime
   access: UserAccessType
+  active: Boolean
   accounts: AccountRelateToManyForUpdateInput
   authenticators: AuthenticatorRelateToManyForUpdateInput
   sessions: SessionRelateToManyForUpdateInput
@@ -898,6 +902,7 @@ input UserCreateInput {
   createdAt: DateTime
   updatedAt: DateTime
   access: UserAccessType
+  active: Boolean
   accounts: AccountRelateToManyForCreateInput
   authenticators: AuthenticatorRelateToManyForCreateInput
   sessions: SessionRelateToManyForCreateInput

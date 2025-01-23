@@ -1,4 +1,5 @@
 import "next-auth";
+import { AppJWT } from "@/types/Auth";
 import { AdapterUser as DefaultAdapterUser } from "next-auth/adapters";
 
 /**
@@ -11,12 +12,11 @@ declare module "next-auth" {
     id?: string;
     access?: string;
     username?: string | null;
+    active?: boolean;
   }
 
   // 2) Extend the JWT
-  interface JWT {
-    id?: string;
-  }
+  interface JWT extends AppJWT {}
 
   // 3) Extend the Session object
   interface Session {
@@ -27,6 +27,7 @@ declare module "next-auth" {
       username?: string | null;
       email?: string | null;
       image?: string | null;
+      active?: boolean;
     };
   }
 }

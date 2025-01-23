@@ -15,9 +15,14 @@ import {
   CREATE_ACCOUNT,
   UPDATE_ACCOUNT,
 } from "@/graphql/auth/account/queries";
+import {
+  deleteCustomFieldsInToken,
+  updateCustomFieldsInSession,
+  updateCustomFieldsInToken,
+} from "@/auth/customFields";
+import { AppJWT } from "@/types/Auth";
 
 export const authConfig: NextAuthConfig = {
-  debug: true,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -159,8 +164,7 @@ export const authConfig: NextAuthConfig = {
       // (i.e., immediately after user logs in).
       if (user?.id) {
         // Attach keystone fields attached to the user to the token object
-        token.id = user.id;
-        token.username = user.username;
+        updateCustomFieldsInToken(user, token as AppJWT);
       }
 
       // Optional: If you want to ensure the user still exists each time:
@@ -173,12 +177,10 @@ export const authConfig: NextAuthConfig = {
           });
           if (!data?.user) {
             // If user was deleted, remove the ID from the token
-            delete token.id;
-            delete token.username;
+            deleteCustomFieldsInToken(token as AppJWT);
           }
         } catch (error) {
-          delete token.id;
-          delete token.username;
+          deleteCustomFieldsInToken(token as AppJWT);
         }
       }
 
@@ -202,9 +204,7 @@ export const authConfig: NextAuthConfig = {
 
       // Attach keystone fields attached to the user then to the token object
       // to the session
-      session.user.id = token.id as string;
-      session.user.access = token.access as string;
-      session.user.username = token.username as string;
+      updateCustomFieldsInSession(token as AppJWT, session);
       return session;
     },
   },

@@ -43,6 +43,7 @@ const authJsLists: Lists = {
         ],
         defaultValue: UserAccess.Freemium,
       }),
+      active: checkbox({ defaultValue: true }),
       accounts: relationship({ ref: "Account.user", many: true }),
       authenticators: relationship({ ref: "Authenticator.user", many: true }),
       sessions: relationship({ ref: "Session.user", many: true }),
