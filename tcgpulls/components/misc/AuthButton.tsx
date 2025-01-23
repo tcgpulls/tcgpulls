@@ -22,7 +22,7 @@ const AuthButton = () => {
       {session?.user ? (
         <Button onClick={() => signOut()}>{t("auth.sign-out")}</Button>
       ) : (
-        <Button onClick={() => signIn("google")}>{t("auth.sign-in")}</Button>
+        <Button onClick={() => signIn()}>{t("auth.sign-in")}</Button>
       )}
     </div>
   );

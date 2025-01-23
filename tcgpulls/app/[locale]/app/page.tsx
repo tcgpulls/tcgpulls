@@ -4,7 +4,7 @@ import Card from "@/components/misc/Card";
 import { getTranslations } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
 import getTcgLanguage from "@/actions/getTcgLanguage";
-import PageHeader from "@/components/misc/PageHeader";
+import Header from "@/components/misc/Header";
 
 const AppPage = async () => {
   const tcgLang = await getTcgLanguage();
@@ -12,7 +12,7 @@ const AppPage = async () => {
 
   return (
     <>
-      <PageHeader title={t("common.home")} />
+      <Header title={t("common.home")} />
       <Link href={`/app/tcg/pokemon/${tcgLang}`}>
         <Card isClickable={true}>
           <p>{t("common.tcg-pokemon")}</p>

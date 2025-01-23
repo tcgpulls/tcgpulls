@@ -4,7 +4,7 @@
     "loading": "ロード中",
     "back": "戻る",
     "home": "ホームページ",
-    "account": "アカウント",
+    "profile": "プロフィール",
     "tcg": "トレーディングカードゲーム",
     "pack": "パック",
     "packs": "パック",
@@ -48,10 +48,10 @@
       "description": "TCGパックの開封結果や出現率を一元管理！"
     }
   },
-  "account-page": {
-    "title": "アカウント",
+  "profile-page": {
+    "title": "プロフィール",
     "metadata": {
-      "title": "アカウント - tcgpulls.xyz",
+      "title": "プロフィール - tcgpulls.xyz",
       "description": "TCGパックの開封結果や出現率を一元管理！"
     }
   },

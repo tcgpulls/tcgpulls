@@ -11,7 +11,7 @@ import {
   OrderDirection,
 } from "@/graphql/generated";
 import { POKEMON_SETS_PAGE_SIZE } from "@/constants/tcg/pokemon";
-import PageHeader from "@/components/misc/PageHeader";
+import Header from "@/components/misc/Header";
 
 interface Props {
   params: UrlParamsT;
@@ -56,8 +56,9 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
 
   return (
     <>
-      <PageHeader
+      <Header
         title={t(`${tcgCategory}`)}
+        size={`small`}
         withBackButton
         previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}`}
       />

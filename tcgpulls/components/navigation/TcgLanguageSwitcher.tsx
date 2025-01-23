@@ -17,7 +17,7 @@ const TcgLanguageSwitcher = ({ tcgLang, tcgBrand, tcgCategory }: Props) => {
   const { setCurrentTcgLanguage } = useTcgLanguage();
 
   return (
-    <ul className="flex space-x-6 border-b border-zinc-700">
+    <ul className="flex space-x-6 border-b border-primary-700">
       {POKEMON_SUPPORTED_TCG_LANGUAGES.map((supportedLang) => {
         const isActive = tcgLang === supportedLang;
         return (
@@ -32,8 +32,8 @@ const TcgLanguageSwitcher = ({ tcgLang, tcgBrand, tcgCategory }: Props) => {
                 transition-colors
                 ${
                   isActive
-                    ? "border-b-2 border-zinc-200 text-zinc-100 font-medium"
-                    : "text-zinc-400 hover:text-zinc-200"
+                    ? "border-b-2 border-primary-200 text-primary-100 font-medium"
+                    : "text-primary-400 hover:text-primary-200"
                 }
               `}
             >

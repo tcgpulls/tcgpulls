@@ -134,6 +134,7 @@ model User {
   createdAt      DateTime?       @default(now())
   updatedAt      DateTime?       @updatedAt
   access         UserAccessType? @default(freemium)
+  active         Boolean         @default(true)
   accounts       Account[]       @relation("Account_user")
   authenticators Authenticator[] @relation("Authenticator_user")
   sessions       Session[]       @relation("Session_user")

@@ -42,7 +42,7 @@ const styles = {
   ],
   outline: [
     // Base
-    "border-zinc-950/10 text-zinc-950 data-[active]:bg-zinc-950/[2.5%] data-[hover]:bg-zinc-950/[2.5%]",
+    "border-primary-950/10 text-primary-950 data-[active]:bg-primary-950/[2.5%] data-[hover]:bg-primary-950/[2.5%]",
     // Dark mode
     "dark:border-white/15 dark:text-white dark:[--btn-bg:transparent] dark:data-[active]:bg-white/5 dark:data-[hover]:bg-white/5",
     // Icon
@@ -50,26 +50,41 @@ const styles = {
   ],
   plain: [
     // Base
-    "border-transparent text-zinc-950 data-[active]:bg-zinc-950/5 data-[hover]:bg-zinc-950/5",
+    "border-transparent text-primary-950 data-[active]:bg-primary-950/5 data-[hover]:bg-primary-950/5",
     // Dark mode
     "dark:text-white dark:data-[active]:bg-white/10 dark:data-[hover]:bg-white/10",
     // Icon
     "[--btn-icon:theme(colors.zinc.500)] data-[active]:[--btn-icon:theme(colors.zinc.700)] data-[hover]:[--btn-icon:theme(colors.zinc.700)] dark:[--btn-icon:theme(colors.zinc.500)] dark:data-[active]:[--btn-icon:theme(colors.zinc.400)] dark:data-[hover]:[--btn-icon:theme(colors.zinc.400)]",
   ],
   colors: {
+    primary: [
+      "text-white [--btn-bg:var(--color-primary-500)] [--btn-border:var(--color-primary-600)] [--btn-hover-overlay:var(--color-primary-700)]",
+      "dark:text-white dark:[--btn-bg:var(--color-primary-400)] dark:[--btn-hover-overlay:var(--color-primary-500)]",
+      "[--btn-icon:var(--color-primary-200)] data-[active]:[--btn-icon:var(--color-primary-100)] data-[hover]:[--btn-icon:var(--color-primary-100)]",
+    ],
+    secondary: [
+      "text-white [--btn-bg:var(--color-secondary-500)] [--btn-border:var(--color-secondary-600)] [--btn-hover-overlay:var(--color-secondary-700)]",
+      "dark:text-white dark:[--btn-bg:var(--color-secondary-400)] dark:[--btn-hover-overlay:var(--color-secondary-500)]",
+      "[--btn-icon:var(--color-secondary-200)] data-[active]:[--btn-icon:var(--color-secondary-100)] data-[hover]:[--btn-icon:var(--color-secondary-100)]",
+    ],
+    accent: [
+      "text-white [--btn-bg:var(--color-accent-5700)] [--btn-border:var(--color-accent-800)] [--btn-hover-overlay:var(--color-accent-900)]",
+      "dark:text-white dark:[--btn-bg:var(--color-accent-600)] dark:[--btn-hover-overlay:var(--color-accent-700)]",
+      "[--btn-icon:var(--color-accent-400)] data-[active]:[--btn-icon:var(--color-accent-300)] data-[hover]:[--btn-icon:var(--color-accent-300)]",
+    ],
     "dark/zinc": [
       "text-white [--btn-bg:theme(colors.zinc.900)] [--btn-border:theme(colors.zinc.950/90%)] [--btn-hover-overlay:theme(colors.white/10%)]",
       "dark:text-white dark:[--btn-bg:theme(colors.zinc.600)] dark:[--btn-hover-overlay:theme(colors.white/5%)]",
       "[--btn-icon:theme(colors.zinc.400)] data-[active]:[--btn-icon:theme(colors.zinc.300)] data-[hover]:[--btn-icon:theme(colors.zinc.300)]",
     ],
     light: [
-      "text-zinc-950 [--btn-bg:white] [--btn-border:theme(colors.zinc.950/10%)] [--btn-hover-overlay:theme(colors.zinc.950/2.5%)] data-[active]:[--btn-border:theme(colors.zinc.950/15%)] data-[hover]:[--btn-border:theme(colors.zinc.950/15%)]",
+      "text-primary-950 [--btn-bg:white] [--btn-border:theme(colors.zinc.950/10%)] [--btn-hover-overlay:theme(colors.zinc.950/2.5%)] data-[active]:[--btn-border:theme(colors.zinc.950/15%)] data-[hover]:[--btn-border:theme(colors.zinc.950/15%)]",
       "dark:text-white dark:[--btn-hover-overlay:theme(colors.white/5%)] dark:[--btn-bg:theme(colors.zinc.800)]",
       "[--btn-icon:theme(colors.zinc.500)] data-[active]:[--btn-icon:theme(colors.zinc.700)] data-[hover]:[--btn-icon:theme(colors.zinc.700)] dark:[--btn-icon:theme(colors.zinc.500)] dark:data-[active]:[--btn-icon:theme(colors.zinc.400)] dark:data-[hover]:[--btn-icon:theme(colors.zinc.400)]",
     ],
     "dark/white": [
       "text-white [--btn-bg:theme(colors.zinc.900)] [--btn-border:theme(colors.zinc.950/90%)] [--btn-hover-overlay:theme(colors.white/10%)]",
-      "dark:text-zinc-950 dark:[--btn-bg:white] dark:[--btn-hover-overlay:theme(colors.zinc.950/5%)]",
+      "dark:text-primary-950 dark:[--btn-bg:white] dark:[--btn-hover-overlay:theme(colors.zinc.950/5%)]",
       "[--btn-icon:theme(colors.zinc.400)] data-[active]:[--btn-icon:theme(colors.zinc.300)] data-[hover]:[--btn-icon:theme(colors.zinc.300)] dark:[--btn-icon:theme(colors.zinc.500)] dark:data-[active]:[--btn-icon:theme(colors.zinc.400)] dark:data-[hover]:[--btn-icon:theme(colors.zinc.400)]",
     ],
     dark: [
@@ -78,7 +93,7 @@ const styles = {
       "[--btn-icon:theme(colors.zinc.400)] data-[active]:[--btn-icon:theme(colors.zinc.300)] data-[hover]:[--btn-icon:theme(colors.zinc.300)]",
     ],
     white: [
-      "text-zinc-950 [--btn-bg:white] [--btn-border:theme(colors.zinc.950/10%)] [--btn-hover-overlay:theme(colors.zinc.950/2.5%)] data-[active]:[--btn-border:theme(colors.zinc.950/15%)] data-[hover]:[--btn-border:theme(colors.zinc.950/15%)]",
+      "text-primary-950 [--btn-bg:white] [--btn-border:theme(colors.zinc.950/10%)] [--btn-hover-overlay:theme(colors.zinc.950/2.5%)] data-[active]:[--btn-border:theme(colors.zinc.950/15%)] data-[hover]:[--btn-border:theme(colors.zinc.950/15%)]",
       "dark:[--btn-hover-overlay:theme(colors.zinc.950/5%)]",
       "[--btn-icon:theme(colors.zinc.400)] data-[active]:[--btn-icon:theme(colors.zinc.500)] data-[hover]:[--btn-icon:theme(colors.zinc.500)]",
     ],
@@ -178,7 +193,7 @@ export const Button = forwardRef(function Button(
       ? styles.outline
       : plain
         ? styles.plain
-        : clsx(styles.solid, styles.colors[color ?? "dark/zinc"]),
+        : clsx(styles.solid, styles.colors[color ?? "accent"]),
     props.onClick || ("href" in props && props.href !== "")
       ? "cursor-pointer"
       : "cursor-default",

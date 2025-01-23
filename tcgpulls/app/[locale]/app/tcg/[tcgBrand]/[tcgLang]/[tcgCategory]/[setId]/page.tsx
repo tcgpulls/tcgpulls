@@ -1,4 +1,4 @@
-import PageHeader from "@/components/misc/PageHeader";
+import Header from "@/components/misc/Header";
 import CardsList from "@/components/tcg/CardsList";
 import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
@@ -49,8 +49,9 @@ const SetCardsPage = async ({ params }: Props) => {
 
   const ThisHeader = () => {
     return (
-      <PageHeader
+      <Header
         title={`${set.name} (${set.tcgSetId})`}
+        size={`small`}
         withBackButton
         previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}`}
       />
