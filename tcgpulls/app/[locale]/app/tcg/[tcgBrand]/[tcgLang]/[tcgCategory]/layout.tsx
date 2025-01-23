@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { UrlParamsT } from "@/types/Params";
-// import TcgLanguageSwitcher from "@/components/navigation/TcgLanguageSwitcher";
 
 const TcgTypeLayout = async ({
   children,
@@ -17,13 +16,6 @@ const TcgTypeLayout = async ({
 
   return (
     <>
-      {/*<div className={`pt-8 pb-8`}>*/}
-      {/*  <TcgLanguageSwitcher*/}
-      {/*    tcgLang={tcgLang}*/}
-      {/*    tcgBrand={tcgBrand}*/}
-      {/*    tcgCategory={tcgCategory}*/}
-      {/*  />*/}
-      {/*</div>*/}
       <div>{children}</div>
     </>
   );

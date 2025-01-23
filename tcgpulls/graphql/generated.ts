@@ -35,6 +35,7 @@ export type Account = {
   type?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   user?: Maybe<User>;
+  userEmail?: Maybe<Scalars['String']['output']>;
 };
 
 export type AccountCreateInput = {
@@ -2205,6 +2206,7 @@ export type StringNullableFilter = {
 
 export type User = {
   __typename?: 'User';
+  access?: Maybe<UserAccessType>;
   accounts?: Maybe<Array<Account>>;
   accountsCount?: Maybe<Scalars['Int']['output']>;
   authenticators?: Maybe<Array<Authenticator>>;
@@ -2264,7 +2266,20 @@ export type UserSessionsCountArgs = {
   where?: SessionWhereInput;
 };
 
+export enum UserAccessType {
+  Freemium = 'freemium',
+  Premium = 'premium'
+}
+
+export type UserAccessTypeNullableFilter = {
+  equals?: InputMaybe<UserAccessType>;
+  in?: InputMaybe<Array<UserAccessType>>;
+  not?: InputMaybe<UserAccessTypeNullableFilter>;
+  notIn?: InputMaybe<Array<UserAccessType>>;
+};
+
 export type UserCreateInput = {
+  access?: InputMaybe<UserAccessType>;
   accounts?: InputMaybe<AccountRelateToManyForCreateInput>;
   authenticators?: InputMaybe<AuthenticatorRelateToManyForCreateInput>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -2279,6 +2294,7 @@ export type UserCreateInput = {
 };
 
 export type UserOrderByInput = {
+  access?: InputMaybe<OrderDirection>;
   createdAt?: InputMaybe<OrderDirection>;
   email?: InputMaybe<OrderDirection>;
   emailVerified?: InputMaybe<OrderDirection>;
@@ -2307,6 +2323,7 @@ export type UserUpdateArgs = {
 };
 
 export type UserUpdateInput = {
+  access?: InputMaybe<UserAccessType>;
   accounts?: InputMaybe<AccountRelateToManyForUpdateInput>;
   authenticators?: InputMaybe<AuthenticatorRelateToManyForUpdateInput>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -2324,6 +2341,7 @@ export type UserWhereInput = {
   AND?: InputMaybe<Array<UserWhereInput>>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
+  access?: InputMaybe<UserAccessTypeNullableFilter>;
   accounts?: InputMaybe<AccountManyRelationFilter>;
   authenticators?: InputMaybe<AuthenticatorManyRelationFilter>;
   createdAt?: InputMaybe<DateTimeNullableFilter>;
@@ -2390,14 +2408,14 @@ export type VerificationTokenWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-export type PokemonCardItemFragment = { __typename?: 'PokemonCard', id: string, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null };
+export type PokemonCardItemFragment = { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null };
 
 export type GetPokemonCardQueryVariables = Exact<{
   where: PokemonCardWhereUniqueInput;
 }>;
 
 
-export type GetPokemonCardQuery = { __typename?: 'Query', pokemonCard?: { __typename?: 'PokemonCard', id: string, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null } | null };
+export type GetPokemonCardQuery = { __typename?: 'Query', pokemonCard?: { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null } | null };
 
 export type GetPokemonCardsQueryVariables = Exact<{
   where: PokemonCardWhereInput;
@@ -2407,7 +2425,7 @@ export type GetPokemonCardsQueryVariables = Exact<{
 }>;
 
 
-export type GetPokemonCardsQuery = { __typename?: 'Query', pokemonCards?: Array<{ __typename?: 'PokemonCard', id: string, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null }> | null };
+export type GetPokemonCardsQuery = { __typename?: 'Query', pokemonCards?: Array<{ __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null }> | null };
 
 export type PokemonSetItemFragment = { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, logoStorageUrl?: string | null };
 
@@ -2431,6 +2449,7 @@ export type GetPokemonSetsQuery = { __typename?: 'Query', pokemonSets?: Array<{ 
 export const PokemonCardItemFragmentDoc = gql`
     fragment PokemonCardItem on PokemonCard {
   id
+  tcgSetId
   tcgCardId
   tcgCardId_variant_language
   name

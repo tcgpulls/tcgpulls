@@ -770,12 +770,18 @@ type User {
   lastLoginAt: DateTime
   createdAt: DateTime
   updatedAt: DateTime
+  access: UserAccessType
   accounts(where: AccountWhereInput! = {}, orderBy: [AccountOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AccountWhereUniqueInput): [Account!]
   accountsCount(where: AccountWhereInput! = {}): Int
   authenticators(where: AuthenticatorWhereInput! = {}, orderBy: [AuthenticatorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AuthenticatorWhereUniqueInput): [Authenticator!]
   authenticatorsCount(where: AuthenticatorWhereInput! = {}): Int
   sessions(where: SessionWhereInput! = {}, orderBy: [SessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SessionWhereUniqueInput): [Session!]
   sessionsCount(where: SessionWhereInput! = {}): Int
+}
+
+enum UserAccessType {
+  freemium
+  premium
 }
 
 input UserWhereUniqueInput {
@@ -797,9 +803,17 @@ input UserWhereInput {
   lastLoginAt: DateTimeNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
+  access: UserAccessTypeNullableFilter
   accounts: AccountManyRelationFilter
   authenticators: AuthenticatorManyRelationFilter
   sessions: SessionManyRelationFilter
+}
+
+input UserAccessTypeNullableFilter {
+  equals: UserAccessType
+  in: [UserAccessType!]
+  notIn: [UserAccessType!]
+  not: UserAccessTypeNullableFilter
 }
 
 input AccountManyRelationFilter {
@@ -830,6 +844,7 @@ input UserOrderByInput {
   lastLoginAt: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
+  access: OrderDirection
 }
 
 input UserUpdateInput {
@@ -841,6 +856,7 @@ input UserUpdateInput {
   lastLoginAt: DateTime
   createdAt: DateTime
   updatedAt: DateTime
+  access: UserAccessType
   accounts: AccountRelateToManyForUpdateInput
   authenticators: AuthenticatorRelateToManyForUpdateInput
   sessions: SessionRelateToManyForUpdateInput
@@ -881,6 +897,7 @@ input UserCreateInput {
   lastLoginAt: DateTime
   createdAt: DateTime
   updatedAt: DateTime
+  access: UserAccessType
   accounts: AccountRelateToManyForCreateInput
   authenticators: AuthenticatorRelateToManyForCreateInput
   sessions: SessionRelateToManyForCreateInput

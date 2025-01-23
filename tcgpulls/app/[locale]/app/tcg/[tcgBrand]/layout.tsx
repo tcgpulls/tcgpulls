@@ -16,13 +16,11 @@ const TcgTypeLayout = async ({
 
   return (
     <>
-      <div className={`mb-4`}>
-        <PageHeader
-          title={t(`common.tcg-${tcgBrand}-short`)}
-          icon={<RectangleStackIcon />}
-        />
-      </div>
-      <div>{children}</div>
+      <PageHeader
+        title={t(`common.tcg-${tcgBrand}-short`)}
+        icon={<RectangleStackIcon />}
+      />
+      <div className={`mt-6`}>{children}</div>
     </>
   );
 };

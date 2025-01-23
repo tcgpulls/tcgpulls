@@ -67,7 +67,7 @@ export function CardsList({
           <CardCard
             key={card.id}
             card={card}
-            href={`/app/tcg/pokemon/${tcgLang}/cards/${card.tcgCardId}-${card.variant}-${tcgLang}`}
+            href={`/app/tcg/pokemon/${tcgLang}/sets/${card.tcgSetId}/cards/${card.tcgCardId}-${card.variant}-${tcgLang}`}
           />
         )}
       />

@@ -10,7 +10,7 @@ import {
   GetPokemonSetQueryVariables,
   OrderDirection,
 } from "@/graphql/generated";
-import client from "@/lib/apolloClient";
+import client from "@/lib/clients/apolloClient";
 import { GET_POKEMON_CARDS } from "@/graphql/tcg/pokemon/cards/queries";
 import { GET_POKEMON_SET } from "@/graphql/tcg/pokemon/sets/queries";
 
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const SetCardsPage = async ({ params }: Props) => {
-  const { setId, tcgLang, tcgBrand } = await params;
+  const { locale, setId, tcgLang, tcgBrand, tcgCategory } = await params;
 
   // Validate
   if (!setId || !tcgBrand || !tcgLang) {
@@ -46,6 +46,16 @@ const SetCardsPage = async ({ params }: Props) => {
   if (!set) {
     return <p>No set found</p>;
   }
+
+  const ThisHeader = () => {
+    return (
+      <PageHeader
+        title={`${set.name} (${set.tcgSetId})`}
+        withBackButton
+        previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}`}
+      />
+    );
+  };
 
   // 2) Define your desired sorting
   const sortBy = "normalizedNumber";
@@ -74,13 +84,18 @@ const SetCardsPage = async ({ params }: Props) => {
     return <p>Error: {cardsError.message}</p>;
   }
 
-  if (!cardsData?.pokemonCards) {
-    return <p>No cards found</p>;
+  if (!cardsData?.pokemonCards?.length || cardsData.pokemonCards.length === 0) {
+    return (
+      <>
+        <ThisHeader />
+        <p>No cards found</p>
+      </>
+    );
   }
 
   return (
     <>
-      <PageHeader title={`${set.name} (${set.tcgSetId})`} />
+      <ThisHeader />
       <CardsList
         key={`${sortBy}-${sortOrder}`}
         initialCards={cardsData.pokemonCards}

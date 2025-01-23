@@ -1,10 +1,9 @@
 import SetsList from "@/components/tcg/SetsList";
 import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
-import { Heading } from "@/components/catalyst-ui/heading";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
-import client from "@/lib/apolloClient"; // Your Apollo Client instance
+import client from "@/lib/clients/apolloClient";
 import { GET_POKEMON_SETS } from "@/graphql/tcg/pokemon/sets/queries";
 import {
   GetPokemonSetsQuery,
@@ -12,14 +11,15 @@ import {
   OrderDirection,
 } from "@/graphql/generated";
 import { POKEMON_SETS_PAGE_SIZE } from "@/constants/tcg/pokemon";
+import PageHeader from "@/components/misc/PageHeader";
 
 interface Props {
   params: UrlParamsT;
 }
 
 const TcgTypeSetsPage = async ({ params }: Props) => {
-  const { tcgLang, tcgBrand, tcgCategory } = await params;
-  const t = await getTranslations();
+  const { locale, tcgLang, tcgBrand, tcgCategory } = await params;
+  const t = await getTranslations("common");
 
   const sortBy = "releaseDate";
   const sortOrder: OrderDirection = OrderDirection.Desc;
@@ -51,12 +51,16 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
   }
 
   if (!data?.pokemonSets) {
-    return <p>{t("common.noSetsFound")}</p>;
+    return <p>No sets found</p>;
   }
 
   return (
     <>
-      <Heading className="pb-6">{t(`common.${tcgCategory}`)}</Heading>
+      <PageHeader
+        title={t(`${tcgCategory}`)}
+        withBackButton
+        previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}`}
+      />
       <SetsList
         key={`${sortBy}-${sortOrder}`}
         initialSets={data.pokemonSets}

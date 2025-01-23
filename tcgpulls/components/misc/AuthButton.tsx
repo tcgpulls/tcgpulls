@@ -2,19 +2,29 @@
 
 import { Button } from "@/components/catalyst-ui/button";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useTranslations } from "use-intl";
+import Spinner from "@/components/misc/Spinner";
 
 const AuthButton = () => {
   const { data: session, status } = useSession();
-  console.log("session", session, "status", status);
+  const t = useTranslations("common");
 
   if (status === "loading") {
-    return <Button disabled>Loading...</Button>;
+    return (
+      <Button className={`w-20`}>
+        <Spinner color={`#fff`} size={12} />
+      </Button>
+    );
   }
 
-  return session?.user ? (
-    <Button onClick={() => signOut()}>Sign Out</Button>
-  ) : (
-    <Button onClick={() => signIn("google")}>Sign In</Button>
+  return (
+    <div>
+      {session?.user ? (
+        <Button onClick={() => signOut()}>{t("auth.sign-out")}</Button>
+      ) : (
+        <Button onClick={() => signIn("google")}>{t("auth.sign-in")}</Button>
+      )}
+    </div>
   );
 };
 
