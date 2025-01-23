@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 export const PokemonCardItem = gql`
   fragment PokemonCardItem on PokemonCard {
     id
+    tcgSetId
     tcgCardId
     tcgCardId_variant_language
     name

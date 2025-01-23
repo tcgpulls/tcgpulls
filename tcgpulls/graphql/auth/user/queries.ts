@@ -6,6 +6,8 @@ export const GET_USER_BY_ID = gql`
       id
       email
       name
+      username
+      access
     }
   }
 `;
@@ -16,6 +18,8 @@ export const GET_USER_BY_EMAIL = gql`
       id
       email
       name
+      username
+      access
     }
   }
 `;

@@ -11,7 +11,11 @@ import {
   SidebarSection,
 } from "@/components/catalyst-ui/sidebar";
 import { Link } from "@/components/catalyst-ui/link";
-import { HomeIcon, RectangleStackIcon } from "@heroicons/react/20/solid";
+import {
+  HomeIcon,
+  RectangleStackIcon,
+  UserCircleIcon,
+} from "@heroicons/react/20/solid";
 import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
 import { useTranslations } from "use-intl";
 import { ReactNode } from "react";
@@ -46,6 +50,11 @@ const SidebarContent = () => {
       icon: <HomeIcon />,
     },
     {
+      href: "/app/account",
+      label: t("account"),
+      icon: <UserCircleIcon />,
+    },
+    {
       heading: t("tcg"),
       items: [
         {
@@ -77,7 +86,7 @@ const SidebarContent = () => {
       <SidebarBody>
         {sidebarItems.map((section, index) =>
           "items" in section ? (
-            <SidebarSection key={index}>
+            <SidebarSection key={index} className={`pt-8`}>
               {section.heading && (
                 <SidebarHeading>{section.heading}</SidebarHeading>
               )}
@@ -94,16 +103,15 @@ const SidebarContent = () => {
               ))}
             </SidebarSection>
           ) : (
-            <SidebarSection key={index}>
-              <SidebarItem
-                href={section.href}
-                current={pathname === section.href}
-                className={section.className}
-              >
-                {section.icon && section.icon}
-                <SidebarLabel>{section.label}</SidebarLabel>
-              </SidebarItem>
-            </SidebarSection>
+            <SidebarItem
+              key={index}
+              href={section.href}
+              current={pathname === section.href}
+              className={section.className}
+            >
+              {section.icon && section.icon}
+              <SidebarLabel>{section.label}</SidebarLabel>
+            </SidebarItem>
           ),
         )}
       </SidebarBody>

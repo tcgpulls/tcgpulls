@@ -20,7 +20,7 @@ const specifiedCardId = cardIdArg ? cardIdArg.split("=")[1] : null;
 
 // Concurrency limits
 const SET_CONCURRENCY_LIMIT = process.env.POKEMON_SETS_CONCURRENCY
-  ? parseInt(process.env.POKEMON_SETS_CONCURRENCY, 5)
+  ? parseInt(process.env.POKEMON_SETS_CONCURRENCY, 10)
   : 10; // how many sets are processed in parallel
 const CARD_CONCURRENCY_LIMIT = process.env.POKEMON_CARDS_CONCURRENCY
   ? parseInt(process.env.POKEMON_CARDS_CONCURRENCY, 10)
@@ -94,7 +94,6 @@ async function processOneSetAndLanguage(
   serverLog(
     `\n🚀 Processing set: ${set.name} (TCG Code: ${set.tcgSetId}, Language: ${language})`,
   );
-
   // 1) Fetch external cards
   let cardsData: any[];
   try {
@@ -274,7 +273,6 @@ async function processOneSetAndLanguage(
 async function fetchAndStorePokemonSetsCards() {
   // Create Keystone context (sudo mode to bypass access checks)
   const ksContext = await getKeystoneContext({ sudo: true });
-
   // Aggregated counters
   let totalSetsProcessed = 0;
   const counters = {

@@ -3,7 +3,7 @@ import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { assetsUrl } from "@/utils/assetsUrl";
-import client from "@/lib/apolloClient";
+import client from "@/lib/clients/apolloClient";
 import {
   GetPokemonCardQuery,
   GetPokemonCardQueryVariables,
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const CardPage = async ({ params }: Props) => {
-  const { cardSlug } = await params;
+  const { locale, tcgBrand, tcgCategory, tcgLang, cardSlug } = await params;
 
   if (!cardSlug) {
     notFound();
@@ -47,7 +47,11 @@ const CardPage = async ({ params }: Props) => {
 
   return (
     <>
-      <PageHeader title={`${card.name} (${card.tcgCardId})`} />
+      <PageHeader
+        title={`${card.name} (${card.tcgCardId})`}
+        withBackButton
+        previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${card.tcgSetId}`}
+      />
       <Image
         src={
           card.imageLargeStorageUrl
@@ -56,7 +60,7 @@ const CardPage = async ({ params }: Props) => {
               ? card.imageLargeApiUrl
               : "https://placehold.co/420x586"
         }
-        className="w-full max-w-[420px] object-contain mb-4 rounded-xl"
+        className="w-full max-w-[420px] object-contain mb-4 rounded-[20px]"
         alt={`${card.name} card`}
         width={420}
         height={586}

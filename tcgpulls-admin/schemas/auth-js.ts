@@ -1,16 +1,18 @@
 import { graphql, list } from "@keystone-6/core";
 import {
+  checkbox,
+  integer,
+  json,
+  relationship,
+  select,
   text,
   timestamp,
-  relationship,
-  integer,
-  checkbox,
-  json,
   virtual,
 } from "@keystone-6/core/fields";
 import type { Lists } from ".keystone/types";
 import rules from "../accessControl";
 import generateUniqueUsername from "../utils/generateUniqueUsername";
+import { UserAccess } from "../types/User";
 
 const authJsLists: Lists = {
   User: list({
@@ -33,6 +35,14 @@ const authJsLists: Lists = {
       lastLoginAt: timestamp(),
       createdAt: timestamp({ defaultValue: { kind: "now" } }),
       updatedAt: timestamp({ db: { updatedAt: true } }),
+      access: select({
+        type: "enum",
+        options: [
+          { label: "Freemium", value: UserAccess.Freemium },
+          { label: "Premium", value: UserAccess.Premium },
+        ],
+        defaultValue: UserAccess.Freemium,
+      }),
       accounts: relationship({ ref: "Account.user", many: true }),
       authenticators: relationship({ ref: "Authenticator.user", many: true }),
       sessions: relationship({ ref: "Session.user", many: true }),

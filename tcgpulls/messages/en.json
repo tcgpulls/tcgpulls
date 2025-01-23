@@ -2,7 +2,9 @@
   "common": {
     "company": "tcgpulls.xyz",
     "loading": "Loading",
+    "back": "Back",
     "home": "Home",
+    "account": "Account",
     "tcg": "Trading Card Games",
     "pack": "Pack",
     "packs": "Packs",
@@ -26,6 +28,10 @@
     "lang": {
       "en_label": "English",
       "ja_label": "Japanese"
+    },
+    "auth": {
+      "sign-in": "Sign In",
+      "sign-out": "Sign Out"
     }
   },
   "landing-page": {
@@ -39,6 +45,13 @@
     "title": "Welcome to tcgpulls.xyz",
     "metadata": {
       "title": "App - tcgpulls.xyz",
+      "description": "Get your TCG pack pulls and pull rates all in one place!"
+    }
+  },
+  "account-page": {
+    "title": "Account",
+    "metadata": {
+      "title": "Account - tcgpulls.xyz",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     }
   },

@@ -1,8 +1,8 @@
 // /app/(or wherever)/auth.ts
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-import adminClient from "@/lib/apolloAdminClient";
+import adminClient from "@/lib/clients/apolloAdminClient";
 import {
   GET_USER_BY_EMAIL,
   CREATE_USER,
@@ -16,7 +16,7 @@ import {
   UPDATE_ACCOUNT,
 } from "@/graphql/auth/account/queries";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const authConfig: NextAuthConfig = {
   debug: true,
   providers: [
     GoogleProvider({
@@ -136,8 +136,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           },
         });
 
-        // 4. Attach keystoneUserId to the NextAuth user object -> the jwt callback
+        // 4. Attach keystone fields to the user object
         user.id = keystoneUserId;
+        user.access = existingUser?.user?.access;
+        user.username = existingUser?.user?.username;
       } catch (error) {
         console.error("Error in signIn callback:", error);
         // If any error occurs, you can choose to deny login by returning false
@@ -156,7 +158,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // This runs on *every* JWT update, but `user` is only defined on the *first* call
       // (i.e., immediately after user logs in).
       if (user?.id) {
+        // Attach keystone fields attached to the user to the token object
         token.id = user.id;
+        token.username = user.username;
       }
 
       // Optional: If you want to ensure the user still exists each time:
@@ -170,9 +174,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           if (!data?.user) {
             // If user was deleted, remove the ID from the token
             delete token.id;
+            delete token.username;
           }
         } catch (error) {
           delete token.id;
+          delete token.username;
         }
       }
 
@@ -193,8 +199,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (!session.user) {
         session.user = {} as typeof session.user; // or type assertion
       }
+
+      // Attach keystone fields attached to the user then to the token object
+      // to the session
       session.user.id = token.id as string;
+      session.user.access = token.access as string;
+      session.user.username = token.username as string;
       return session;
     },
   },
-});
+};
+
+export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);

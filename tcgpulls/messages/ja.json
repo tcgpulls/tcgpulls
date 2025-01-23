@@ -2,7 +2,9 @@
   "common": {
     "company": "tcgpulls.xyz",
     "loading": "ロード中",
+    "back": "戻る",
     "home": "ホームページ",
+    "account": "アカウント",
     "tcg": "トレーディングカードゲーム",
     "pack": "パック",
     "packs": "パック",
@@ -26,6 +28,10 @@
     "lang": {
       "en_label": "英語",
       "ja_label": "日本語"
+    },
+    "auth": {
+      "sign-in": "ログイン",
+      "sign-out": "ログアウト"
     }
   },
   "landing-page": {
@@ -39,6 +45,13 @@
     "title": "tcgpulls.xyzへようこそ",
     "metadata": {
       "title": "アップリ - tcgpulls.xyz",
+      "description": "TCGパックの開封結果や出現率を一元管理！"
+    }
+  },
+  "account-page": {
+    "title": "アカウント",
+    "metadata": {
+      "title": "アカウント - tcgpulls.xyz",
       "description": "TCGパックの開封結果や出現率を一元管理！"
     }
   },
