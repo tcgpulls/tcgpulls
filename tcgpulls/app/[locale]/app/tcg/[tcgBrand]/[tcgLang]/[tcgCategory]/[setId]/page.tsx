@@ -10,9 +10,9 @@ import {
   GetPokemonSetQueryVariables,
   OrderDirection,
 } from "@/graphql/generated";
-import client from "@/lib/clients/apolloClient";
 import { GET_POKEMON_CARDS } from "@/graphql/tcg/pokemon/cards/queries";
 import { GET_POKEMON_SET } from "@/graphql/tcg/pokemon/sets/queries";
+import createApolloClient from "@/lib/clients/createApolloClient";
 
 interface Props {
   params: UrlParamsT;
@@ -20,6 +20,7 @@ interface Props {
 
 const SetCardsPage = async ({ params }: Props) => {
   const { locale, setId, tcgLang, tcgBrand, tcgCategory } = await params;
+  const client = createApolloClient();
 
   // Validate
   if (!setId || !tcgBrand || !tcgLang) {

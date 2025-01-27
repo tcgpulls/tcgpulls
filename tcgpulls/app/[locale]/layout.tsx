@@ -5,7 +5,9 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
-import Providers from "@/components/Providers";
+import CustomApolloProvider from "@/components/CustomApolloProvider";
+import { SessionProvider } from "next-auth/react";
+import TcgLanguageContextWrapper from "@/components/context/TcgLanguageContextWrapper";
 
 const LocaleLayout = async ({
   children,
@@ -26,13 +28,17 @@ const LocaleLayout = async ({
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
-      <Providers>
-        <html lang={locale} className={`min-h-screen`}>
-          <body className={`min-h-screen font-sans`}>{children}</body>
-        </html>
-      </Providers>
-    </NextIntlClientProvider>
+    <SessionProvider>
+      <TcgLanguageContextWrapper>
+        <NextIntlClientProvider messages={messages}>
+          <CustomApolloProvider>
+            <html lang={locale} className={`min-h-screen`}>
+              <body className={`min-h-screen font-sans`}>{children}</body>
+            </html>
+          </CustomApolloProvider>
+        </NextIntlClientProvider>
+      </TcgLanguageContextWrapper>
+    </SessionProvider>
   );
 };
 

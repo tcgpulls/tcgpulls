@@ -42,14 +42,14 @@
   --color-accent-900: #713f12;
   --color-accent-950: #422006;
 
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-primary-50);
+  --foreground: var(--color-primary-950);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-secondary-950);
+    --foreground: var(--color-secondary-50);
   }
 }
 

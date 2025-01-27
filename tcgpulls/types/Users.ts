@@ -2,12 +2,13 @@ import { Session } from "next-auth";
 
 export interface UserAuthenticatedSession extends Session {
   user: {
-    id: string;
-    access: string;
-    name: string;
-    username: string;
-    email: string;
-    image: string;
+    id?: string | undefined;
+    access?: string | undefined;
+    name?: string | null | undefined;
+    username?: string | null | undefined;
+    email?: string | null | undefined;
+    image?: string | null | undefined;
+    active?: boolean | undefined;
   };
 }
 

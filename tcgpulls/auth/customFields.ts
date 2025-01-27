@@ -1,7 +1,16 @@
 import { Session, User } from "next-auth";
 import { AppJWT } from "@/types/Auth";
 
-const customAuthFields = ["id", "username", "access", "active"] as const;
+const customAuthFields = ["id"] as const;
+
+export function updateCustomFieldsInUser(
+  user: User,
+  existingUser: { user: User },
+) {
+  customAuthFields.forEach((field) => {
+    (user as Record<string, unknown>)[field] = existingUser.user[field];
+  });
+}
 
 export function updateCustomFieldsInToken(user: User, token: AppJWT) {
   customAuthFields.forEach((field) => {

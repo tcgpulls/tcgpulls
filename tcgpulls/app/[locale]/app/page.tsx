@@ -3,7 +3,7 @@ import { Link } from "@/components/catalyst-ui/link";
 import Card from "@/components/misc/Card";
 import { getTranslations } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
-import getTcgLanguage from "@/actions/getTcgLanguage";
+import getTcgLanguage from "@/utils/getTcgLanguage";
 import Header from "@/components/misc/Header";
 
 const AppPage = async () => {

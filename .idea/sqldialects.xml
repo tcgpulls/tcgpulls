@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/tcgpulls-admin/migrations/20250123035432_lowercase_user_access/migration.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/tcgpulls-admin/migrations/20250123064649_added_active_prop_users/migration.sql" dialect="PostgreSQL" />
+  </component>
+</project>

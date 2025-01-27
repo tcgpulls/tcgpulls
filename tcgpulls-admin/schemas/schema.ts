@@ -11,7 +11,7 @@
 // when using Typescript, you can refine your types to a stricter subset by importing
 // the generated types from '.keystone/types'
 import cmsLists from "./cms";
-import authJsLists from "./auth-js";
+import authJsLists from "./authjs";
 import tcgPokemonLists from "./tcg/pokemon";
 
 const lists = {

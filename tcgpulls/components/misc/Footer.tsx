@@ -6,7 +6,7 @@ const Footer = async () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer>
+    <footer className={`mt-8`}>
       <Text className={`text-center`}>
         &copy; {currentYear} {t("company")} - {t("footer.copyright")}
       </Text>
