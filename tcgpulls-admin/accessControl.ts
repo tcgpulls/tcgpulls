@@ -1,5 +1,6 @@
 // accessControl.ts
 import { KeystoneSessionT } from "./types/Keystone";
+import { KeystoneContext } from "@keystone-6/core/types";
 
 const isSudo = ({ context }: { context: any }) => {
   return Boolean((context.req as any)?.isSudoContext);

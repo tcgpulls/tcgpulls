@@ -61,16 +61,19 @@ const styles = {
       "text-white [--btn-bg:var(--color-primary-500)] [--btn-border:var(--color-primary-600)] [--btn-hover-overlay:var(--color-primary-700)]",
       "dark:text-white dark:[--btn-bg:var(--color-primary-400)] dark:[--btn-hover-overlay:var(--color-primary-500)]",
       "[--btn-icon:var(--color-primary-200)] data-[active]:[--btn-icon:var(--color-primary-100)] data-[hover]:[--btn-icon:var(--color-primary-100)]",
+      "data-[focus]:outline-primary-500",
     ],
     secondary: [
       "text-white [--btn-bg:var(--color-secondary-500)] [--btn-border:var(--color-secondary-600)] [--btn-hover-overlay:var(--color-secondary-700)]",
       "dark:text-white dark:[--btn-bg:var(--color-secondary-400)] dark:[--btn-hover-overlay:var(--color-secondary-500)]",
       "[--btn-icon:var(--color-secondary-200)] data-[active]:[--btn-icon:var(--color-secondary-100)] data-[hover]:[--btn-icon:var(--color-secondary-100)]",
+      "data-[focus]:outline-secondary-500",
     ],
     accent: [
       "text-white [--btn-bg:var(--color-accent-5700)] [--btn-border:var(--color-accent-800)] [--btn-hover-overlay:var(--color-accent-900)]",
       "dark:text-white dark:[--btn-bg:var(--color-accent-600)] dark:[--btn-hover-overlay:var(--color-accent-700)]",
       "[--btn-icon:var(--color-accent-400)] data-[active]:[--btn-icon:var(--color-accent-300)] data-[hover]:[--btn-icon:var(--color-accent-300)]",
+      "data-[focus]:outline-accent-500",
     ],
     "dark/zinc": [
       "text-white [--btn-bg:theme(colors.zinc.900)] [--btn-border:theme(colors.zinc.950/90%)] [--btn-hover-overlay:theme(colors.white/10%)]",

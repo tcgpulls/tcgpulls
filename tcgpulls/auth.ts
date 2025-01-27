@@ -4,25 +4,24 @@ import GoogleProvider from "next-auth/providers/google";
 
 import adminClient from "@/lib/clients/apolloAdminClient";
 import {
-  GET_USER_BY_EMAIL,
   CREATE_USER,
+  GET_USER_BY_EMAIL,
+  GET_USER_BY_ID,
   UPDATE_USER,
   UPDATE_USER_LASTLOGIN,
-  GET_USER_BY_ID,
 } from "@/graphql/auth/user/queries";
 import {
-  GET_ACCOUNT_BY_PROVIDER,
   CREATE_ACCOUNT,
+  GET_ACCOUNT_BY_PROVIDER,
   UPDATE_ACCOUNT,
 } from "@/graphql/auth/account/queries";
-import {
-  deleteCustomFieldsInToken,
-  updateCustomFieldsInSession,
-  updateCustomFieldsInToken,
-} from "@/auth/customFields";
-import { AppJWT } from "@/types/Auth";
+import { SignJWT } from "jose";
 
 export const authConfig: NextAuthConfig = {
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.AUTH_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -47,13 +46,12 @@ export const authConfig: NextAuthConfig = {
         const { data: existingUser } = await adminClient.query({
           query: GET_USER_BY_EMAIL,
           variables: { email: normalizedEmail },
-          fetchPolicy: "network-only",
         });
 
-        let keystoneUserId = existingUser?.user?.id;
+        let userRecord = existingUser?.user;
 
-        if (!keystoneUserId) {
-          // Create a new user
+        if (!userRecord?.id) {
+          // Create new user
           const createUserResult = await adminClient.mutate({
             mutation: CREATE_USER,
             variables: {
@@ -65,13 +63,13 @@ export const authConfig: NextAuthConfig = {
               },
             },
           });
-          keystoneUserId = createUserResult?.data?.createUser?.id;
+          userRecord = createUserResult?.data?.createUser;
         } else {
-          // Update user if it exists
+          // Update existing user
           await adminClient.mutate({
             mutation: UPDATE_USER,
             variables: {
-              id: keystoneUserId,
+              id: userRecord.id,
               data: {
                 name: user.name,
                 image: user.image,
@@ -79,6 +77,31 @@ export const authConfig: NextAuthConfig = {
             },
           });
         }
+
+        // Now we definitely have userRecord with an .id
+        await adminClient.mutate({
+          mutation: UPDATE_USER_LASTLOGIN,
+          variables: {
+            id: userRecord.id,
+            data: {
+              lastLoginAt: new Date().toISOString(),
+            },
+          },
+        });
+
+        // 3. Update lastLoginAt
+        await adminClient.mutate({
+          mutation: UPDATE_USER_LASTLOGIN,
+          variables: {
+            id: userRecord.id,
+            data: {
+              lastLoginAt: new Date().toISOString(),
+            },
+          },
+        });
+
+        // Finally, set the fields on the NextAuth `user` object
+        user.id = userRecord.id;
 
         // 2. Check if an account record exists for this (provider + providerAccountId)
         const { data: accountData } = await adminClient.query({
@@ -90,9 +113,9 @@ export const authConfig: NextAuthConfig = {
           fetchPolicy: "network-only",
         });
 
-        const existingAccount = accountData?.accounts?.[0];
+        const accountRecord = accountData?.accounts?.[0];
 
-        if (!existingAccount) {
+        if (!accountRecord) {
           // Create a new Account in Keystone
           await adminClient.mutate({
             mutation: CREATE_ACCOUNT,
@@ -109,7 +132,7 @@ export const authConfig: NextAuthConfig = {
                 expiresAt: account.expires_at,
                 // Connect the user relationship
                 user: {
-                  connect: { id: keystoneUserId },
+                  connect: { id: userRecord.id },
                 },
               },
             },
@@ -121,7 +144,7 @@ export const authConfig: NextAuthConfig = {
           await adminClient.mutate({
             mutation: UPDATE_ACCOUNT,
             variables: {
-              id: existingAccount.id,
+              id: accountRecord.id,
               data: {
                 accessToken: account.access_token,
                 refreshToken: account.refresh_token,
@@ -129,22 +152,6 @@ export const authConfig: NextAuthConfig = {
             },
           });
         }
-
-        // 3. Update lastLoginAt
-        await adminClient.mutate({
-          mutation: UPDATE_USER_LASTLOGIN,
-          variables: {
-            id: keystoneUserId,
-            data: {
-              lastLoginAt: new Date().toISOString(),
-            },
-          },
-        });
-
-        // 4. Attach keystone fields to the user object
-        user.id = keystoneUserId;
-        user.access = existingUser?.user?.access;
-        user.username = existingUser?.user?.username;
       } catch (error) {
         console.error("Error in signIn callback:", error);
         // If any error occurs, you can choose to deny login by returning false
@@ -164,7 +171,7 @@ export const authConfig: NextAuthConfig = {
       // (i.e., immediately after user logs in).
       if (user?.id) {
         // Attach keystone fields attached to the user to the token object
-        updateCustomFieldsInToken(user, token as AppJWT);
+        token.id = user.id;
       }
 
       // Optional: If you want to ensure the user still exists each time:
@@ -175,14 +182,27 @@ export const authConfig: NextAuthConfig = {
             variables: { id: token.id },
             fetchPolicy: "network-only",
           });
+
           if (!data?.user) {
             // If user was deleted, remove the ID from the token
-            deleteCustomFieldsInToken(token as AppJWT);
+            delete token.id;
           }
         } catch (error) {
-          deleteCustomFieldsInToken(token as AppJWT);
+          delete token.id;
         }
       }
+
+      // 3. Sign a minimal payload – *not* the entire token object
+      //    i.e. only { id: token.id } or { sub: token.id } or however you'd like
+      const minimalPayload = {
+        id: token.id,
+      };
+
+      // 4. Use JOSE to sign that minimal payload
+      const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
+      (token as any).rawJwt = await new SignJWT(minimalPayload)
+        .setProtectedHeader({ alg: "HS256" })
+        .sign(secret);
 
       return token;
     },
@@ -197,14 +217,11 @@ export const authConfig: NextAuthConfig = {
         return { ...session, user: undefined };
       }
 
-      // Otherwise, we have a valid user ID => set on session
-      if (!session.user) {
-        session.user = {} as typeof session.user; // or type assertion
-      }
+      // Put the raw JWT on session.user.token
+      if (!session.user) session.user = {} as any;
+      (session.user as any).id = token.id;
+      (session.user as any).token = (token as any).rawJwt ?? null;
 
-      // Attach keystone fields attached to the user then to the token object
-      // to the session
-      updateCustomFieldsInSession(token as AppJWT, session);
       return session;
     },
   },

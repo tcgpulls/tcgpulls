@@ -1,4 +1,5 @@
 export type KeystoneSessionT = {
+  itemId?: string;
   data: {
     id: string;
     name: string;

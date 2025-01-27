@@ -3,7 +3,6 @@ import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
-import client from "@/lib/clients/apolloClient";
 import { GET_POKEMON_SETS } from "@/graphql/tcg/pokemon/sets/queries";
 import {
   GetPokemonSetsQuery,
@@ -12,6 +11,7 @@ import {
 } from "@/graphql/generated";
 import { POKEMON_SETS_PAGE_SIZE } from "@/constants/tcg/pokemon";
 import Header from "@/components/misc/Header";
+import createApolloClient from "@/lib/clients/createApolloClient";
 
 interface Props {
   params: UrlParamsT;
@@ -19,6 +19,7 @@ interface Props {
 
 const TcgTypeSetsPage = async ({ params }: Props) => {
   const { locale, tcgLang, tcgBrand, tcgCategory } = await params;
+  const client = createApolloClient();
   const t = await getTranslations("common");
 
   const sortBy = "releaseDate";

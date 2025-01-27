@@ -3,12 +3,12 @@ import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { assetsUrl } from "@/utils/assetsUrl";
-import client from "@/lib/clients/apolloClient";
 import {
   GetPokemonCardQuery,
   GetPokemonCardQueryVariables,
 } from "@/graphql/generated";
 import { GET_POKEMON_CARD } from "@/graphql/tcg/pokemon/cards/queries";
+import createApolloClient from "@/lib/clients/createApolloClient";
 
 interface Props {
   params: UrlParamsT;
@@ -16,6 +16,7 @@ interface Props {
 
 const CardPage = async ({ params }: Props) => {
   const { locale, tcgBrand, tcgCategory, tcgLang, cardSlug } = await params;
+  const client = createApolloClient();
 
   if (!cardSlug) {
     notFound();

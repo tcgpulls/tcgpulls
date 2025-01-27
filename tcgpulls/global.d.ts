@@ -13,6 +13,7 @@ declare module "next-auth" {
     access?: string;
     username?: string | null;
     active?: boolean;
+    token?: string;
   }
 
   // 2) Extend the JWT
@@ -28,6 +29,7 @@ declare module "next-auth" {
       email?: string | null;
       image?: string | null;
       active?: boolean;
+      token?: string;
     };
   }
 }

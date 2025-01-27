@@ -2,23 +2,22 @@ import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
 import Header from "@/components/misc/Header";
-import { auth } from "@/auth";
-import ProfileForm from "@/components/profile/ProfileForm";
+import ProfileForm from "@/components/providers/ProfileForm";
+import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
 
-const ProfilePage = async () => {
-  const session = await auth();
+type Props = {
+  params: UrlParamsT;
+};
+
+const ProfilePage = async ({ params }: Props) => {
+  const { locale } = await params;
+  await requireAuthOrRedirect({ redirectRoute: `/${locale}/app/profile` });
   const t = await getTranslations("profile-page");
 
   return (
     <>
       <Header title={t("title")} />
-      <ProfileForm
-        userId={session?.user?.id || ""}
-        name={session?.user?.name || ""}
-        email={session?.user?.email || ""}
-        image={session?.user?.image || ""}
-        username={session?.user?.username || ""}
-      />
+      <ProfileForm />
     </>
   );
 };

@@ -1,12 +1,14 @@
 import { gql } from "@apollo/client";
 
 export const GET_USER_BY_ID = gql`
-  query GetUserByEmail($id: ID!) {
+  query GetUserById($id: ID!) {
     user(where: { id: $id }) {
       id
       email
       name
       username
+      image
+      active
       access
     }
   }
@@ -19,6 +21,8 @@ export const GET_USER_BY_EMAIL = gql`
       email
       name
       username
+      image
+      active
       access
     }
   }
@@ -47,9 +51,8 @@ export const UPDATE_USER = gql`
 `;
 
 export const UPDATE_USER_PROFILE = gql`
-  mutation UpdateUser($id: ID!, $data: UserUpdateInput!) {
+  mutation UpdateUserProfile($id: ID!, $data: UserUpdateInput!) {
     updateUser(where: { id: $id }, data: $data) {
-      id
       username
     }
   }
