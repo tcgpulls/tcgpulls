@@ -6,7 +6,6 @@ import Spinner from "@/components/misc/Spinner";
 import { Avatar } from "@/components/catalyst-ui/avatar";
 import { useProfileForm } from "@/hooks/useProfileForm";
 import { useTranslations } from "use-intl";
-import { deriveApolloErrorMessage } from "@/utils/deriveApolloErrorMessage";
 
 export default function ProfileForm() {
   const t = useTranslations("profile-page");
@@ -15,16 +14,16 @@ export default function ProfileForm() {
     handleInputChange,
     handleSubmit,
     hasChanges,
-    updateSuccess,
-    mutationError,
     mutationLoading,
     queryLoading,
     queryError,
     userData,
-    usernameCheckError,
   } = useProfileForm();
 
-  if (queryError) return <p>Error: {queryError.message}</p>;
+  // If there's a top-level query error for user data
+  if (queryError) {
+    return <p>Error: {queryError.message}</p>;
+  }
 
   return (
     <div className="max-w-lg mt-8 p-6 bg-white rounded-lg shadow-md dark:bg-primary-800">
@@ -99,25 +98,6 @@ export default function ProfileForm() {
             >
               {mutationLoading ? <Spinner /> : t("form.save-changes")}
             </Button>
-
-            {/* Error Message */}
-            {mutationError && (
-              <p className="mt-2 text-xs text-center text-red-500">
-                {deriveApolloErrorMessage(mutationError)}
-              </p>
-            )}
-            {usernameCheckError && (
-              <p className="mt-2 text-xs text-center text-red-500">
-                {usernameCheckError}
-              </p>
-            )}
-
-            {/* Success Message */}
-            {updateSuccess && !mutationError && (
-              <p className="mt-2 text-xs text-center text-green-500">
-                {t("form.messages.success")}
-              </p>
-            )}
           </form>
         </>
       )}
