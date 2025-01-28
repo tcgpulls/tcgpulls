@@ -32,6 +32,19 @@
     "auth": {
       "sign-in": "Sign In",
       "sign-out": "Sign Out"
+    },
+    "forms": {
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "errors": {
+      "generic": "An error occurred.",
+      "access-denied": "Access Denied",
+      "access-denied-action": "You do not have permission to perform this action.",
+      "not-found": "Page not found",
+      "auth-required": "Authentication required",
+      "username-taken": "Username is already taken."
     }
   },
   "landing-page": {
@@ -53,6 +66,19 @@
     "metadata": {
       "title": "Profile - tcgpulls.xyz",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
+    },
+    "form": {
+      "title": "Edit Profile",
+      "name": "Name",
+      "email": "Email",
+      "username": "Username",
+      "username-placeholder": "Enter a username",
+      "current-image": "Current Image",
+      "save-changes": "Save Changes",
+      "messages": {
+        "success": "Profile updated successfully!",
+        "error": "Profile update failed."
+      }
     }
   },
   "tcg-page": {

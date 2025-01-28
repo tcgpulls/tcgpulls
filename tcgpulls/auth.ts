@@ -17,6 +17,9 @@ import {
 } from "@/graphql/auth/account/queries";
 import { SignJWT } from "jose";
 
+// we need to set this to avoid lingering cache issues when handling auth
+const FETCH_POLICY = "network-only";
+
 export const authConfig: NextAuthConfig = {
   session: {
     strategy: "jwt",
@@ -46,6 +49,7 @@ export const authConfig: NextAuthConfig = {
         const { data: existingUser } = await adminClient.query({
           query: GET_USER_BY_EMAIL,
           variables: { email: normalizedEmail },
+          fetchPolicy: FETCH_POLICY,
         });
 
         let userRecord = existingUser?.user;
@@ -62,6 +66,7 @@ export const authConfig: NextAuthConfig = {
                 emailVerified: new Date().toISOString(),
               },
             },
+            fetchPolicy: FETCH_POLICY,
           });
           userRecord = createUserResult?.data?.createUser;
         } else {
@@ -75,6 +80,7 @@ export const authConfig: NextAuthConfig = {
                 image: user.image,
               },
             },
+            fetchPolicy: FETCH_POLICY,
           });
         }
 
@@ -87,6 +93,7 @@ export const authConfig: NextAuthConfig = {
               lastLoginAt: new Date().toISOString(),
             },
           },
+          fetchPolicy: FETCH_POLICY,
         });
 
         // 3. Update lastLoginAt
@@ -98,6 +105,7 @@ export const authConfig: NextAuthConfig = {
               lastLoginAt: new Date().toISOString(),
             },
           },
+          fetchPolicy: FETCH_POLICY,
         });
 
         // Finally, set the fields on the NextAuth `user` object
@@ -110,7 +118,7 @@ export const authConfig: NextAuthConfig = {
             provider: account.provider,
             providerAccountId: account.providerAccountId,
           },
-          fetchPolicy: "network-only",
+          fetchPolicy: FETCH_POLICY,
         });
 
         const accountRecord = accountData?.accounts?.[0];
@@ -136,6 +144,7 @@ export const authConfig: NextAuthConfig = {
                 },
               },
             },
+            fetchPolicy: FETCH_POLICY,
           });
         } else {
           // Optional: you could update the existing account if you want to refresh access/refresh tokens
@@ -150,6 +159,7 @@ export const authConfig: NextAuthConfig = {
                 refreshToken: account.refresh_token,
               },
             },
+            fetchPolicy: FETCH_POLICY,
           });
         }
       } catch (error) {
@@ -180,7 +190,7 @@ export const authConfig: NextAuthConfig = {
           const { data } = await adminClient.query({
             query: GET_USER_BY_ID,
             variables: { id: token.id },
-            fetchPolicy: "network-only",
+            fetchPolicy: FETCH_POLICY,
           });
 
           if (!data?.user) {

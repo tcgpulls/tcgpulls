@@ -2,6 +2,7 @@ import { getContext } from "@keystone-6/core/context";
 import config from "./keystone"; // Adjust the path to your Keystone configuration
 import * as PrismaModule from "@prisma/client";
 import serverLog from "./utils/serverLog";
+import { CmsUserRoles } from "./types/CmsUser";
 
 async function seedData() {
   // 1. Create a context
@@ -11,10 +12,10 @@ async function seedData() {
   serverLog("Seeding roles...");
   const roles = await context.sudo().db.CmsRole.createMany({
     data: [
-      { label: "Super Admin", value: "super-admin" },
-      { label: "Admin", value: "admin" },
-      { label: "Editor", value: "editor" },
-      { label: "Viewer", value: "viewer" },
+      { label: "Super Admin", value: CmsUserRoles.SuperAdmin },
+      { label: "Admin", value: CmsUserRoles.Admin },
+      { label: "Editor", value: CmsUserRoles.Editor },
+      { label: "Viewer", value: CmsUserRoles.Viewer },
     ],
   });
   serverLog("Roles seeded:", roles);
@@ -25,7 +26,7 @@ async function seedData() {
       name: process.env.SUPER_ADMIN_NAME,
       email: process.env.SUPER_ADMIN_EMAIL,
       password: process.env.SUPER_ADMIN_PASSWORD, // hashed automatically
-      role: { connect: { value: "super-admin" } },
+      role: { connect: { value: CmsUserRoles.SuperAdmin } },
     },
   });
   serverLog("Super admin user seeded:", superAdminUser);

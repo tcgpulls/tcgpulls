@@ -19,56 +19,35 @@ const authJsLists: Lists = {
     access: {
       // 1. Operation-level access (broad rules)
       operation: {
-        // (A) Query: must at least allow some reading. We'll refine with filter.query
         query: () => true,
-
-        // (B) Create: if you want an open sign-up, do `() => true`.
-        // If you only want admins or superadmins to create users, do something else:
-        create: ({ session, context }) =>
-          rules.isSudoOrSuperAdmin({ session }) || rules.isAdmin({ session }),
-
-        // (C) Update: allowed in principle, but we refine with filter.update
+        create: ({ session, context }) => {
+          return rules.isSudo({ context }) || rules.isSuperAdmin({ session });
+        },
         update: () => true,
-
-        // (D) Delete: only superadmins or sudo
-        delete: ({ session }) => rules.isSudoOrSuperAdmin({ session }),
+        delete: ({ session, context }) => {
+          return rules.isSudo({ context }) || rules.isSuperAdmin({ session });
+        },
       },
-
-      // 2. Fine-grained filter rules
       filter: {
-        // (A) Query: superadmin or admin => see all. Otherwise => see only self
         query: ({ session, context }) => {
           if (
-            rules.isSudoOrSuperAdmin({ session, context }) ||
+            rules.isSudo({ context }) ||
+            rules.isSuperAdmin({ session }) ||
             rules.isAdmin({ session })
           ) {
             return true;
           }
-          // Otherwise, only see self
           return { id: { equals: session?.itemId } };
         },
-
-        // (B) Update: superadmin => update anyone, admin => update anyone, self => only own record
         update: ({ session, context }) => {
           if (
-            rules.isSudoOrSuperAdmin({ session, context }) ||
+            rules.isSudo({ context }) ||
+            rules.isSuperAdmin({ session }) ||
             rules.isAdmin({ session })
           ) {
             return true;
           }
-          // Normal user => can only update themselves
           return { id: { equals: session?.itemId } };
-        },
-
-        // (C) Delete: superadmin or sudo => can delete anything,
-        // but we've already blocked others entirely in operation.delete.
-        // You can either return false or do the same logic as operation.delete
-        delete: ({ session, context }) => {
-          if (rules.isSudoOrSuperAdmin({ session, context })) {
-            return true;
-          }
-          // If you want to *also* let admin delete, add `|| rules.isAdmin({ session })`.
-          return false;
         },
       },
     },
@@ -119,7 +98,7 @@ const authJsLists: Lists = {
     },
   }),
   Account: list({
-    access: rules.isSudoOrSuperAdmin,
+    access: rules.isSudo || rules.isSuperAdmin,
     ui: {
       isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
       listView: {
@@ -163,7 +142,7 @@ const authJsLists: Lists = {
     // Composite key equivalent can be managed via hooks or database-level constraints
   }),
   Session: list({
-    access: rules.isSudoOrSuperAdmin,
+    access: rules.isSudo || rules.isSuperAdmin,
     ui: {
       isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
     },
@@ -179,7 +158,7 @@ const authJsLists: Lists = {
     },
   }),
   VerificationToken: list({
-    access: rules.isSudoOrSuperAdmin,
+    access: rules.isSudo || rules.isSuperAdmin,
     ui: {
       isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
     },
@@ -191,7 +170,7 @@ const authJsLists: Lists = {
     // Composite key equivalent can be managed via hooks or database-level constraints
   }),
   Authenticator: list({
-    access: rules.isSudoOrSuperAdmin,
+    access: rules.isSudo || rules.isSuperAdmin,
     ui: {
       isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
     },

@@ -28,6 +28,14 @@ export const GET_USER_BY_EMAIL = gql`
   }
 `;
 
+export const GET_IS_USERNAME_TAKEN = gql`
+  query IsUsernameTaken($username: String!) {
+    user(where: { username: $username }) {
+      id
+    }
+  }
+`;
+
 export const CREATE_USER = gql`
   mutation CreateUser($data: UserCreateInput!) {
     createUser(data: $data) {

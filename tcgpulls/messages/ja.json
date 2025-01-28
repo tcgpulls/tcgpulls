@@ -32,6 +32,19 @@
     "auth": {
       "sign-in": "ログイン",
       "sign-out": "ログアウト"
+    },
+    "forms": {
+      "submit": "送信",
+      "cancel": "キャンセル",
+      "save": "保存"
+    },
+    "errors": {
+      "generic": "エラーが発生しました。",
+      "access-denied": "アクセスが拒否されました",
+      "access-denied-action": "この操作を行う権限がありません。",
+      "not-found": "ページが見つかりません",
+      "auth-required": "認証が必要です",
+      "username-taken": "このユーザー名は既に使われています。"
     }
   },
   "landing-page": {
@@ -53,6 +66,19 @@
     "metadata": {
       "title": "プロフィール - tcgpulls.xyz",
       "description": "TCGパックの開封結果や出現率を一元管理！"
+    },
+    "form": {
+      "title": "プロフィールを編集",
+      "name": "名前",
+      "email": "メールアドレス",
+      "username": "ユーザー名",
+      "username-placeholder": "ユーザー名を入力してください",
+      "current-image": "現在の画像",
+      "save-changes": "変更を保存",
+      "messages": {
+        "success": "プロフィールが正常に更新されました！",
+        "error": "プロフィールの更新に失敗しました。"
+      }
     }
   },
   "tcg-page": {

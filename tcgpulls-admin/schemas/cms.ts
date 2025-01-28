@@ -7,6 +7,7 @@ import {
 } from "@keystone-6/core/fields";
 import type { Lists } from ".keystone/types";
 import rules from "../accessControl";
+import { CmsUserRoles } from "../types/CmsUser";
 
 const cmsLists: Lists = {
   CmsUser: list({
@@ -91,7 +92,9 @@ const cmsLists: Lists = {
             return true;
           }
           if (rules.isAdmin({ session })) {
-            return { value: { in: ["editor", "viewer"] } };
+            return {
+              value: { in: [CmsUserRoles.Editor, CmsUserRoles.Viewer] },
+            };
           }
           return false;
         },
