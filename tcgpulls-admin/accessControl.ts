@@ -1,6 +1,6 @@
 // accessControl.ts
 import { KeystoneSessionT } from "./types/Keystone";
-import { KeystoneContext } from "@keystone-6/core/types";
+import { CmsUserRoles } from "./types/CmsUser";
 
 const isSudo = ({ context }: { context: any }) => {
   return Boolean((context.req as any)?.isSudoContext);
@@ -8,45 +8,36 @@ const isSudo = ({ context }: { context: any }) => {
 
 const isSuperAdmin = ({ session }: { session?: KeystoneSessionT }) => {
   const role = session?.data.role.value;
-  return role === "super-admin";
-};
-
-const isSudoOrSuperAdmin = ({
-  session,
-  context,
-}: {
-  session?: KeystoneSessionT;
-  context?: any;
-}) => {
-  if (!session) return isSudo({ context });
-  if (!context) return isSuperAdmin({ session });
-  return isSudo({ context }) || isSuperAdmin({ session });
+  return role === CmsUserRoles.SuperAdmin;
 };
 
 const isAdmin = ({ session }: { session?: KeystoneSessionT }) => {
   const role = session?.data.role.value;
-  return role === "super-admin" || role === "admin";
+  return role === CmsUserRoles.SuperAdmin || role === CmsUserRoles.Admin;
 };
 
 const isEditor = ({ session }: { session?: KeystoneSessionT }) => {
   const role = session?.data.role.value;
-  return role === "super-admin" || role === "admin" || role === "editor";
+  return (
+    role === CmsUserRoles.SuperAdmin ||
+    role === CmsUserRoles.Admin ||
+    role === CmsUserRoles.Editor
+  );
 };
 
 const isViewer = ({ session }: { session?: KeystoneSessionT }) => {
   const role = session?.data.role.value;
   return (
-    role === "super-admin" ||
-    role === "admin" ||
-    role === "editor" ||
-    role === "viewer"
+    role === CmsUserRoles.SuperAdmin ||
+    role === CmsUserRoles.Admin ||
+    role === CmsUserRoles.Editor ||
+    role === CmsUserRoles.Viewer
   );
 };
 
 const rules = {
   isSudo,
   isSuperAdmin,
-  isSudoOrSuperAdmin,
   isAdmin,
   isEditor,
   isViewer,

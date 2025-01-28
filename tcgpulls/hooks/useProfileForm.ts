@@ -1,10 +1,12 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import {
+  GET_IS_USERNAME_TAKEN,
   GET_USER_BY_ID,
   UPDATE_USER_PROFILE,
 } from "@/graphql/auth/user/queries";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "use-intl";
 
 type FormData = {
   name: string;
@@ -13,8 +15,15 @@ type FormData = {
 };
 
 export function useProfileForm() {
+  const t = useTranslations();
   const { data: session } = useSession();
   const userId = session?.user?.id;
+  const [checkUsername, { loading: usernameCheckLoading }] = useLazyQuery(
+    GET_IS_USERNAME_TAKEN,
+    {
+      fetchPolicy: "network-only", // or "no-cache"
+    },
+  );
 
   // 1) Fetch existing user data
   const {
@@ -45,6 +54,9 @@ export function useProfileForm() {
 
   // 4) For showing a success message if update completes
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [usernameCheckError, setUsernameCheckError] = useState<string | null>(
+    null,
+  );
 
   // 5) Populate both formData and initialData once we have the user
   useEffect(() => {
@@ -77,8 +89,23 @@ export function useProfileForm() {
     );
   }
 
+  async function isUsernameTaken() {
+    if (formData.username !== initialData.username) {
+      const { data } = await checkUsername({
+        variables: { username: formData.username },
+      });
+      if (data?.user?.id) {
+        setUsernameCheckError(t("common.errors.username-taken"));
+        return true;
+      }
+    }
+    return false;
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    setUpdateSuccess(false);
+    setUsernameCheckError(null);
     if (!userId) return;
 
     // If no changes, skip the request
@@ -86,7 +113,10 @@ export function useProfileForm() {
       return;
     }
 
-    setUpdateSuccess(false);
+    if (await isUsernameTaken()) {
+      return;
+    }
+
     try {
       // Right now we only update username,
       // but you can extend this if you allow more fields to be updated.
@@ -120,5 +150,7 @@ export function useProfileForm() {
     queryLoading,
     queryError,
     userData: data?.user,
+    usernameCheckLoading,
+    usernameCheckError,
   };
 }

@@ -1,3 +1,5 @@
+import { CmsUserRoles } from "./CmsUser";
+
 export type KeystoneSessionT = {
   itemId?: string;
   data: {
@@ -7,7 +9,7 @@ export type KeystoneSessionT = {
     role: {
       id: string;
       label: string;
-      value: "super-admin" | "admin" | "editor" | "viewer";
+      value: CmsUserRoles;
     };
   };
 };
