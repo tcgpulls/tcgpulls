@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
 import Header from "@/components/misc/Header";
-import ProfileForm from "@/components/providers/ProfileForm";
+import ProfileForm from "@/components/profile/ProfileForm";
 import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
 
 type Props = {

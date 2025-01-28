@@ -1,3 +1,5 @@
+"use client";
+
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import {
@@ -7,6 +9,8 @@ import {
 } from "@/graphql/auth/user/queries";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "use-intl";
+import toast from "react-hot-toast";
+import { deriveApolloErrorMessage } from "@/utils/deriveApolloErrorMessage";
 
 type FormData = {
   name: string;
@@ -18,14 +22,14 @@ export function useProfileForm() {
   const t = useTranslations();
   const { data: session } = useSession();
   const userId = session?.user?.id;
+
   const [checkUsername, { loading: usernameCheckLoading }] = useLazyQuery(
     GET_IS_USERNAME_TAKEN,
     {
-      fetchPolicy: "network-only", // or "no-cache"
+      fetchPolicy: "network-only",
     },
   );
 
-  // 1) Fetch existing user data
   const {
     data,
     loading: queryLoading,
@@ -36,11 +40,12 @@ export function useProfileForm() {
     skip: !userId,
   });
 
-  // 2) Mutation for updating
   const [updateUser, { loading: mutationLoading, error: mutationError }] =
-    useMutation(UPDATE_USER_PROFILE);
+    useMutation(UPDATE_USER_PROFILE, {
+      // If you want to handle errors in your code vs. thrown:
+      errorPolicy: "all",
+    });
 
-  // 3) We'll keep both `formData` (current edits) and `initialData` (last saved)
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -52,13 +57,6 @@ export function useProfileForm() {
     username: "",
   });
 
-  // 4) For showing a success message if update completes
-  const [updateSuccess, setUpdateSuccess] = useState(false);
-  const [usernameCheckError, setUsernameCheckError] = useState<string | null>(
-    null,
-  );
-
-  // 5) Populate both formData and initialData once we have the user
   useEffect(() => {
     if (data?.user) {
       const loaded = {
@@ -71,16 +69,13 @@ export function useProfileForm() {
     }
   }, [data]);
 
-  // Single handler for multiple fields
   function handleInputChange(
     e: ChangeEvent<HTMLInputElement>,
     field: keyof FormData,
   ) {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    setUpdateSuccess(false); // reset if user types again
   }
 
-  // Helper to see if anything changed compared to initialData
   function hasChanges() {
     return (
       formData.name !== initialData.name ||
@@ -95,7 +90,8 @@ export function useProfileForm() {
         variables: { username: formData.username },
       });
       if (data?.user?.id) {
-        setUsernameCheckError(t("common.errors.username-taken"));
+        // Instead of storing local error, let's just toast here:
+        toast.error(t("common.errors.username-taken"));
         return true;
       }
     }
@@ -104,23 +100,24 @@ export function useProfileForm() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setUpdateSuccess(false);
-    setUsernameCheckError(null);
-    if (!userId) return;
 
-    // If no changes, skip the request
-    if (!hasChanges()) {
+    if (!userId) {
+      toast.error("No user ID found.");
       return;
     }
 
-    if (await isUsernameTaken()) {
+    if (!hasChanges()) {
+      // maybe toast a quick "No changes" or just do nothing
       return;
+    }
+
+    // Check username
+    if (await isUsernameTaken()) {
+      return; // Already toasted
     }
 
     try {
-      // Right now we only update username,
-      // but you can extend this if you allow more fields to be updated.
-      await updateUser({
+      const res = await updateUser({
         variables: {
           id: userId,
           data: {
@@ -129,12 +126,27 @@ export function useProfileForm() {
         },
       });
 
-      // If successful:
+      // If the mutation has GraphQL errors in `errorPolicy: "all"`, you can check here:
+      if (res.errors && res.errors.length > 0) {
+        // Show a toast for the first error
+        toast.error(res.errors[0].message);
+        return;
+      }
+
+      // If success, do a refetch
       await refetch();
-      setInitialData(formData); // New baseline
-      setUpdateSuccess(true); // Show success
+      setInitialData(formData);
+
+      toast.success(t("profile-page.form.messages.success"));
     } catch (err) {
       console.error("Error updating user:", err);
+
+      if (mutationError) {
+        const errorMessage = await deriveApolloErrorMessage(mutationError);
+        toast.error(errorMessage);
+      } else {
+        toast.error(t("common.errors.generic"));
+      }
     }
   }
 
@@ -144,13 +156,11 @@ export function useProfileForm() {
     handleInputChange,
     handleSubmit,
     hasChanges,
-    updateSuccess, // For success message
     mutationError,
     mutationLoading,
     queryLoading,
     queryError,
     userData: data?.user,
     usernameCheckLoading,
-    usernameCheckError,
   };
 }

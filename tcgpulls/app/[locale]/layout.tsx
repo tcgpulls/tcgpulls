@@ -5,9 +5,10 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
-import CustomApolloProvider from "@/components/CustomApolloProvider";
+import CustomApolloProvider from "@/components/providers/CustomApolloProvider";
 import { SessionProvider } from "next-auth/react";
 import TcgLanguageContextWrapper from "@/components/context/TcgLanguageContextWrapper";
+import ToasterProvider from "@/components/providers/ToasterProvider";
 
 const LocaleLayout = async ({
   children,
@@ -33,7 +34,10 @@ const LocaleLayout = async ({
         <NextIntlClientProvider messages={messages}>
           <CustomApolloProvider>
             <html lang={locale} className={`min-h-screen`}>
-              <body className={`min-h-screen font-sans`}>{children}</body>
+              <body className={`min-h-screen font-sans`}>
+                <ToasterProvider />
+                {children}
+              </body>
             </html>
           </CustomApolloProvider>
         </NextIntlClientProvider>
