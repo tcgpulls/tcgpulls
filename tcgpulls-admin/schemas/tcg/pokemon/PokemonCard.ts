@@ -185,6 +185,10 @@ const PokemonCard = list({
     abilities: relationship({ ref: "PokemonCardAbility.card", many: true }),
     attacks: relationship({ ref: "PokemonCardAttack.card", many: true }),
     weaknesses: relationship({ ref: "PokemonCardWeakness.card", many: true }),
+    resistances: relationship({
+      ref: "PokemonCardResistance.card",
+      many: true,
+    }),
     set: relationship({ ref: "PokemonSet.cards", many: false }),
     priceHistories: relationship({
       ref: "PokemonCardPriceHistory.card",

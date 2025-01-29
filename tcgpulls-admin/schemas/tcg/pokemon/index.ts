@@ -4,6 +4,7 @@ import PokemonCardPriceHistory from "./PokemonCardPriceHistory";
 import PokemonCardAbility from "./PokemonCardAbility";
 import PokemonCardAttack from "./PokemonCardAttack";
 import PokemonCardWeakness from "./PokemonCardWeakness";
+import PokemonCardResistance from "./PokemonCardResistance";
 
 const tcgPokemonLists = {
   PokemonSet,
@@ -12,6 +13,7 @@ const tcgPokemonLists = {
   PokemonCardAbility,
   PokemonCardAttack,
   PokemonCardWeakness,
+  PokemonCardResistance,
 };
 
 export default tcgPokemonLists;

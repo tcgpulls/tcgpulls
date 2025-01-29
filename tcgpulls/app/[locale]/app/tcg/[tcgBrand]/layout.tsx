@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import Header from "@/components/misc/Header";
 import { getTranslations } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
-import { RectangleStackIcon } from "@heroicons/react/20/solid";
+import { HiRectangleStack } from "react-icons/hi2";
 
 const TcgTypeLayout = async ({
   children,
@@ -18,7 +18,7 @@ const TcgTypeLayout = async ({
     <>
       <Header
         title={t(`common.tcg-${tcgBrand}-short`)}
-        icon={<RectangleStackIcon />}
+        icon={<HiRectangleStack />}
       />
       <div className={`mt-6`}>{children}</div>
     </>

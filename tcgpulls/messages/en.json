@@ -2,6 +2,8 @@
   "common": {
     "company": "tcgpulls.xyz",
     "loading": "Loading",
+    "error": "Error",
+    "success": "Success",
     "back": "Back",
     "home": "Home",
     "profile": "Profile",
@@ -18,6 +20,11 @@
     "tcg-pokemon-short": "Pokémon TCG",
     "tcg-one-piece": "One Piece Trading Card Game",
     "tcg-one-piece-short": "One Piece TCG",
+    "artist": "Artist",
+    "description": "Description",
+    "rarity": "Rarity",
+    "pull-rate": "Pull Rate",
+    "pull-rates": "Pull Rates",
     "metadata": {
       "title": "tcgpulls.xyz",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
@@ -45,6 +52,44 @@
       "not-found": "Page not found",
       "auth-required": "Authentication required",
       "username-taken": "Username is already taken."
+    }
+  },
+  "tcg": {
+    "pokemon": {
+      "energy": {
+        "name": "Energy",
+        "types": {
+          "grass": "Grass",
+          "fire": "Fire",
+          "water": "Water",
+          "lightning": "Lightning",
+          "psychic": "Psychic",
+          "fighting": "Fighting",
+          "darkness": "Darkness",
+          "metal": "Metal",
+          "fairy": "Fairy",
+          "dragon": "Dragon",
+          "colorless": "Colorless"
+        }
+      },
+      "type": "Type",
+      "types": "Types",
+      "stage": "Stage",
+      "damage": "Damage",
+      "cost": "Cost",
+      "series": "Series",
+      "ability": "Ability",
+      "abilities": "Abilities",
+      "attack": "Attack",
+      "attacks": "Attacks",
+      "hp": "HP",
+      "evolves-from": "Evolves from",
+      "weakness": "Weakness",
+      "weaknesses": "Weaknesses",
+      "resistance": "Resistance",
+      "resistances": "Resistances",
+      "retreat": "Retreat Cost",
+      "trainer": "Trainer"
     }
   },
   "landing-page": {
@@ -94,5 +139,8 @@
       "title": "Sets - tcgpulls.xyz",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     }
+  },
+  "card-page": {
+    "not-found": "Card not found"
   }
 }

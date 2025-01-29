@@ -67,6 +67,7 @@ model PokemonCard {
   abilities                  PokemonCardAbility[]      @relation("PokemonCardAbility_card")
   attacks                    PokemonCardAttack[]       @relation("PokemonCardAttack_card")
   weaknesses                 PokemonCardWeakness[]     @relation("PokemonCardWeakness_card")
+  resistances                PokemonCardResistance[]   @relation("PokemonCardResistance_card")
   set                        PokemonSet?               @relation("PokemonCard_set", fields: [setId], references: [id])
   setId                      String?                   @map("set")
   priceHistories             PokemonCardPriceHistory[] @relation("PokemonCardPriceHistory_card")
@@ -118,6 +119,16 @@ model PokemonCardWeakness {
   type   String       @default("")
   value  String       @default("")
   card   PokemonCard? @relation("PokemonCardWeakness_card", fields: [cardId], references: [id])
+  cardId String?      @map("card")
+
+  @@index([cardId])
+}
+
+model PokemonCardResistance {
+  id     String       @id @default(cuid())
+  type   String       @default("")
+  value  String       @default("")
+  card   PokemonCard? @relation("PokemonCardResistance_card", fields: [cardId], references: [id])
   cardId String?      @map("card")
 
   @@index([cardId])

@@ -11,17 +11,14 @@ import {
   SidebarSection,
 } from "@/components/catalyst-ui/sidebar";
 import { Link } from "@/components/catalyst-ui/link";
-import {
-  HomeIcon,
-  RectangleStackIcon,
-  UserCircleIcon,
-} from "@heroicons/react/20/solid";
 import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
 import { useTranslations } from "use-intl";
 import { ReactNode } from "react";
 import { usePathname } from "@/i18n/routing";
 import useTcgLanguage from "@/hooks/context/useTcgLanguage";
 import AuthButton from "@/components/misc/AuthButton";
+import { HiHome, HiUserCircle } from "react-icons/hi";
+import { HiRectangleStack } from "react-icons/hi2";
 
 type SidebarItem = {
   href: string;
@@ -47,12 +44,12 @@ const SidebarContent = () => {
     {
       href: "/app",
       label: t("home"),
-      icon: <HomeIcon />,
+      icon: <HiHome size={20} />,
     },
     {
       href: "/app/profile",
       label: t("profile"),
-      icon: <UserCircleIcon />,
+      icon: <HiUserCircle size={20} />,
     },
     {
       heading: t("tcg"),
@@ -60,7 +57,7 @@ const SidebarContent = () => {
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}`,
           label: t("tcg-pokemon-short"),
-          icon: <RectangleStackIcon />,
+          icon: <HiRectangleStack size={20} />,
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/booster-packs`,

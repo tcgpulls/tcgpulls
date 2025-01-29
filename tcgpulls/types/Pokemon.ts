@@ -17,3 +17,17 @@ export type PokemonTcgApiSetT = {
     logo: string;
   };
 };
+
+export enum PokemonEnergyT {
+  Grass = "Grass",
+  Fire = "Fire",
+  Water = "Water",
+  Lightning = "Lightning",
+  Fighting = "Fighting",
+  Psychic = "Psychic",
+  Fairy = "Fairy",
+  Darkness = "Darkness",
+  Metal = "Metal",
+  Colorless = "Colorless",
+  Free = "Free",
+}

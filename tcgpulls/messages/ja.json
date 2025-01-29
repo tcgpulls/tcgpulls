@@ -2,25 +2,32 @@
   "common": {
     "company": "tcgpulls.xyz",
     "loading": "ロード中",
+    "error": "エラー",
+    "success": "成功",
     "back": "戻る",
-    "home": "ホームページ",
+    "home": "ホーム",
     "profile": "プロフィール",
     "tcg": "トレーディングカードゲーム",
     "pack": "パック",
     "packs": "パック",
     "booster-pack": "ブースターパック",
     "booster-packs": "ブースターパック",
-    "set": "弾",
-    "sets": "弾",
+    "set": "拡張パック",
+    "sets": "拡張パック",
     "pokemon": "ポケモン",
     "one-piece": "ワンピース",
     "tcg-pokemon": "ポケモンカードゲーム",
     "tcg-pokemon-short": "ポケカ",
     "tcg-one-piece": "ワンピースカードゲーム",
     "tcg-one-piece-short": "ワンピカ",
+    "artist": "イラストレーター",
+    "description": "説明",
+    "rarity": "レアリティ",
+    "pull-rate": "排出率",
+    "pull-rates": "排出率一覧",
     "metadata": {
       "title": "tcgpulls.xyz",
-      "description": "TCGパックの開封結果や出現率を一元管理！"
+      "description": "TCGパックの開封結果や排出率を一元管理！"
     },
     "footer": {
       "copyright": "本ウェブサイトは、任天堂または株式会社ポケモンによって制作、承認、サポート、または提携されているものではありません。"
@@ -44,28 +51,66 @@
       "access-denied-action": "この操作を行う権限がありません。",
       "not-found": "ページが見つかりません",
       "auth-required": "認証が必要です",
-      "username-taken": "このユーザー名は既に使われています。"
+      "username-taken": "このユーザー名は既に使用されています。"
+    }
+  },
+  "tcg": {
+    "pokemon": {
+      "energy": {
+        "name": "エネルギー",
+        "types": {
+          "grass": "草",
+          "fire": "炎",
+          "water": "水",
+          "lightning": "雷",
+          "psychic": "超",
+          "fighting": "闘",
+          "darkness": "悪",
+          "metal": "鋼",
+          "fairy": "フェアリー",
+          "dragon": "ドラゴン",
+          "colorless": "無色"
+        }
+      },
+      "type": "タイプ",
+      "types": "タイプ一覧",
+      "stage": "進化段階",
+      "damage": "ダメージ",
+      "cost": "エネルギーコスト",
+      "series": "シリーズ",
+      "ability": "特性",
+      "abilities": "特性一覧",
+      "attack": "ワザ",
+      "attacks": "ワザ一覧",
+      "hp": "HP",
+      "evolves-from": "進化前",
+      "weakness": "弱点",
+      "weaknesses": "弱点一覧",
+      "resistance": "抵抗力",
+      "resistances": "抵抗力一覧",
+      "retreat": "にげる",
+      "trainer": "トレーナー"
     }
   },
   "landing-page": {
     "title": "tcgpulls.xyzへようこそ",
     "metadata": {
-      "title": "ホームページ - tcgpulls.xyz",
-      "description": "TCGパックの開封結果や出現率を一元管理！"
+      "title": "ホーム - tcgpulls.xyz",
+      "description": "TCGパックの開封結果や排出率を一元管理！"
     }
   },
   "app-page": {
     "title": "tcgpulls.xyzへようこそ",
     "metadata": {
-      "title": "アップリ - tcgpulls.xyz",
-      "description": "TCGパックの開封結果や出現率を一元管理！"
+      "title": "アプリ - tcgpulls.xyz",
+      "description": "TCGパックの開封結果や排出率を一元管理！"
     }
   },
   "profile-page": {
     "title": "プロフィール",
     "metadata": {
       "title": "プロフィール - tcgpulls.xyz",
-      "description": "TCGパックの開封結果や出現率を一元管理！"
+      "description": "TCGパックの開封結果や排出率を一元管理！"
     },
     "form": {
       "title": "プロフィールを編集",
@@ -84,15 +129,18 @@
   "tcg-page": {
     "title": "トレーディングカードゲーム",
     "metadata": {
-      "title": "拡張パック - tcgpulls.xyz",
-      "description": "TCGパックの開封結果や出現率を一元管理！"
+      "title": "トレーディングカードゲーム - tcgpulls.xyz",
+      "description": "TCGパックの開封結果や排出率を一元管理！"
     }
   },
   "sets-page": {
     "title": "拡張パック",
     "metadata": {
       "title": "拡張パック - tcgpulls.xyz",
-      "description": "TCGパックの開封結果や出現率を一元管理！"
+      "description": "TCGパックの開封結果や排出率を一元管理！"
     }
+  },
+  "card-page": {
+    "not-found": "カードが見つかりません"
   }
 }

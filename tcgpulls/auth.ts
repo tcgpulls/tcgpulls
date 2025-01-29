@@ -9,12 +9,12 @@ import {
   GET_USER_BY_ID,
   UPDATE_USER,
   UPDATE_USER_LASTLOGIN,
-} from "@/graphql/auth/user/queries";
+} from "@/graphql/user/queries";
 import {
   CREATE_ACCOUNT,
   GET_ACCOUNT_BY_PROVIDER,
   UPDATE_ACCOUNT,
-} from "@/graphql/auth/account/queries";
+} from "@/graphql/account/queries";
 import { SignJWT } from "jose";
 
 // we need to set this to avoid lingering cache issues when handling auth

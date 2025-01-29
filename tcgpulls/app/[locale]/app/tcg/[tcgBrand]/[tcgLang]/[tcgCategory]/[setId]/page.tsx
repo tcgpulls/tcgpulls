@@ -13,6 +13,7 @@ import {
 import { GET_POKEMON_CARDS } from "@/graphql/tcg/pokemon/cards/queries";
 import { GET_POKEMON_SET } from "@/graphql/tcg/pokemon/sets/queries";
 import createApolloClient from "@/lib/clients/createApolloClient";
+import { getTranslations } from "next-intl/server";
 
 interface Props {
   params: UrlParamsT;
@@ -48,10 +49,11 @@ const SetCardsPage = async ({ params }: Props) => {
     return <p>No set found</p>;
   }
 
-  const ThisHeader = () => {
+  const ThisHeader = async () => {
+    const t = await getTranslations("common");
     return (
       <Header
-        title={`${set.name} (${set.tcgSetId})`}
+        title={t(`${tcgCategory}`)}
         size={`small`}
         withBackButton
         previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}`}

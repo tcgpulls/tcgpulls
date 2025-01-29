@@ -58,7 +58,7 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
   return (
     <>
       <Header
-        title={t(`${tcgCategory}`)}
+        title={t(`${tcgBrand}`)}
         size={`small`}
         withBackButton
         previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}`}

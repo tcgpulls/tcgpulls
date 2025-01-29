@@ -9,9 +9,12 @@ const PokemonCardPriceHistory = list({
   access: {
     operation: {
       query: () => true, // Public read access
-      create: ({ session }) => rules.isAdmin({ session }), // Only admins can create
-      update: ({ session }) => rules.isAdmin({ session }), // Only admins can update
-      delete: ({ session }) => rules.isAdmin({ session }), // Only admins can delete
+      create: ({ session, context }) =>
+        rules.isSudo({ context }) || rules.isAdmin({ session }),
+      update: ({ session, context }) =>
+        rules.isSudo({ context }) || rules.isAdmin({ session }),
+      delete: ({ session, context }) =>
+        rules.isSudo({ context }) || rules.isAdmin({ session }),
     },
   },
   fields: {
