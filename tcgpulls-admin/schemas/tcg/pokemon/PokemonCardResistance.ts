@@ -1,19 +1,16 @@
 import { list } from "@keystone-6/core";
 import rules from "../../../accessControl";
-import { integer, json, relationship, text } from "@keystone-6/core/fields";
+import { relationship, text } from "@keystone-6/core/fields";
 
-const PokemonCardAttack = list({
+const PokemonCardResistance = list({
   ui: {
-    label: "Pokemon Attacks",
+    label: "Pokemon Resistances",
     isHidden: ({ session }) => !rules.isSuperAdmin({ session }),
   },
   fields: {
-    name: text({ validation: { isRequired: true } }),
-    cost: json(),
-    convertedEnergyCost: integer({ validation: { isRequired: true } }),
-    damage: text(),
-    text: text(),
-    card: relationship({ ref: "PokemonCard.attacks", many: false }),
+    type: text({ validation: { isRequired: true } }),
+    value: text({ validation: { isRequired: true } }),
+    card: relationship({ ref: "PokemonCard.resistances", many: false }),
   },
   access: {
     operation: {
@@ -28,4 +25,4 @@ const PokemonCardAttack = list({
   },
 });
 
-export default PokemonCardAttack;
+export default PokemonCardResistance;

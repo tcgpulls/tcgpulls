@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
-import { ChevronLeftIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
+import { HiChevronLeft } from "react-icons/hi";
 
 type Props = {
-  title: string;
+  title: string | ReactNode;
   description?: ReactNode;
   icon?: ReactNode;
   withBackButton?: boolean;
@@ -30,16 +30,19 @@ const Header = ({
       <div
         className={`inline-flex items-center ${previousUrl !== "" && "gap-4 "}`}
       >
-        <Link
-          href={previousUrl}
-          className={`rounded-full bg-primary-600 text-primary-100 ${previousUrl !== "" && "hover:text-primary-300 hover:bg-primary-700"}`}
-        >
-          {withBackButton && <ChevronLeftIcon className={`w-7 h-7`} />}
+        <Link href={previousUrl} className={`text-primary-100`}>
+          <span
+            className={`flex gap-4 items-center ${titleSizes[size]} font-bold ${previousUrl !== "" && "hover:text-primary-300"}`}
+          >
+            {withBackButton && (
+              <span className={`bg-primary-600 rounded-full`}>
+                <HiChevronLeft className={`w-7 h-7`} />
+              </span>
+            )}
+            {icon && <div className={`w-6 h-6`}>{icon}</div>}
+            {title}
+          </span>
         </Link>
-        <h1 className={`flex gap-4 items-center ${titleSizes[size]} font-bold`}>
-          {icon && <div className={`w-6 h-6`}>{icon}</div>}
-          {title}
-        </h1>
       </div>
       {description && <div className="text-primary-500">{description}</div>}
     </div>

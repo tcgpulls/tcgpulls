@@ -571,6 +571,8 @@ export type Mutation = {
   createPokemonCardAttacks?: Maybe<Array<Maybe<PokemonCardAttack>>>;
   createPokemonCardPriceHistories?: Maybe<Array<Maybe<PokemonCardPriceHistory>>>;
   createPokemonCardPriceHistory?: Maybe<PokemonCardPriceHistory>;
+  createPokemonCardResistance?: Maybe<PokemonCardResistance>;
+  createPokemonCardResistances?: Maybe<Array<Maybe<PokemonCardResistance>>>;
   createPokemonCardWeakness?: Maybe<PokemonCardWeakness>;
   createPokemonCardWeaknesses?: Maybe<Array<Maybe<PokemonCardWeakness>>>;
   createPokemonCards?: Maybe<Array<Maybe<PokemonCard>>>;
@@ -597,6 +599,8 @@ export type Mutation = {
   deletePokemonCardAttacks?: Maybe<Array<Maybe<PokemonCardAttack>>>;
   deletePokemonCardPriceHistories?: Maybe<Array<Maybe<PokemonCardPriceHistory>>>;
   deletePokemonCardPriceHistory?: Maybe<PokemonCardPriceHistory>;
+  deletePokemonCardResistance?: Maybe<PokemonCardResistance>;
+  deletePokemonCardResistances?: Maybe<Array<Maybe<PokemonCardResistance>>>;
   deletePokemonCardWeakness?: Maybe<PokemonCardWeakness>;
   deletePokemonCardWeaknesses?: Maybe<Array<Maybe<PokemonCardWeakness>>>;
   deletePokemonCards?: Maybe<Array<Maybe<PokemonCard>>>;
@@ -624,6 +628,8 @@ export type Mutation = {
   updatePokemonCardAttacks?: Maybe<Array<Maybe<PokemonCardAttack>>>;
   updatePokemonCardPriceHistories?: Maybe<Array<Maybe<PokemonCardPriceHistory>>>;
   updatePokemonCardPriceHistory?: Maybe<PokemonCardPriceHistory>;
+  updatePokemonCardResistance?: Maybe<PokemonCardResistance>;
+  updatePokemonCardResistances?: Maybe<Array<Maybe<PokemonCardResistance>>>;
   updatePokemonCardWeakness?: Maybe<PokemonCardWeakness>;
   updatePokemonCardWeaknesses?: Maybe<Array<Maybe<PokemonCardWeakness>>>;
   updatePokemonCards?: Maybe<Array<Maybe<PokemonCard>>>;
@@ -716,6 +722,16 @@ export type MutationCreatePokemonCardPriceHistoriesArgs = {
 
 export type MutationCreatePokemonCardPriceHistoryArgs = {
   data: PokemonCardPriceHistoryCreateInput;
+};
+
+
+export type MutationCreatePokemonCardResistanceArgs = {
+  data: PokemonCardResistanceCreateInput;
+};
+
+
+export type MutationCreatePokemonCardResistancesArgs = {
+  data: Array<PokemonCardResistanceCreateInput>;
 };
 
 
@@ -846,6 +862,16 @@ export type MutationDeletePokemonCardPriceHistoriesArgs = {
 
 export type MutationDeletePokemonCardPriceHistoryArgs = {
   where: PokemonCardPriceHistoryWhereUniqueInput;
+};
+
+
+export type MutationDeletePokemonCardResistanceArgs = {
+  where: PokemonCardResistanceWhereUniqueInput;
+};
+
+
+export type MutationDeletePokemonCardResistancesArgs = {
+  where: Array<PokemonCardResistanceWhereUniqueInput>;
 };
 
 
@@ -987,6 +1013,17 @@ export type MutationUpdatePokemonCardPriceHistoryArgs = {
 };
 
 
+export type MutationUpdatePokemonCardResistanceArgs = {
+  data: PokemonCardResistanceUpdateInput;
+  where: PokemonCardResistanceWhereUniqueInput;
+};
+
+
+export type MutationUpdatePokemonCardResistancesArgs = {
+  data: Array<PokemonCardResistanceUpdateArgs>;
+};
+
+
 export type MutationUpdatePokemonCardWeaknessArgs = {
   data: PokemonCardWeaknessUpdateInput;
   where: PokemonCardWeaknessWhereUniqueInput;
@@ -1096,6 +1133,8 @@ export type PokemonCard = {
   priceHistories?: Maybe<Array<PokemonCardPriceHistory>>;
   priceHistoriesCount?: Maybe<Scalars['Int']['output']>;
   rarity?: Maybe<Scalars['String']['output']>;
+  resistances?: Maybe<Array<PokemonCardResistance>>;
+  resistancesCount?: Maybe<Scalars['Int']['output']>;
   retreatCost?: Maybe<Scalars['JSON']['output']>;
   set?: Maybe<PokemonSet>;
   subtypes?: Maybe<Scalars['JSON']['output']>;
@@ -1150,6 +1189,20 @@ export type PokemonCardPriceHistoriesArgs = {
 
 export type PokemonCardPriceHistoriesCountArgs = {
   where?: PokemonCardPriceHistoryWhereInput;
+};
+
+
+export type PokemonCardResistancesArgs = {
+  cursor?: InputMaybe<PokemonCardResistanceWhereUniqueInput>;
+  orderBy?: Array<PokemonCardResistanceOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: PokemonCardResistanceWhereInput;
+};
+
+
+export type PokemonCardResistancesCountArgs = {
+  where?: PokemonCardResistanceWhereInput;
 };
 
 
@@ -1330,6 +1383,7 @@ export type PokemonCardCreateInput = {
   number?: InputMaybe<Scalars['String']['input']>;
   priceHistories?: InputMaybe<PokemonCardPriceHistoryRelateToManyForCreateInput>;
   rarity?: InputMaybe<Scalars['String']['input']>;
+  resistances?: InputMaybe<PokemonCardResistanceRelateToManyForCreateInput>;
   retreatCost?: InputMaybe<Scalars['JSON']['input']>;
   set?: InputMaybe<PokemonSetRelateToOneForCreateInput>;
   subtypes?: InputMaybe<Scalars['JSON']['input']>;
@@ -1481,6 +1535,69 @@ export type PokemonCardRelateToOneForUpdateInput = {
   disconnect?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type PokemonCardResistance = {
+  __typename?: 'PokemonCardResistance';
+  card?: Maybe<PokemonCard>;
+  id: Scalars['ID']['output'];
+  type?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['String']['output']>;
+};
+
+export type PokemonCardResistanceCreateInput = {
+  card?: InputMaybe<PokemonCardRelateToOneForCreateInput>;
+  type?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PokemonCardResistanceManyRelationFilter = {
+  every?: InputMaybe<PokemonCardResistanceWhereInput>;
+  none?: InputMaybe<PokemonCardResistanceWhereInput>;
+  some?: InputMaybe<PokemonCardResistanceWhereInput>;
+};
+
+export type PokemonCardResistanceOrderByInput = {
+  id?: InputMaybe<OrderDirection>;
+  type?: InputMaybe<OrderDirection>;
+  value?: InputMaybe<OrderDirection>;
+};
+
+export type PokemonCardResistanceRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<PokemonCardResistanceWhereUniqueInput>>;
+  create?: InputMaybe<Array<PokemonCardResistanceCreateInput>>;
+};
+
+export type PokemonCardResistanceRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<PokemonCardResistanceWhereUniqueInput>>;
+  create?: InputMaybe<Array<PokemonCardResistanceCreateInput>>;
+  disconnect?: InputMaybe<Array<PokemonCardResistanceWhereUniqueInput>>;
+  set?: InputMaybe<Array<PokemonCardResistanceWhereUniqueInput>>;
+};
+
+export type PokemonCardResistanceUpdateArgs = {
+  data: PokemonCardResistanceUpdateInput;
+  where: PokemonCardResistanceWhereUniqueInput;
+};
+
+export type PokemonCardResistanceUpdateInput = {
+  card?: InputMaybe<PokemonCardRelateToOneForUpdateInput>;
+  type?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PokemonCardResistanceWhereInput = {
+  AND?: InputMaybe<Array<PokemonCardResistanceWhereInput>>;
+  NOT?: InputMaybe<Array<PokemonCardResistanceWhereInput>>;
+  OR?: InputMaybe<Array<PokemonCardResistanceWhereInput>>;
+  card?: InputMaybe<PokemonCardWhereInput>;
+  id?: InputMaybe<IdFilter>;
+  type?: InputMaybe<StringFilter>;
+  value?: InputMaybe<StringFilter>;
+};
+
+export type PokemonCardResistanceWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type PokemonCardUpdateArgs = {
   data: PokemonCardUpdateInput;
   where: PokemonCardWhereUniqueInput;
@@ -1506,6 +1623,7 @@ export type PokemonCardUpdateInput = {
   number?: InputMaybe<Scalars['String']['input']>;
   priceHistories?: InputMaybe<PokemonCardPriceHistoryRelateToManyForUpdateInput>;
   rarity?: InputMaybe<Scalars['String']['input']>;
+  resistances?: InputMaybe<PokemonCardResistanceRelateToManyForUpdateInput>;
   retreatCost?: InputMaybe<Scalars['JSON']['input']>;
   set?: InputMaybe<PokemonSetRelateToOneForUpdateInput>;
   subtypes?: InputMaybe<Scalars['JSON']['input']>;
@@ -1605,6 +1723,7 @@ export type PokemonCardWhereInput = {
   number?: InputMaybe<StringFilter>;
   priceHistories?: InputMaybe<PokemonCardPriceHistoryManyRelationFilter>;
   rarity?: InputMaybe<StringFilter>;
+  resistances?: InputMaybe<PokemonCardResistanceManyRelationFilter>;
   set?: InputMaybe<PokemonSetWhereInput>;
   supertype?: InputMaybe<StringFilter>;
   tcgCardId?: InputMaybe<StringFilter>;
@@ -1829,6 +1948,9 @@ export type Query = {
   pokemonCardPriceHistories?: Maybe<Array<PokemonCardPriceHistory>>;
   pokemonCardPriceHistoriesCount?: Maybe<Scalars['Int']['output']>;
   pokemonCardPriceHistory?: Maybe<PokemonCardPriceHistory>;
+  pokemonCardResistance?: Maybe<PokemonCardResistance>;
+  pokemonCardResistances?: Maybe<Array<PokemonCardResistance>>;
+  pokemonCardResistancesCount?: Maybe<Scalars['Int']['output']>;
   pokemonCardWeakness?: Maybe<PokemonCardWeakness>;
   pokemonCardWeaknesses?: Maybe<Array<PokemonCardWeakness>>;
   pokemonCardWeaknessesCount?: Maybe<Scalars['Int']['output']>;
@@ -1984,6 +2106,25 @@ export type QueryPokemonCardPriceHistoriesCountArgs = {
 
 export type QueryPokemonCardPriceHistoryArgs = {
   where: PokemonCardPriceHistoryWhereUniqueInput;
+};
+
+
+export type QueryPokemonCardResistanceArgs = {
+  where: PokemonCardResistanceWhereUniqueInput;
+};
+
+
+export type QueryPokemonCardResistancesArgs = {
+  cursor?: InputMaybe<PokemonCardResistanceWhereUniqueInput>;
+  orderBy?: Array<PokemonCardResistanceOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: PokemonCardResistanceWhereInput;
+};
+
+
+export type QueryPokemonCardResistancesCountArgs = {
+  where?: PokemonCardResistanceWhereInput;
 };
 
 
@@ -2413,14 +2554,14 @@ export type VerificationTokenWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-export type PokemonCardItemFragment = { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null };
+export type PokemonCardItemFragment = { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null, supertype?: string | null, subtypes?: any | null, hp?: number | null, types?: any | null, evolvesFrom?: string | null, flavorText?: string | null, artist?: string | null, rarity?: string | null, retreatCost?: any | null, convertedRetreatCost?: number | null, nationalPokedexNumbers?: any | null, set?: { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, symbolApiUrl?: string | null } | null, abilities?: Array<{ __typename?: 'PokemonCardAbility', id: string, name?: string | null, text?: string | null, type?: string | null }> | null, attacks?: Array<{ __typename?: 'PokemonCardAttack', id: string, name?: string | null, text?: string | null, cost?: any | null, damage?: string | null, convertedEnergyCost?: number | null }> | null, weaknesses?: Array<{ __typename?: 'PokemonCardWeakness', id: string, type?: string | null, value?: string | null }> | null, resistances?: Array<{ __typename?: 'PokemonCardResistance', id: string, type?: string | null, value?: string | null }> | null };
 
 export type GetPokemonCardQueryVariables = Exact<{
   where: PokemonCardWhereUniqueInput;
 }>;
 
 
-export type GetPokemonCardQuery = { __typename?: 'Query', pokemonCard?: { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null } | null };
+export type GetPokemonCardQuery = { __typename?: 'Query', pokemonCard?: { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null, supertype?: string | null, subtypes?: any | null, hp?: number | null, types?: any | null, evolvesFrom?: string | null, flavorText?: string | null, artist?: string | null, rarity?: string | null, retreatCost?: any | null, convertedRetreatCost?: number | null, nationalPokedexNumbers?: any | null, set?: { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, symbolApiUrl?: string | null } | null, abilities?: Array<{ __typename?: 'PokemonCardAbility', id: string, name?: string | null, text?: string | null, type?: string | null }> | null, attacks?: Array<{ __typename?: 'PokemonCardAttack', id: string, name?: string | null, text?: string | null, cost?: any | null, damage?: string | null, convertedEnergyCost?: number | null }> | null, weaknesses?: Array<{ __typename?: 'PokemonCardWeakness', id: string, type?: string | null, value?: string | null }> | null, resistances?: Array<{ __typename?: 'PokemonCardResistance', id: string, type?: string | null, value?: string | null }> | null } | null };
 
 export type GetPokemonCardsQueryVariables = Exact<{
   where: PokemonCardWhereInput;
@@ -2430,7 +2571,7 @@ export type GetPokemonCardsQueryVariables = Exact<{
 }>;
 
 
-export type GetPokemonCardsQuery = { __typename?: 'Query', pokemonCards?: Array<{ __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null }> | null };
+export type GetPokemonCardsQuery = { __typename?: 'Query', pokemonCards?: Array<{ __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null, supertype?: string | null, subtypes?: any | null, hp?: number | null, types?: any | null, evolvesFrom?: string | null, flavorText?: string | null, artist?: string | null, rarity?: string | null, retreatCost?: any | null, convertedRetreatCost?: number | null, nationalPokedexNumbers?: any | null, set?: { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, symbolApiUrl?: string | null } | null, abilities?: Array<{ __typename?: 'PokemonCardAbility', id: string, name?: string | null, text?: string | null, type?: string | null }> | null, attacks?: Array<{ __typename?: 'PokemonCardAttack', id: string, name?: string | null, text?: string | null, cost?: any | null, damage?: string | null, convertedEnergyCost?: number | null }> | null, weaknesses?: Array<{ __typename?: 'PokemonCardWeakness', id: string, type?: string | null, value?: string | null }> | null, resistances?: Array<{ __typename?: 'PokemonCardResistance', id: string, type?: string | null, value?: string | null }> | null }> | null };
 
 export type PokemonSetItemFragment = { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, logoStorageUrl?: string | null };
 
@@ -2464,6 +2605,50 @@ export const PokemonCardItemFragmentDoc = gql`
   imageLargeApiUrl
   imageSmallStorageUrl
   imageLargeStorageUrl
+  supertype
+  subtypes
+  hp
+  types
+  evolvesFrom
+  flavorText
+  artist
+  rarity
+  retreatCost
+  convertedRetreatCost
+  nationalPokedexNumbers
+  set {
+    id
+    tcgSetId
+    name
+    series
+    releaseDate
+    logoApiUrl
+    symbolApiUrl
+  }
+  abilities {
+    id
+    name
+    text
+    type
+  }
+  attacks {
+    id
+    name
+    text
+    cost
+    damage
+    convertedEnergyCost
+  }
+  weaknesses {
+    id
+    type
+    value
+  }
+  resistances {
+    id
+    type
+    value
+  }
 }
     `;
 export const PokemonSetItemFragmentDoc = gql`

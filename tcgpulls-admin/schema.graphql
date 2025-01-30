@@ -312,6 +312,8 @@ type PokemonCard {
   attacksCount(where: PokemonCardAttackWhereInput! = {}): Int
   weaknesses(where: PokemonCardWeaknessWhereInput! = {}, orderBy: [PokemonCardWeaknessOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCardWeaknessWhereUniqueInput): [PokemonCardWeakness!]
   weaknessesCount(where: PokemonCardWeaknessWhereInput! = {}): Int
+  resistances(where: PokemonCardResistanceWhereInput! = {}, orderBy: [PokemonCardResistanceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCardResistanceWhereUniqueInput): [PokemonCardResistance!]
+  resistancesCount(where: PokemonCardResistanceWhereInput! = {}): Int
   set: PokemonSet
   priceHistories(where: PokemonCardPriceHistoryWhereInput! = {}, orderBy: [PokemonCardPriceHistoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCardPriceHistoryWhereUniqueInput): [PokemonCardPriceHistory!]
   priceHistoriesCount(where: PokemonCardPriceHistoryWhereInput! = {}): Int
@@ -351,6 +353,7 @@ input PokemonCardWhereInput {
   abilities: PokemonCardAbilityManyRelationFilter
   attacks: PokemonCardAttackManyRelationFilter
   weaknesses: PokemonCardWeaknessManyRelationFilter
+  resistances: PokemonCardResistanceManyRelationFilter
   set: PokemonSetWhereInput
   priceHistories: PokemonCardPriceHistoryManyRelationFilter
 }
@@ -382,6 +385,12 @@ input PokemonCardWeaknessManyRelationFilter {
   every: PokemonCardWeaknessWhereInput
   some: PokemonCardWeaknessWhereInput
   none: PokemonCardWeaknessWhereInput
+}
+
+input PokemonCardResistanceManyRelationFilter {
+  every: PokemonCardResistanceWhereInput
+  some: PokemonCardResistanceWhereInput
+  none: PokemonCardResistanceWhereInput
 }
 
 input PokemonCardPriceHistoryManyRelationFilter {
@@ -444,6 +453,7 @@ input PokemonCardUpdateInput {
   abilities: PokemonCardAbilityRelateToManyForUpdateInput
   attacks: PokemonCardAttackRelateToManyForUpdateInput
   weaknesses: PokemonCardWeaknessRelateToManyForUpdateInput
+  resistances: PokemonCardResistanceRelateToManyForUpdateInput
   set: PokemonSetRelateToOneForUpdateInput
   priceHistories: PokemonCardPriceHistoryRelateToManyForUpdateInput
 }
@@ -467,6 +477,13 @@ input PokemonCardWeaknessRelateToManyForUpdateInput {
   set: [PokemonCardWeaknessWhereUniqueInput!]
   create: [PokemonCardWeaknessCreateInput!]
   connect: [PokemonCardWeaknessWhereUniqueInput!]
+}
+
+input PokemonCardResistanceRelateToManyForUpdateInput {
+  disconnect: [PokemonCardResistanceWhereUniqueInput!]
+  set: [PokemonCardResistanceWhereUniqueInput!]
+  create: [PokemonCardResistanceCreateInput!]
+  connect: [PokemonCardResistanceWhereUniqueInput!]
 }
 
 input PokemonCardPriceHistoryRelateToManyForUpdateInput {
@@ -510,6 +527,7 @@ input PokemonCardCreateInput {
   abilities: PokemonCardAbilityRelateToManyForCreateInput
   attacks: PokemonCardAttackRelateToManyForCreateInput
   weaknesses: PokemonCardWeaknessRelateToManyForCreateInput
+  resistances: PokemonCardResistanceRelateToManyForCreateInput
   set: PokemonSetRelateToOneForCreateInput
   priceHistories: PokemonCardPriceHistoryRelateToManyForCreateInput
 }
@@ -527,6 +545,11 @@ input PokemonCardAttackRelateToManyForCreateInput {
 input PokemonCardWeaknessRelateToManyForCreateInput {
   create: [PokemonCardWeaknessCreateInput!]
   connect: [PokemonCardWeaknessWhereUniqueInput!]
+}
+
+input PokemonCardResistanceRelateToManyForCreateInput {
+  create: [PokemonCardResistanceCreateInput!]
+  connect: [PokemonCardResistanceWhereUniqueInput!]
 }
 
 input PokemonCardPriceHistoryRelateToManyForCreateInput {
@@ -755,6 +778,50 @@ input PokemonCardWeaknessUpdateArgs {
 }
 
 input PokemonCardWeaknessCreateInput {
+  type: String
+  value: String
+  card: PokemonCardRelateToOneForCreateInput
+}
+
+type PokemonCardResistance {
+  id: ID!
+  type: String
+  value: String
+  card: PokemonCard
+}
+
+input PokemonCardResistanceWhereUniqueInput {
+  id: ID
+}
+
+input PokemonCardResistanceWhereInput {
+  AND: [PokemonCardResistanceWhereInput!]
+  OR: [PokemonCardResistanceWhereInput!]
+  NOT: [PokemonCardResistanceWhereInput!]
+  id: IDFilter
+  type: StringFilter
+  value: StringFilter
+  card: PokemonCardWhereInput
+}
+
+input PokemonCardResistanceOrderByInput {
+  id: OrderDirection
+  type: OrderDirection
+  value: OrderDirection
+}
+
+input PokemonCardResistanceUpdateInput {
+  type: String
+  value: String
+  card: PokemonCardRelateToOneForUpdateInput
+}
+
+input PokemonCardResistanceUpdateArgs {
+  where: PokemonCardResistanceWhereUniqueInput!
+  data: PokemonCardResistanceUpdateInput!
+}
+
+input PokemonCardResistanceCreateInput {
   type: String
   value: String
   card: PokemonCardRelateToOneForCreateInput
@@ -1348,6 +1415,12 @@ type Mutation {
   updatePokemonCardWeaknesses(data: [PokemonCardWeaknessUpdateArgs!]!): [PokemonCardWeakness]
   deletePokemonCardWeakness(where: PokemonCardWeaknessWhereUniqueInput!): PokemonCardWeakness
   deletePokemonCardWeaknesses(where: [PokemonCardWeaknessWhereUniqueInput!]!): [PokemonCardWeakness]
+  createPokemonCardResistance(data: PokemonCardResistanceCreateInput!): PokemonCardResistance
+  createPokemonCardResistances(data: [PokemonCardResistanceCreateInput!]!): [PokemonCardResistance]
+  updatePokemonCardResistance(where: PokemonCardResistanceWhereUniqueInput!, data: PokemonCardResistanceUpdateInput!): PokemonCardResistance
+  updatePokemonCardResistances(data: [PokemonCardResistanceUpdateArgs!]!): [PokemonCardResistance]
+  deletePokemonCardResistance(where: PokemonCardResistanceWhereUniqueInput!): PokemonCardResistance
+  deletePokemonCardResistances(where: [PokemonCardResistanceWhereUniqueInput!]!): [PokemonCardResistance]
   createUser(data: UserCreateInput!): User
   createUsers(data: [UserCreateInput!]!): [User]
   updateUser(where: UserWhereUniqueInput!, data: UserUpdateInput!): User
@@ -1424,6 +1497,9 @@ type Query {
   pokemonCardWeakness(where: PokemonCardWeaknessWhereUniqueInput!): PokemonCardWeakness
   pokemonCardWeaknesses(where: PokemonCardWeaknessWhereInput! = {}, orderBy: [PokemonCardWeaknessOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCardWeaknessWhereUniqueInput): [PokemonCardWeakness!]
   pokemonCardWeaknessesCount(where: PokemonCardWeaknessWhereInput! = {}): Int
+  pokemonCardResistance(where: PokemonCardResistanceWhereUniqueInput!): PokemonCardResistance
+  pokemonCardResistances(where: PokemonCardResistanceWhereInput! = {}, orderBy: [PokemonCardResistanceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCardResistanceWhereUniqueInput): [PokemonCardResistance!]
+  pokemonCardResistancesCount(where: PokemonCardResistanceWhereInput! = {}): Int
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int

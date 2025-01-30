@@ -16,9 +16,12 @@ const PokemonCardAbility = list({
   access: {
     operation: {
       query: () => true,
-      create: ({ session }) => rules.isAdmin({ session }),
-      update: ({ session }) => rules.isAdmin({ session }),
-      delete: ({ session }) => rules.isAdmin({ session }),
+      create: ({ session, context }) =>
+        rules.isSudo({ context }) || rules.isAdmin({ session }),
+      update: ({ session, context }) =>
+        rules.isSudo({ context }) || rules.isAdmin({ session }),
+      delete: ({ session, context }) =>
+        rules.isSudo({ context }) || rules.isAdmin({ session }),
     },
   },
 });

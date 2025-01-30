@@ -10,6 +10,12 @@ import {
   POKEMON_R2_STORAGE_PATH,
   POKEMON_SUPPORTED_LANGUAGES,
 } from "../../constants/tcg/pokemon";
+import {
+  PokemonCardAbility,
+  PokemonCardAttack,
+  PokemonCardResistance,
+  PokemonCardWeakness,
+} from ".prisma/client";
 
 // Command line arguments
 const args = process.argv.slice(2);
@@ -78,7 +84,7 @@ function chunkArray<T>(arr: T[], chunkSize: number): T[][] {
 
 /**
  * Handles fetching TCG data for a single set + language,
- * then creates or skips the cards in Keystone.
+ * then creates or updates the cards in Keystone.
  */
 async function processOneSetAndLanguage(
   ksContext: any,
@@ -87,7 +93,7 @@ async function processOneSetAndLanguage(
   specifiedCardId: string | null,
   counters: {
     totalCardsInserted: number;
-    totalCardsSkipped: number;
+    totalCardsSkipped: number; // We'll reuse this for "updates" to keep it minimal
     errorCardIds: string[];
   },
 ) {
@@ -138,7 +144,7 @@ async function processOneSetAndLanguage(
     const normalizedNumber = normalizeNumber(card.number);
 
     // TCGPlayer variant keys
-    // If there's no price data, default to "normal" (like your existing logic)
+    // If there's no price data, default to "normal"
     const variantKeys = card.tcgplayer?.prices
       ? Object.keys(card.tcgplayer.prices)
       : [];
@@ -149,109 +155,229 @@ async function processOneSetAndLanguage(
         limitCardLevel(async () => {
           // We'll combine: cardId + language + variant => unique
           const tcgCardId_variant_language = `${card.id}-${variantKey}-${language}`;
+
           try {
             // 1) Check if card already exists
             const existingCard = await ksContext.db.PokemonCard.findOne({
               where: { tcgCardId_variant_language },
+              query: `
+                id
+              `,
             });
 
-            if (existingCard) {
-              // Skip creation, do an update if you want,
-              // or truly skip if you do not want to update
-              counters.totalCardsSkipped++;
+            if (!existingCard) {
+              // ***** NO CHANGE: Create new card if none exist
+              counters.totalCardsInserted++;
               serverLog(
-                `⏭️ Skipping existing card: ${card.name} (${card.id} - ${variantKey}) in set: ${set.name}`,
+                `✨ Creating new card: ${card.name} (${card.id} - ${variantKey}) in set: ${set.name}`,
               );
-              return;
-            }
 
-            // 2) Create new card
-            counters.totalCardsInserted++;
-            serverLog(
-              `✨ Creating new card: ${card.name} (${card.id} - ${variantKey}) in set: ${set.name}`,
-            );
+              // Prepare child relationships
+              const abilitiesData = (card.abilities || []).map(
+                (ability: any) => ({
+                  name: ability.name,
+                  text: ability.text,
+                  type: ability.type,
+                }),
+              );
 
-            // Prepare child relationships
-            // Keystone 6 allows you to create related items in the same call
-            const abilitiesData = (card.abilities || []).map(
-              (ability: any) => ({
-                name: ability.name,
-                text: ability.text,
-                type: ability.type,
-              }),
-            );
+              const attacksData = (card.attacks || []).map((attack: any) => ({
+                name: attack.name,
+                cost: attack.cost || [],
+                convertedEnergyCost: attack.convertedEnergyCost,
+                damage: attack.damage ?? null,
+                text: attack.text ?? null,
+              }));
 
-            const attacksData = (card.attacks || []).map((attack: any) => ({
-              name: attack.name,
-              cost: attack.cost || [],
-              convertedEnergyCost: attack.convertedEnergyCost,
-              damage: attack.damage ?? null,
-              text: attack.text ?? null,
-            }));
+              const weaknessesData = (card.weaknesses || []).map(
+                (weakness: any) => ({
+                  type: weakness.type,
+                  value: weakness.value,
+                }),
+              );
 
-            const weaknessesData = (card.weaknesses || []).map(
-              (weakness: any) => ({
-                type: weakness.type,
-                value: weakness.value,
-              }),
-            );
+              const resistancesData = (card.resistances || []).map(
+                (resistance: any) => ({
+                  type: resistance.type,
+                  value: resistance.value,
+                }),
+              );
 
-            // We'll store images in: img/tcg/pokemon/sets/{language}/{tcgSetId}/cards/...
-            const baseImagePath = `${POKEMON_R2_STORAGE_PATH}/sets/${set.language}/${set.tcgSetId}/cards`;
-            const baseImageName = `${card.id}-${variantKey}`;
+              // We'll store images in: img/tcg/pokemon/sets/{language}/{tcgSetId}/cards/...
+              const baseImagePath = `${POKEMON_R2_STORAGE_PATH}/sets/${set.language}/${set.tcgSetId}/cards`;
+              const baseImageName = `${card.id}-${variantKey}`;
 
-            await ksContext.db.PokemonCard.createOne({
-              data: {
-                name: card.name,
-                tcgCardId: card.id,
-                tcgSetId: card.set?.id || set.tcgSetId, // fallback
-                language,
-                tcgCardId_variant_language,
-                variant: variantKey,
-                supertype: card.supertype || "Unknown",
-                subtypes: card.subtypes || [],
-                hp,
-                types: card.types || [],
-                evolvesFrom: card.evolvesFrom || "",
-                flavorText: card.flavorText || "",
-                number: card.number,
-                normalizedNumber,
-                artist: card.artist || "",
-                rarity: card.rarity || "",
-                nationalPokedexNumbers: card.nationalPokedexNumbers || [],
-                imageSmallApiUrl: card.images?.small || "",
-                imageLargeApiUrl: card.images?.large || "",
-                imageSmallStorageUrl: `${baseImagePath}/${baseImageName}-small.jpg`,
-                imageLargeStorageUrl: `${baseImagePath}/${baseImageName}-large.jpg`,
-                retreatCost: card.retreatCost || [],
-                convertedRetreatCost,
-                // Link to the parent set
-                set: {
-                  connect: {
-                    id: set.id, // 'set.id' is your DB's primary key for PokemonSet
+              await ksContext.db.PokemonCard.createOne({
+                data: {
+                  name: card.name,
+                  tcgCardId: card.id,
+                  tcgSetId: card.set?.id || set.tcgSetId,
+                  language,
+                  tcgCardId_variant_language,
+                  variant: variantKey,
+                  supertype: card.supertype || "Unknown",
+                  subtypes: card.subtypes || [],
+                  hp,
+                  types: card.types || [],
+                  evolvesFrom: card.evolvesFrom || "",
+                  flavorText: card.flavorText || "",
+                  number: card.number,
+                  normalizedNumber,
+                  artist: card.artist || "",
+                  rarity: card.rarity || "",
+                  nationalPokedexNumbers: card.nationalPokedexNumbers || [],
+                  imageSmallApiUrl: card.images?.small || "",
+                  imageLargeApiUrl: card.images?.large || "",
+                  imageSmallStorageUrl: `${baseImagePath}/${baseImageName}-small.jpg`,
+                  imageLargeStorageUrl: `${baseImagePath}/${baseImageName}-large.jpg`,
+                  retreatCost: card.retreatCost || [],
+                  convertedRetreatCost,
+                  // Link to the parent set
+                  set: {
+                    connect: {
+                      id: set.id,
+                    },
+                  },
+                  // Create child items in one go
+                  abilities: {
+                    create: abilitiesData,
+                  },
+                  attacks: {
+                    create: attacksData,
+                  },
+                  weaknesses: {
+                    create: weaknessesData,
+                  },
+                  resistances: {
+                    create: resistancesData,
                   },
                 },
-                // Create the child items in one go
-                abilities: {
-                  create: abilitiesData,
-                },
-                attacks: {
-                  create: attacksData,
-                },
-                weaknesses: {
-                  create: weaknessesData,
-                },
-              },
-            });
+              });
 
-            serverLog(
-              `✅ Created new card: ${set.name} - ${card.name} (${variantKey})`,
-            );
+              serverLog(
+                `✅ Created new card: ${set.name} - ${card.name} (${variantKey})`,
+              );
+            } else {
+              // ***** CHANGED/ADDED: If the card *does* exist, update it
+              counters.totalCardsSkipped++; // reuse "skipped" as "updated"
+              serverLog(
+                `🔄 Updating existing card: ${card.name} (${card.id} - ${variantKey}) in set: ${set.name}`,
+              );
+
+              // 1) Fetch existing children so we only add new ones
+              const [
+                existingAbilities,
+                existingAttacks,
+                existingWeaknesses,
+                existingResistances,
+              ] = await Promise.all([
+                ksContext.db.PokemonCardAbility.findMany({
+                  where: { card: { id: { equals: existingCard.id } } },
+                  query: "id name text type",
+                }),
+                ksContext.db.PokemonCardAttack.findMany({
+                  where: { card: { id: { equals: existingCard.id } } },
+                  query: "id name text cost damage",
+                }),
+                ksContext.db.PokemonCardWeakness.findMany({
+                  where: { card: { id: { equals: existingCard.id } } },
+                  query: "id type value",
+                }),
+                ksContext.db.PokemonCardResistance.findMany({
+                  where: { card: { id: { equals: existingCard.id } } },
+                  query: "id type value",
+                }),
+              ]);
+
+              // 2) Filter out duplicates
+              const newAbilitiesData = (card.abilities || []).filter(
+                (ability: any) =>
+                  !existingAbilities.some(
+                    (a: PokemonCardAbility) =>
+                      a.name === ability.name &&
+                      a.text === ability.text &&
+                      a.type === ability.type,
+                  ),
+              );
+
+              const newAttacksData = (card.attacks || []).filter(
+                (attack: any) =>
+                  !existingAttacks.some(
+                    (a: PokemonCardAttack) =>
+                      a.name === attack.name &&
+                      a.text === attack.text &&
+                      JSON.stringify(a.cost) === JSON.stringify(attack.cost) &&
+                      a.damage === (attack.damage ?? null),
+                  ),
+              );
+
+              const newWeaknessesData = (card.weaknesses || []).filter(
+                (weakness: any) =>
+                  !existingWeaknesses.some(
+                    (w: PokemonCardWeakness) =>
+                      w.type === weakness.type && w.value === weakness.value,
+                  ),
+              );
+
+              const newResistancesData = (card.resistances || []).filter(
+                (resistance: any) =>
+                  !existingResistances.some(
+                    (r: PokemonCardResistance) =>
+                      r.type === resistance.type &&
+                      r.value === resistance.value,
+                  ),
+              );
+
+              // 3) Perform the update: only add new children
+              //    (Optionally, you can also update fields like HP, rarity, etc.)
+              await ksContext.db.PokemonCard.updateOne({
+                where: { id: existingCard.id },
+                data: {
+                  // for example, you could also re-sync HP, images, rarity, etc. here if you want:
+                  // hp,
+                  // rarity: card.rarity || "",
+
+                  // Create only new children
+                  abilities: {
+                    create: newAbilitiesData.map((ab: any) => ({
+                      name: ab.name,
+                      text: ab.text,
+                      type: ab.type,
+                    })),
+                  },
+                  attacks: {
+                    create: newAttacksData.map((atk: any) => ({
+                      name: atk.name,
+                      cost: atk.cost || [],
+                      convertedEnergyCost: atk.convertedEnergyCost,
+                      damage: atk.damage ?? null,
+                      text: atk.text ?? null,
+                    })),
+                  },
+                  weaknesses: {
+                    create: newWeaknessesData.map((weak: any) => ({
+                      type: weak.type,
+                      value: weak.value,
+                    })),
+                  },
+                  resistances: {
+                    create: newResistancesData.map((res: any) => ({
+                      type: res.type,
+                      value: res.value,
+                    })),
+                  },
+                },
+              });
+
+              serverLog(
+                `✅ Updated existing card: ${set.name} - ${card.name} (${variantKey})`,
+              );
+            }
           } catch (insertError) {
             counters.errorCardIds.push(card.id);
             serverLog(
               "error",
-              `❌ Error creating card: ${set.name} - ${card.name} (${variantKey}) (cardId: ${card.id})`,
+              `❌ Error creating/updating card: ${set.name} - ${card.name} (${variantKey}) (cardId: ${card.id})`,
               insertError,
             );
           }
@@ -277,7 +403,7 @@ async function fetchAndStorePokemonSetsCards() {
   let totalSetsProcessed = 0;
   const counters = {
     totalCardsInserted: 0,
-    totalCardsSkipped: 0,
+    totalCardsSkipped: 0, // Reusing "skipped" as "updated" to keep minimal changes
     errorCardIds: [] as string[],
   };
 
@@ -325,15 +451,17 @@ async function fetchAndStorePokemonSetsCards() {
     serverLog("\n--- Card Insertion Summary ---");
     serverLog(`✅ Total Sets Processed: ${totalSetsProcessed}`);
     serverLog(`✅ Total Cards Inserted: ${counters.totalCardsInserted}`);
-    serverLog(`⏭️ Total Cards Skipped: ${counters.totalCardsSkipped}`);
+    serverLog(`⏭️ Total Cards Skipped/Updated: ${counters.totalCardsSkipped}`);
 
     if (counters.errorCardIds.length > 0) {
       serverLog(
         "warn",
-        `❌ The following external card IDs had insert errors:\n   ${counters.errorCardIds.join(", ")}`,
+        `❌ The following external card IDs had insert/update errors:\n   ${counters.errorCardIds.join(
+          ", ",
+        )}`,
       );
     } else {
-      serverLog("🎉 All cards inserted or skipped with no fatal errors!");
+      serverLog("🎉 All cards created or updated with no fatal errors!");
     }
   } catch (error) {
     serverLog("error", "❌ Error during fetching and storing cards", error);

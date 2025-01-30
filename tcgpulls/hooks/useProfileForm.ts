@@ -6,7 +6,7 @@ import {
   GET_IS_USERNAME_TAKEN,
   GET_USER_BY_ID,
   UPDATE_USER_PROFILE,
-} from "@/graphql/auth/user/queries";
+} from "@/graphql/user/queries";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "use-intl";
 import toast from "react-hot-toast";

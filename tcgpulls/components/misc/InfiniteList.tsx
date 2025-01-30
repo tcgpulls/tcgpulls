@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import Spinner from "@/components/misc/Spinner";
 
 type Props<T> = {
   initialItems: T[];
@@ -36,7 +37,11 @@ const InfiniteList = <T,>({
           </div>
         );
       })}
-      {loading && <p className={`text-center`}>Loading...</p>}
+      {loading && (
+        <div className={`w-full col-span-full py-10 flex justify-center`}>
+          <Spinner />
+        </div>
+      )}
     </>
   );
 };

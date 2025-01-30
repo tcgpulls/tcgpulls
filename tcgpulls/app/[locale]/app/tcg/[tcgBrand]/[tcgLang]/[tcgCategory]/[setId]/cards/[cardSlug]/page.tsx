@@ -1,74 +1,34 @@
-import Header from "@/components/misc/Header";
-import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
-import Image from "next/image";
-import { assetsUrl } from "@/utils/assetsUrl";
-import {
-  GetPokemonCardQuery,
-  GetPokemonCardQueryVariables,
-} from "@/graphql/generated";
-import { GET_POKEMON_CARD } from "@/graphql/tcg/pokemon/cards/queries";
-import createApolloClient from "@/lib/clients/createApolloClient";
+import dynamic from "next/dynamic";
+import { UrlParamsT } from "@/types/Params";
+import { ComponentType } from "react";
 
 interface Props {
   params: UrlParamsT;
 }
 
 const CardPage = async ({ params }: Props) => {
-  const { locale, tcgBrand, tcgCategory, tcgLang, cardSlug } = await params;
-  const client = createApolloClient();
+  const { tcgBrand } = await params;
 
-  if (!cardSlug) {
+  if (!tcgBrand) {
     notFound();
   }
 
-  // const card = await getCard({ tcgBrand, tcgLang, cardSlug });
-
-  const { data: cardData, error: cardError } = await client.query<
-    GetPokemonCardQuery,
-    GetPokemonCardQueryVariables
-  >({
-    query: GET_POKEMON_CARD,
-    variables: {
-      where: {
-        tcgCardId_variant_language: cardSlug,
-      },
-    },
-  });
-
-  if (cardError) {
-    return <p>Error fetching card: {cardError.message}</p>;
+  // Dynamically import the CardPage component based on the tcgBrand
+  let TcgBrandCardPage: ComponentType<{ params: UrlParamsT }>;
+  try {
+    // Import the CardPage component based on the tcgBrand e.g: components/tcg/pokemon/CardPage
+    // Add other brands here as needed
+    TcgBrandCardPage = dynamic(
+      () => import(`@/components/tcg/${tcgBrand}/CardPage`),
+    );
+  } catch (error) {
+    console.error(`Failed to load CardPage for brand: ${tcgBrand}`, error);
+    notFound(); // Render a 404 page if the brand is not found
   }
 
-  const card = cardData?.pokemonCard;
-
-  if (!card) {
-    return <p>No card found</p>;
-  }
-
-  return (
-    <>
-      <Header
-        title={`${card.name} (${card.tcgCardId})`}
-        size={`small`}
-        withBackButton
-        previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${card.tcgSetId}`}
-      />
-      <Image
-        src={
-          card.imageLargeStorageUrl
-            ? assetsUrl(card.imageLargeStorageUrl!)
-            : card.imageLargeApiUrl
-              ? card.imageLargeApiUrl
-              : "https://placehold.co/420x586"
-        }
-        className="w-full max-w-[420px] object-contain mb-4 rounded-[20px]"
-        alt={`${card.name} card`}
-        width={420}
-        height={586}
-      />
-    </>
-  );
+  // Render the dynamically loaded component and pass down the params
+  return <TcgBrandCardPage params={params} />;
 };
 
 export default CardPage;

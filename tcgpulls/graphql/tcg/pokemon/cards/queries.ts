@@ -13,6 +13,50 @@ export const PokemonCardItem = gql`
     imageLargeApiUrl
     imageSmallStorageUrl
     imageLargeStorageUrl
+    supertype
+    subtypes
+    hp
+    types
+    evolvesFrom
+    flavorText
+    artist
+    rarity
+    retreatCost
+    convertedRetreatCost
+    nationalPokedexNumbers
+    set {
+      id
+      tcgSetId
+      name
+      series
+      releaseDate
+      logoApiUrl
+      symbolApiUrl
+    }
+    abilities {
+      id
+      name
+      text
+      type
+    }
+    attacks {
+      id
+      name
+      text
+      cost
+      damage
+      convertedEnergyCost
+    }
+    weaknesses {
+      id
+      type
+      value
+    }
+    resistances {
+      id
+      type
+      value
+    }
   }
 `;
 

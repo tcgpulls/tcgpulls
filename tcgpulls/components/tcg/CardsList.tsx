@@ -10,6 +10,8 @@ import {
   useGetPokemonCardsQuery,
 } from "@/graphql/generated";
 import { POKEMON_CARDS_PAGE_SIZE } from "@/constants/tcg/pokemon";
+import Spinner from "@/components/misc/Spinner";
+import { useTranslations } from "use-intl";
 
 interface CardsListProps {
   initialCards: PokemonCardItemFragment[];
@@ -28,6 +30,7 @@ export function CardsList({
   sortOrder,
 }: CardsListProps) {
   // 1) Run the same GraphQL query client-side for more data
+  const t = useTranslations("card-page");
   const { data, loading, fetchMore } = useGetPokemonCardsQuery({
     variables: {
       where: {
@@ -50,11 +53,15 @@ export function CardsList({
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className={`py-10 flex justify-center`}>
+        <Spinner />
+      </div>
+    );
   }
 
   if (!data?.pokemonCards) {
-    return <p>No cards found</p>;
+    return <p>{t("not-found")}</p>;
   }
 
   return (
