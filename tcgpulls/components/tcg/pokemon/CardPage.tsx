@@ -8,10 +8,10 @@ import WeaknessesList from "@/components/tcg/pokemon/misc/WeaknessesList";
 import BasicInfo from "@/components/tcg/pokemon/misc/BasicInfo";
 import FlavorText from "@/components/tcg/pokemon/misc/FlavorText";
 import ArtistInfo from "@/components/tcg/pokemon/misc/ArtistInfo";
-import EvolvesFrom from "@/components/tcg/pokemon/misc/EvolvesFrom";
 import CardImage from "@/components/tcg/pokemon/misc/CardImage";
 import ResistancesList from "@/components/tcg/pokemon/misc/ResistancesList";
 import RetreatCost from "@/components/tcg/pokemon/misc/RetreatCost";
+import { Divider } from "@/components/catalyst-ui/divider";
 
 interface Props {
   params: UrlParamsT;
@@ -35,7 +35,6 @@ const PokemonCardPage = async ({ params }: Props) => {
     const {
       tcgSetId,
       flavorText,
-      evolvesFrom,
       artist,
       set,
       attacks,
@@ -44,8 +43,6 @@ const PokemonCardPage = async ({ params }: Props) => {
       resistances,
       retreatCost,
     } = card;
-
-    console.log("weaknesses", weaknesses);
 
     return (
       <>
@@ -58,7 +55,7 @@ const PokemonCardPage = async ({ params }: Props) => {
         />
 
         {/* Main Content Container */}
-        <div className="flex flex-col md:flex-row gap-16 py-4 md:py-6">
+        <div className="flex flex-col md:flex-row gap-8 py-4 md:py-6">
           {/* Left Column: Card Image */}
           <div className="flex justify-center min-w-[420px] items-start">
             <CardImage card={card} />
@@ -66,21 +63,16 @@ const PokemonCardPage = async ({ params }: Props) => {
 
           {/* Right Column: Card Info */}
           <div className="flex flex-col gap-4 grow max-w-[520px]">
-            {/* Basic Info */}
             <BasicInfo card={card} tcgLang={tcgLang!} />
 
-            {/* Evolves From */}
-            {evolvesFrom && <EvolvesFrom evolvesFrom={evolvesFrom} />}
+            <Divider />
 
-            {/* Flavor Text */}
             {flavorText && <FlavorText flavorText={flavorText} />}
 
-            {/* Abilities */}
             {abilities && abilities.length > 0 && (
               <AbilitiesList abilities={abilities} />
             )}
 
-            {/* Attacks */}
             {attacks && attacks.length > 0 && <AttacksList attacks={attacks} />}
 
             <div className={`grid grid-cols-3 gap-4`}>
@@ -89,7 +81,6 @@ const PokemonCardPage = async ({ params }: Props) => {
               <RetreatCost retreatCost={retreatCost} />
             </div>
 
-            {/* Artist */}
             {artist && <ArtistInfo artist={artist} />}
           </div>
         </div>

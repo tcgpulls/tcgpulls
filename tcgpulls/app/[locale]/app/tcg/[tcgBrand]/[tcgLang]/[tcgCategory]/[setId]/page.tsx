@@ -104,7 +104,6 @@ const SetCardsPage = async ({ params }: Props) => {
         key={`${sortBy}-${sortOrder}`}
         initialCards={cardsData.pokemonCards}
         tcgLang={tcgLang}
-        tcgBrand={tcgBrand}
         setId={setId}
         sortBy={sortBy}
         sortOrder={sortOrder} // or convert to "asc"/"desc" if needed

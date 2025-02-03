@@ -4,7 +4,7 @@ import React from "react";
 import CardsGrid from "@/components/misc/CardsGrid";
 import InfiniteList from "@/components/misc/InfiniteList";
 import CardCard from "@/components/tcg/CardCard";
-import { TcgLangT, TcgSortOrderT, TcgBrandT } from "@/types/Tcg";
+import { TcgLangT, TcgSortOrderT } from "@/types/Tcg";
 import {
   PokemonCardItemFragment,
   useGetPokemonCardsQuery,
@@ -16,7 +16,6 @@ import { useTranslations } from "use-intl";
 interface CardsListProps {
   initialCards: PokemonCardItemFragment[];
   tcgLang: TcgLangT;
-  tcgBrand: TcgBrandT;
   setId: string;
   sortBy: string;
   sortOrder: TcgSortOrderT;

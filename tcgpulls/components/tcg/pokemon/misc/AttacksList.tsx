@@ -12,7 +12,7 @@ const AttacksList = async ({ attacks }: Props) => {
 
   return (
     <section>
-      <h3 className="text-lg font-semibold mb-2">{t("attacks")}</h3>
+      <h3 className="font-semibold mb-2">{t("attacks")}</h3>
       <div className="space-y-4">
         {attacks.map((attack) => (
           <div
@@ -26,7 +26,7 @@ const AttacksList = async ({ attacks }: Props) => {
                     <EnergyIcon type={energy} key={index} />
                   ))}
               </span>
-              <span className={`grow`}>{attack.name}</span>
+              <span className={`grow text-sm`}>{attack.name}</span>
               {attack.damage && (
                 <span className="text-lg font-bold">{attack.damage}</span>
               )}

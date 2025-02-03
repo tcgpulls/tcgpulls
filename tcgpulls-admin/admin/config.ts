@@ -18,10 +18,11 @@ export const displayedLists = [
     lists: [
       "PokemonSet",
       "PokemonCard",
+      "PokemonCardPriceHistory",
       "PokemonCardAbility",
       "PokemonCardAttack",
       "PokemonCardWeakness",
-      "PokemonCardPriceHistory",
+      "PokemonCollectionItem",
     ],
   },
   {
