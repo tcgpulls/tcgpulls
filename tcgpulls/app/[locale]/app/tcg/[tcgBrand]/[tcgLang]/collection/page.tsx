@@ -1,85 +1,94 @@
-// import CardsList from "@/components/tcg/CardsList";
-// import { UrlParamsT } from "@/types/Params";
-// import { notFound } from "next/navigation";
-// import { POKEMON_CARDS_PAGE_SIZE } from "@/constants/tcg/pokemon";
-// import { OrderDirection } from "@/graphql/generated";
-// import { getTranslations } from "next-intl/server";
-// import { useSession } from "next-auth/react";
-// import { useQuery } from "@apollo/client";
-// import Header from "@/components/misc/Header";
-// import { GET_USER_COLLECTION_CARDS } from "@/graphql/tcg/pokemon/collection/queries";
-//
-// interface Props {
-//   params: UrlParamsT;
-// }
-//
-// const CollectionCardsPage = async ({ params }: Props) => {
-//   const { locale, setId, tcgLang, tcgBrand, tcgCategory } = await params;
-//   const { data: session, status } = useSession();
-//
-//   // Validate
-//   if (!setId || !tcgBrand || !tcgLang) {
-//     notFound();
-//   }
-//
-//   // Ensure the user is authenticated
-//   if (status === "loading") {
-//     return <p>Loading...</p>;
-//   }
-//
-//   if (status !== "authenticated") {
-//     return <p>Please sign in to view your collection.</p>;
-//   }
-//
-//   const userId = session?.user?.id;
-//
-//   const { data, loading, error } = useQuery(GET_USER_COLLECTION_CARDS, {
-//     variables: {
-//       userId,
-//       setId,
-//       tcgLang,
-//       sortBy: "addedAt",
-//       sortOrder: OrderDirection.Asc,
-//       take: POKEMON_CARDS_PAGE_SIZE,
-//       skip: 0,
-//     },
-//   });
-//
-//   if (loading) {
-//     return <p>Loading...</p>;
-//   }
-//
-//   if (error) {
-//     return <p>Error fetching cards: {error.message}</p>;
-//   }
-//
-//   const cards = data?.pokemonCards;
-//
-//   if (!cards || cards.length === 0) {
-//     return <p>No cards found in your collection for this set.</p>;
-//   }
-//
-//   const t = await getTranslations("common");
-//
-//   return (
-//     <>
-//       <Header
-//         title={t(`${tcgCategory}`)}
-//         size="small"
-//         withBackButton
-//         previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}`}
-//       />
-//       <CardsList
-//         key={`normalizedNumber-${OrderDirection.Asc}`}
-//         initialCards={cards}
-//         tcgLang={tcgLang}
-//         tcgBrand={tcgBrand}
-//         setId={setId}
-//         sortBy="normalizedNumber"
-//         sortOrder={OrderDirection.Asc}
-//       />
-//     </>
-//   );
-// };
-//
-// export default CollectionCardsPage;
+import { UrlParamsT } from "@/types/Params";
+import { notFound } from "next/navigation";
+import { POKEMON_CARDS_PAGE_SIZE } from "@/constants/tcg/pokemon";
+import { OrderDirection } from "@/graphql/generated";
+import { getTranslations } from "next-intl/server";
+import { GET_USER_POKEMON_COLLECTION_ITEMS } from "@/graphql/tcg/pokemon/collection/queries";
+import Header from "@/components/misc/Header";
+import { auth } from "@/auth";
+import createApolloClient from "@/lib/clients/createApolloClient";
+import Spinner from "@/components/misc/Spinner";
+import CollectionList from "@/components/tcg/CollectionList";
+
+interface Props {
+  params: UrlParamsT;
+}
+
+const CollectionCardsPage = async ({ params }: Props) => {
+  const { locale, setId, tcgLang, tcgBrand } = await params;
+  const session = await auth();
+
+  // Validate
+  if (!locale || !tcgBrand || !tcgLang) {
+    notFound();
+  }
+
+  const userId = session?.user?.id;
+
+  const client = createApolloClient(userId);
+
+  const whereFilter = {
+    user: { id: { equals: userId } },
+    // only if you want to filter by set:
+    card: {
+      set: {
+        tcgSetId: { equals: setId },
+        language: { equals: tcgLang },
+      },
+    },
+  };
+
+  const { data, loading, error } = await client.query({
+    query: GET_USER_POKEMON_COLLECTION_ITEMS,
+    variables: {
+      where: whereFilter,
+      orderBy: [{ acquiredAt: OrderDirection.Desc }], // or "addedAt", etc.
+      take: POKEMON_CARDS_PAGE_SIZE,
+      skip: 0,
+    },
+  });
+
+  console.log(data);
+
+  if (loading) {
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <p>Error fetching cards: {error.message}</p>;
+  }
+
+  const cards = data?.pokemonCollectionItems;
+
+  if (!cards || cards.length === 0) {
+    return <p>No cards found in your collection for this set.</p>;
+  }
+
+  const t = await getTranslations();
+
+  return (
+    <>
+      <Header
+        title={t(`common.collection`)}
+        size="small"
+        withBackButton
+        previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}`}
+      />
+      <CollectionList
+        key={`updatedAt-${OrderDirection.Asc}`}
+        initialItems={cards}
+        tcgLang={tcgLang}
+        userId={userId!}
+        setId={setId}
+        sortBy="updatedAt"
+        sortOrder={OrderDirection.Asc}
+      />
+    </>
+  );
+};
+
+export default CollectionCardsPage;

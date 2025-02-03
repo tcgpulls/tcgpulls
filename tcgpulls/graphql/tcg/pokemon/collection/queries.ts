@@ -1,35 +1,36 @@
 import { gql } from "@apollo/client";
 
-// export const GET_USER_COLLECTION_CARDS = gql`
-// query GetUserCollectionCards(
-//   $userId: ID!
-//   $setId: String!
-//   $tcgLang: String!
-//   $orderBy: PokemonCardOrderByInput!
-//   $take: Int!
-//   $skip: Int!
-// ) {
-//   pokemonCards(
-//     where: {
-//       collections: {
-//         some: {
-//           user: { id: { equals: $userId } }
-//         }
-//       }
-//       set: {
-//         tcgSetId: { equals: $setId }
-//         language: { equals: $tcgLang }
-//       }
-//     }
-//     orderBy: { [orderBy.field]: orderBy.direction }
-//     take: $take
-//     skip: $skip
-//   ) {
-//     id
-//     name
-//   }
-// }
-// `;
+export const GET_USER_POKEMON_COLLECTION_ITEMS = gql`
+  query GetUserPokemonCollectionItems(
+    $where: PokemonCollectionItemWhereInput!
+    $orderBy: [PokemonCollectionItemOrderByInput!]!
+    $take: Int!
+    $skip: Int!
+  ) {
+    pokemonCollectionItems(
+      where: $where
+      orderBy: $orderBy
+      take: $take
+      skip: $skip
+    ) {
+      id
+      # The user’s collection-specific fields:
+      acquiredAt
+      # or “addedAt,” “condition,” etc.
+
+      # Include nested card data
+      card {
+        id
+        tcgSetId
+        tcgCardId
+        variant
+        name
+        imageSmallStorageUrl
+        imageSmallApiUrl
+      }
+    }
+  }
+`;
 
 /**
  * Checks whether the user has a particular card in their collection.
@@ -37,8 +38,8 @@ import { gql } from "@apollo/client";
  * Because of your Keystone "filter" access control, this returns only
  * the record that belongs to the *current* user (assuming the user is logged in).
  */
-export const GET_CARD_COLLECTION_ENTRY = gql`
-  query GetCardCollectionEntry($cardWhere: PokemonCardWhereUniqueInput!) {
+export const GET_POKEMON_COLLECTION_CARD = gql`
+  query GetPokemonCollectionCard($cardWhere: PokemonCardWhereUniqueInput!) {
     # We look up the card first or skip. Alternatively, you can directly query
     # pokemonCardUserCollections(where: { card: { id: { equals: cardId } } })...
     pokemonCard(where: $cardWhere) {
@@ -57,8 +58,10 @@ export const GET_CARD_COLLECTION_ENTRY = gql`
  * Creates a new PokemonCardUserCollection record referencing the given cardId.
  * The backend automatically sets the "user" from context.session if not provided.
  */
-export const ADD_CARD_TO_COLLECTION = gql`
-  mutation AddCardToCollection($data: PokemonCollectionItemCreateInput!) {
+export const ADD_CARD_TO_POKEMON_COLLECTION = gql`
+  mutation AddCardToPokemonCollection(
+    $data: PokemonCollectionItemCreateInput!
+  ) {
     createPokemonCollectionItem(data: $data) {
       id
       card {
@@ -71,7 +74,7 @@ export const ADD_CARD_TO_COLLECTION = gql`
 /**
  * Removes an existing collection record by ID.
  */
-export const REMOVE_CARD_FROM_COLLECTION = gql`
+export const REMOVE_CARD_FROM_POKEMON_COLLECTION = gql`
   mutation RemoveCardFromCollection($id: ID!) {
     deletePokemonCollectionItem(where: { id: $id }) {
       id

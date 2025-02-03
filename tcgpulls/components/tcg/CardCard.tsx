@@ -23,7 +23,7 @@ const CardCard = ({ card, href }: Props) => {
               ? assetsUrl(card.imageSmallStorageUrl)
               : card.imageSmallApiUrl
                 ? card.imageSmallApiUrl
-                : "https://placehold.co/300x200"
+                : assetsUrl("img/tcg/pokemon/card-placeholder.jpg")
           }
           className="w-full object-contain mb-4 rounded-xl"
           alt={`${card.name} card`}

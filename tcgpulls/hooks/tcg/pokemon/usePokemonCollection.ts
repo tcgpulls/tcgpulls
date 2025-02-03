@@ -2,9 +2,9 @@
 
 import { useQuery, useMutation } from "@apollo/client";
 import {
-  ADD_CARD_TO_COLLECTION,
-  GET_CARD_COLLECTION_ENTRY,
-  REMOVE_CARD_FROM_COLLECTION,
+  ADD_CARD_TO_POKEMON_COLLECTION,
+  GET_POKEMON_COLLECTION_CARD,
+  REMOVE_CARD_FROM_POKEMON_COLLECTION,
 } from "@/graphql/tcg/pokemon/collection/queries";
 import { PokemonCollectionItem } from "@/graphql/generated";
 import { useSession } from "next-auth/react";
@@ -41,7 +41,7 @@ export function usePokemonCollection(
   const currentUserId = session?.user?.id;
 
   // Query the card's collection entry.
-  const { data, loading, refetch } = useQuery(GET_CARD_COLLECTION_ENTRY, {
+  const { data, loading, refetch } = useQuery(GET_POKEMON_COLLECTION_CARD, {
     variables: { cardWhere: { id: cardId } },
   });
 
@@ -57,10 +57,10 @@ export function usePokemonCollection(
 
   // Prepare the ADD and REMOVE mutations.
   const [addMutation, { loading: addLoading }] = useMutation(
-    ADD_CARD_TO_COLLECTION,
+    ADD_CARD_TO_POKEMON_COLLECTION,
   );
   const [removeMutation, { loading: removeLoading }] = useMutation(
-    REMOVE_CARD_FROM_COLLECTION,
+    REMOVE_CARD_FROM_POKEMON_COLLECTION,
   );
 
   // Function to add the card to the collection.
