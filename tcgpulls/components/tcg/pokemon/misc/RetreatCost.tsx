@@ -11,14 +11,14 @@ const RetreatCost = async ({ retreatCost }: Props) => {
   const t = await getTranslations("tcg.pokemon");
   return (
     <section>
-      <h3 className="text-lg font-semibold mb-2">{t("retreat")}</h3>
+      <h3 className="font-semibold mb-2">{t("retreat")}</h3>
       <div className="flex items-center gap-1 bg-primary-800 rounded-xl p-4">
         {retreatCost && retreatCost.length > 0 ? (
           retreatCost.map((type: PokemonCard["retreatCost"], index: number) => (
             <EnergyIcon key={index} type={type as PokemonEnergyT} />
           ))
         ) : (
-          <p>-</p>
+          <p className={`font-semibold`}>-</p>
         )}
       </div>
     </section>

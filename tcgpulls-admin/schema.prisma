@@ -71,6 +71,7 @@ model PokemonCard {
   set                        PokemonSet?               @relation("PokemonCard_set", fields: [setId], references: [id])
   setId                      String?                   @map("set")
   priceHistories             PokemonCardPriceHistory[] @relation("PokemonCardPriceHistory_card")
+  collections                PokemonCollectionItem[]   @relation("PokemonCollectionItem_card")
 
   @@index([setId])
 }
@@ -134,21 +135,40 @@ model PokemonCardResistance {
   @@index([cardId])
 }
 
+model PokemonCollectionItem {
+  id             String       @id @default(cuid())
+  user           User?        @relation("PokemonCollectionItem_user", fields: [userId], references: [id])
+  userId         String?      @map("user")
+  card           PokemonCard? @relation("PokemonCollectionItem_card", fields: [cardId], references: [id])
+  cardId         String?      @map("card")
+  quantity       Int          @default(1)
+  price          Decimal?     @default("0.00") @postgresql.Decimal(18, 2)
+  condition      String?      @default("near-mint")
+  gradingCompany String?
+  gradingRating  String?
+  acquiredAt     DateTime?    @default(now())
+  notes          String       @default("")
+
+  @@index([userId])
+  @@index([cardId])
+}
+
 model User {
-  id             String          @id @default(cuid())
-  name           String          @default("")
-  username       String          @unique @default("")
-  email          String          @unique @default("")
+  id             String                  @id @default(cuid())
+  name           String                  @default("")
+  username       String                  @unique @default("")
+  email          String                  @unique @default("")
   emailVerified  DateTime?
-  image          String          @default("")
+  image          String                  @default("")
   lastLoginAt    DateTime?
-  createdAt      DateTime?       @default(now())
-  updatedAt      DateTime?       @updatedAt
-  access         UserAccessType? @default(freemium)
-  active         Boolean         @default(true)
-  accounts       Account[]       @relation("Account_user")
-  authenticators Authenticator[] @relation("Authenticator_user")
-  sessions       Session[]       @relation("Session_user")
+  createdAt      DateTime?               @default(now())
+  updatedAt      DateTime?               @updatedAt
+  access         UserAccessType?         @default(freemium)
+  active         Boolean                 @default(true)
+  accounts       Account[]               @relation("Account_user")
+  authenticators Authenticator[]         @relation("Authenticator_user")
+  sessions       Session[]               @relation("Session_user")
+  collections    PokemonCollectionItem[] @relation("PokemonCollectionItem_user")
 }
 
 model Account {

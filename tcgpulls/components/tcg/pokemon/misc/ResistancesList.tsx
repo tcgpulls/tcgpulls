@@ -9,21 +9,20 @@ type Props = {
 
 const ResistancesList = async ({ resistances }: Props) => {
   const t = await getTranslations("tcg.pokemon");
-  console.log("resistances", resistances);
 
   return (
     <section>
-      <h3 className="text-lg font-semibold mb-2">{t("resistances")}</h3>
-      <div className="bg-primary-800 rounded-xl p-4">
+      <h3 className="font-semibold mb-2">{t("resistances")}</h3>
+      <div className="bg-primary-800 rounded-xl p-4 font-smibold">
         {resistances && resistances.length > 0 ? (
           resistances.map((resistance) => (
-            <div key={resistance.id} className={`flex items-center gap-2`}>
+            <p key={resistance.id} className={`flex items-center gap-2`}>
               <EnergyIcon type={resistance.type! as PokemonEnergyT} />
               <span>{resistance.value}</span>
-            </div>
+            </p>
           ))
         ) : (
-          <div>-</div>
+          <p>-</p>
         )}
       </div>
     </section>

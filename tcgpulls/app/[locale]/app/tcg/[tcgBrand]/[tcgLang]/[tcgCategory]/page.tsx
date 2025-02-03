@@ -20,7 +20,7 @@ interface Props {
 const TcgTypeSetsPage = async ({ params }: Props) => {
   const { locale, tcgLang, tcgBrand, tcgCategory } = await params;
   const client = createApolloClient();
-  const t = await getTranslations("common");
+  const t = await getTranslations();
 
   const sortBy = "releaseDate";
   const sortOrder: OrderDirection = OrderDirection.Desc;
@@ -58,7 +58,7 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
   return (
     <>
       <Header
-        title={t(`${tcgBrand}`)}
+        title={t(`tcg.categories`)}
         size={`small`}
         withBackButton
         previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}`}

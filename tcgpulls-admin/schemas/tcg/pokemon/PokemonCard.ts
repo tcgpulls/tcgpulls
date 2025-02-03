@@ -194,6 +194,13 @@ const PokemonCard = list({
       ref: "PokemonCardPriceHistory.card",
       many: true,
     }),
+    collections: relationship({
+      ref: "PokemonCollectionItem.card",
+      many: true,
+      ui: {
+        hideCreate: true,
+      },
+    }),
   },
 });
 

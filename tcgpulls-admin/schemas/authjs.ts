@@ -81,6 +81,13 @@ const authJsLists: Lists = {
       accounts: relationship({ ref: "Account.user", many: true }),
       authenticators: relationship({ ref: "Authenticator.user", many: true }),
       sessions: relationship({ ref: "Session.user", many: true }),
+      collections: relationship({
+        ref: "PokemonCollectionItem.user",
+        many: true,
+        ui: {
+          hideCreate: true,
+        },
+      }),
     },
     hooks: {
       resolveInput: async ({ operation, resolvedData, context }) => {

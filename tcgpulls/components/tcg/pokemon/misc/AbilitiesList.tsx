@@ -11,7 +11,7 @@ const AbilitiesList = async ({ abilities }: Props) => {
 
   return (
     <section>
-      <h3 className="text-lg font-semibold mb-2">{t("abilities")}</h3>
+      <h3 className="font-semibold mb-2">{t("abilities")}</h3>
       <div className="space-y-2">
         {abilities.map((ability) => (
           <div
@@ -19,12 +19,8 @@ const AbilitiesList = async ({ abilities }: Props) => {
             className="p-4 bg-primary-800 rounded-xl space-y-2"
           >
             <div className={`flex gap-4 items-center`}>
-              {ability.type === "Ability" ? (
-                <AbilityBadge />
-              ) : (
-                <p className="text-sm">{ability.type}</p>
-              )}
-              <h4 className="font-bold grow">{ability.name}</h4>
+              {ability.type && <AbilityBadge type={ability.type} />}
+              <h4 className="font-bold text-sm grow">{ability.name}</h4>
             </div>
             <p className={`text-sm text-primary-400`}>{ability.text}</p>
           </div>

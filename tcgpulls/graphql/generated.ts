@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  Decimal: { input: any; output: any; }
   JSON: { input: any; output: any; }
 };
 
@@ -369,6 +370,17 @@ export type DateTimeNullableFilter = {
   notIn?: InputMaybe<Array<Scalars['DateTime']['input']>>;
 };
 
+export type DecimalNullableFilter = {
+  equals?: InputMaybe<Scalars['Decimal']['input']>;
+  gt?: InputMaybe<Scalars['Decimal']['input']>;
+  gte?: InputMaybe<Scalars['Decimal']['input']>;
+  in?: InputMaybe<Array<Scalars['Decimal']['input']>>;
+  lt?: InputMaybe<Scalars['Decimal']['input']>;
+  lte?: InputMaybe<Scalars['Decimal']['input']>;
+  not?: InputMaybe<DecimalNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['Decimal']['input']>>;
+};
+
 export type IdFilter = {
   equals?: InputMaybe<Scalars['ID']['input']>;
   gt?: InputMaybe<Scalars['ID']['input']>;
@@ -576,6 +588,8 @@ export type Mutation = {
   createPokemonCardWeakness?: Maybe<PokemonCardWeakness>;
   createPokemonCardWeaknesses?: Maybe<Array<Maybe<PokemonCardWeakness>>>;
   createPokemonCards?: Maybe<Array<Maybe<PokemonCard>>>;
+  createPokemonCollectionItem?: Maybe<PokemonCollectionItem>;
+  createPokemonCollectionItems?: Maybe<Array<Maybe<PokemonCollectionItem>>>;
   createPokemonSet?: Maybe<PokemonSet>;
   createPokemonSets?: Maybe<Array<Maybe<PokemonSet>>>;
   createSession?: Maybe<Session>;
@@ -604,6 +618,8 @@ export type Mutation = {
   deletePokemonCardWeakness?: Maybe<PokemonCardWeakness>;
   deletePokemonCardWeaknesses?: Maybe<Array<Maybe<PokemonCardWeakness>>>;
   deletePokemonCards?: Maybe<Array<Maybe<PokemonCard>>>;
+  deletePokemonCollectionItem?: Maybe<PokemonCollectionItem>;
+  deletePokemonCollectionItems?: Maybe<Array<Maybe<PokemonCollectionItem>>>;
   deletePokemonSet?: Maybe<PokemonSet>;
   deletePokemonSets?: Maybe<Array<Maybe<PokemonSet>>>;
   deleteSession?: Maybe<Session>;
@@ -633,6 +649,8 @@ export type Mutation = {
   updatePokemonCardWeakness?: Maybe<PokemonCardWeakness>;
   updatePokemonCardWeaknesses?: Maybe<Array<Maybe<PokemonCardWeakness>>>;
   updatePokemonCards?: Maybe<Array<Maybe<PokemonCard>>>;
+  updatePokemonCollectionItem?: Maybe<PokemonCollectionItem>;
+  updatePokemonCollectionItems?: Maybe<Array<Maybe<PokemonCollectionItem>>>;
   updatePokemonSet?: Maybe<PokemonSet>;
   updatePokemonSets?: Maybe<Array<Maybe<PokemonSet>>>;
   updateSession?: Maybe<Session>;
@@ -747,6 +765,16 @@ export type MutationCreatePokemonCardWeaknessesArgs = {
 
 export type MutationCreatePokemonCardsArgs = {
   data: Array<PokemonCardCreateInput>;
+};
+
+
+export type MutationCreatePokemonCollectionItemArgs = {
+  data: PokemonCollectionItemCreateInput;
+};
+
+
+export type MutationCreatePokemonCollectionItemsArgs = {
+  data: Array<PokemonCollectionItemCreateInput>;
 };
 
 
@@ -887,6 +915,16 @@ export type MutationDeletePokemonCardWeaknessesArgs = {
 
 export type MutationDeletePokemonCardsArgs = {
   where: Array<PokemonCardWhereUniqueInput>;
+};
+
+
+export type MutationDeletePokemonCollectionItemArgs = {
+  where: PokemonCollectionItemWhereUniqueInput;
+};
+
+
+export type MutationDeletePokemonCollectionItemsArgs = {
+  where: Array<PokemonCollectionItemWhereUniqueInput>;
 };
 
 
@@ -1040,6 +1078,17 @@ export type MutationUpdatePokemonCardsArgs = {
 };
 
 
+export type MutationUpdatePokemonCollectionItemArgs = {
+  data: PokemonCollectionItemUpdateInput;
+  where: PokemonCollectionItemWhereUniqueInput;
+};
+
+
+export type MutationUpdatePokemonCollectionItemsArgs = {
+  data: Array<PokemonCollectionItemUpdateArgs>;
+};
+
+
 export type MutationUpdatePokemonSetArgs = {
   data: PokemonSetUpdateInput;
   where: PokemonSetWhereUniqueInput;
@@ -1114,6 +1163,8 @@ export type PokemonCard = {
   artist?: Maybe<Scalars['String']['output']>;
   attacks?: Maybe<Array<PokemonCardAttack>>;
   attacksCount?: Maybe<Scalars['Int']['output']>;
+  collections?: Maybe<Array<PokemonCollectionItem>>;
+  collectionsCount?: Maybe<Scalars['Int']['output']>;
   convertedRetreatCost?: Maybe<Scalars['Int']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   displayName?: Maybe<Scalars['String']['output']>;
@@ -1175,6 +1226,20 @@ export type PokemonCardAttacksArgs = {
 
 export type PokemonCardAttacksCountArgs = {
   where?: PokemonCardAttackWhereInput;
+};
+
+
+export type PokemonCardCollectionsArgs = {
+  cursor?: InputMaybe<PokemonCollectionItemWhereUniqueInput>;
+  orderBy?: Array<PokemonCollectionItemOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: PokemonCollectionItemWhereInput;
+};
+
+
+export type PokemonCardCollectionsCountArgs = {
+  where?: PokemonCollectionItemWhereInput;
 };
 
 
@@ -1367,6 +1432,7 @@ export type PokemonCardCreateInput = {
   abilities?: InputMaybe<PokemonCardAbilityRelateToManyForCreateInput>;
   artist?: InputMaybe<Scalars['String']['input']>;
   attacks?: InputMaybe<PokemonCardAttackRelateToManyForCreateInput>;
+  collections?: InputMaybe<PokemonCollectionItemRelateToManyForCreateInput>;
   convertedRetreatCost?: InputMaybe<Scalars['Int']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   evolvesFrom?: InputMaybe<Scalars['String']['input']>;
@@ -1607,6 +1673,7 @@ export type PokemonCardUpdateInput = {
   abilities?: InputMaybe<PokemonCardAbilityRelateToManyForUpdateInput>;
   artist?: InputMaybe<Scalars['String']['input']>;
   attacks?: InputMaybe<PokemonCardAttackRelateToManyForUpdateInput>;
+  collections?: InputMaybe<PokemonCollectionItemRelateToManyForUpdateInput>;
   convertedRetreatCost?: InputMaybe<Scalars['Int']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   evolvesFrom?: InputMaybe<Scalars['String']['input']>;
@@ -1707,6 +1774,7 @@ export type PokemonCardWhereInput = {
   abilities?: InputMaybe<PokemonCardAbilityManyRelationFilter>;
   artist?: InputMaybe<StringFilter>;
   attacks?: InputMaybe<PokemonCardAttackManyRelationFilter>;
+  collections?: InputMaybe<PokemonCollectionItemManyRelationFilter>;
   convertedRetreatCost?: InputMaybe<IntNullableFilter>;
   createdAt?: InputMaybe<DateTimeNullableFilter>;
   evolvesFrom?: InputMaybe<StringFilter>;
@@ -1737,6 +1805,98 @@ export type PokemonCardWhereInput = {
 export type PokemonCardWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   tcgCardId_variant_language?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PokemonCollectionItem = {
+  __typename?: 'PokemonCollectionItem';
+  acquiredAt?: Maybe<Scalars['DateTime']['output']>;
+  card?: Maybe<PokemonCard>;
+  condition?: Maybe<Scalars['String']['output']>;
+  gradingCompany?: Maybe<Scalars['String']['output']>;
+  gradingRating?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['Decimal']['output']>;
+  quantity?: Maybe<Scalars['Int']['output']>;
+  user?: Maybe<User>;
+};
+
+export type PokemonCollectionItemCreateInput = {
+  acquiredAt?: InputMaybe<Scalars['DateTime']['input']>;
+  card?: InputMaybe<PokemonCardRelateToOneForCreateInput>;
+  condition?: InputMaybe<Scalars['String']['input']>;
+  gradingCompany?: InputMaybe<Scalars['String']['input']>;
+  gradingRating?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Decimal']['input']>;
+  quantity?: InputMaybe<Scalars['Int']['input']>;
+  user?: InputMaybe<UserRelateToOneForCreateInput>;
+};
+
+export type PokemonCollectionItemManyRelationFilter = {
+  every?: InputMaybe<PokemonCollectionItemWhereInput>;
+  none?: InputMaybe<PokemonCollectionItemWhereInput>;
+  some?: InputMaybe<PokemonCollectionItemWhereInput>;
+};
+
+export type PokemonCollectionItemOrderByInput = {
+  acquiredAt?: InputMaybe<OrderDirection>;
+  condition?: InputMaybe<OrderDirection>;
+  gradingCompany?: InputMaybe<OrderDirection>;
+  gradingRating?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  notes?: InputMaybe<OrderDirection>;
+  price?: InputMaybe<OrderDirection>;
+  quantity?: InputMaybe<OrderDirection>;
+};
+
+export type PokemonCollectionItemRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<PokemonCollectionItemWhereUniqueInput>>;
+  create?: InputMaybe<Array<PokemonCollectionItemCreateInput>>;
+};
+
+export type PokemonCollectionItemRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<PokemonCollectionItemWhereUniqueInput>>;
+  create?: InputMaybe<Array<PokemonCollectionItemCreateInput>>;
+  disconnect?: InputMaybe<Array<PokemonCollectionItemWhereUniqueInput>>;
+  set?: InputMaybe<Array<PokemonCollectionItemWhereUniqueInput>>;
+};
+
+export type PokemonCollectionItemUpdateArgs = {
+  data: PokemonCollectionItemUpdateInput;
+  where: PokemonCollectionItemWhereUniqueInput;
+};
+
+export type PokemonCollectionItemUpdateInput = {
+  acquiredAt?: InputMaybe<Scalars['DateTime']['input']>;
+  card?: InputMaybe<PokemonCardRelateToOneForUpdateInput>;
+  condition?: InputMaybe<Scalars['String']['input']>;
+  gradingCompany?: InputMaybe<Scalars['String']['input']>;
+  gradingRating?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Decimal']['input']>;
+  quantity?: InputMaybe<Scalars['Int']['input']>;
+  user?: InputMaybe<UserRelateToOneForUpdateInput>;
+};
+
+export type PokemonCollectionItemWhereInput = {
+  AND?: InputMaybe<Array<PokemonCollectionItemWhereInput>>;
+  NOT?: InputMaybe<Array<PokemonCollectionItemWhereInput>>;
+  OR?: InputMaybe<Array<PokemonCollectionItemWhereInput>>;
+  acquiredAt?: InputMaybe<DateTimeNullableFilter>;
+  card?: InputMaybe<PokemonCardWhereInput>;
+  condition?: InputMaybe<StringNullableFilter>;
+  gradingCompany?: InputMaybe<StringNullableFilter>;
+  gradingRating?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<IdFilter>;
+  notes?: InputMaybe<StringFilter>;
+  price?: InputMaybe<DecimalNullableFilter>;
+  quantity?: InputMaybe<IntFilter>;
+  user?: InputMaybe<UserWhereInput>;
+};
+
+export type PokemonCollectionItemWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type PokemonSet = {
@@ -1956,6 +2116,9 @@ export type Query = {
   pokemonCardWeaknessesCount?: Maybe<Scalars['Int']['output']>;
   pokemonCards?: Maybe<Array<PokemonCard>>;
   pokemonCardsCount?: Maybe<Scalars['Int']['output']>;
+  pokemonCollectionItem?: Maybe<PokemonCollectionItem>;
+  pokemonCollectionItems?: Maybe<Array<PokemonCollectionItem>>;
+  pokemonCollectionItemsCount?: Maybe<Scalars['Int']['output']>;
   pokemonSet?: Maybe<PokemonSet>;
   pokemonSets?: Maybe<Array<PokemonSet>>;
   pokemonSetsCount?: Maybe<Scalars['Int']['output']>;
@@ -2161,6 +2324,25 @@ export type QueryPokemonCardsCountArgs = {
 };
 
 
+export type QueryPokemonCollectionItemArgs = {
+  where: PokemonCollectionItemWhereUniqueInput;
+};
+
+
+export type QueryPokemonCollectionItemsArgs = {
+  cursor?: InputMaybe<PokemonCollectionItemWhereUniqueInput>;
+  orderBy?: Array<PokemonCollectionItemOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: PokemonCollectionItemWhereInput;
+};
+
+
+export type QueryPokemonCollectionItemsCountArgs = {
+  where?: PokemonCollectionItemWhereInput;
+};
+
+
 export type QueryPokemonSetArgs = {
   where: PokemonSetWhereUniqueInput;
 };
@@ -2353,6 +2535,8 @@ export type User = {
   active?: Maybe<Scalars['Boolean']['output']>;
   authenticators?: Maybe<Array<Authenticator>>;
   authenticatorsCount?: Maybe<Scalars['Int']['output']>;
+  collections?: Maybe<Array<PokemonCollectionItem>>;
+  collectionsCount?: Maybe<Scalars['Int']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   emailVerified?: Maybe<Scalars['DateTime']['output']>;
@@ -2395,6 +2579,20 @@ export type UserAuthenticatorsCountArgs = {
 };
 
 
+export type UserCollectionsArgs = {
+  cursor?: InputMaybe<PokemonCollectionItemWhereUniqueInput>;
+  orderBy?: Array<PokemonCollectionItemOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: PokemonCollectionItemWhereInput;
+};
+
+
+export type UserCollectionsCountArgs = {
+  where?: PokemonCollectionItemWhereInput;
+};
+
+
 export type UserSessionsArgs = {
   cursor?: InputMaybe<SessionWhereUniqueInput>;
   orderBy?: Array<SessionOrderByInput>;
@@ -2425,6 +2623,7 @@ export type UserCreateInput = {
   accounts?: InputMaybe<AccountRelateToManyForCreateInput>;
   active?: InputMaybe<Scalars['Boolean']['input']>;
   authenticators?: InputMaybe<AuthenticatorRelateToManyForCreateInput>;
+  collections?: InputMaybe<PokemonCollectionItemRelateToManyForCreateInput>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   emailVerified?: InputMaybe<Scalars['DateTime']['input']>;
@@ -2471,6 +2670,7 @@ export type UserUpdateInput = {
   accounts?: InputMaybe<AccountRelateToManyForUpdateInput>;
   active?: InputMaybe<Scalars['Boolean']['input']>;
   authenticators?: InputMaybe<AuthenticatorRelateToManyForUpdateInput>;
+  collections?: InputMaybe<PokemonCollectionItemRelateToManyForUpdateInput>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   emailVerified?: InputMaybe<Scalars['DateTime']['input']>;
@@ -2490,6 +2690,7 @@ export type UserWhereInput = {
   accounts?: InputMaybe<AccountManyRelationFilter>;
   active?: InputMaybe<BooleanFilter>;
   authenticators?: InputMaybe<AuthenticatorManyRelationFilter>;
+  collections?: InputMaybe<PokemonCollectionItemManyRelationFilter>;
   createdAt?: InputMaybe<DateTimeNullableFilter>;
   email?: InputMaybe<StringFilter>;
   emailVerified?: InputMaybe<DateTimeNullableFilter>;
@@ -2572,6 +2773,27 @@ export type GetPokemonCardsQueryVariables = Exact<{
 
 
 export type GetPokemonCardsQuery = { __typename?: 'Query', pokemonCards?: Array<{ __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, tcgCardId_variant_language?: string | null, name?: string | null, number?: string | null, variant?: string | null, imageSmallApiUrl?: string | null, imageLargeApiUrl?: string | null, imageSmallStorageUrl?: string | null, imageLargeStorageUrl?: string | null, supertype?: string | null, subtypes?: any | null, hp?: number | null, types?: any | null, evolvesFrom?: string | null, flavorText?: string | null, artist?: string | null, rarity?: string | null, retreatCost?: any | null, convertedRetreatCost?: number | null, nationalPokedexNumbers?: any | null, set?: { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, symbolApiUrl?: string | null } | null, abilities?: Array<{ __typename?: 'PokemonCardAbility', id: string, name?: string | null, text?: string | null, type?: string | null }> | null, attacks?: Array<{ __typename?: 'PokemonCardAttack', id: string, name?: string | null, text?: string | null, cost?: any | null, damage?: string | null, convertedEnergyCost?: number | null }> | null, weaknesses?: Array<{ __typename?: 'PokemonCardWeakness', id: string, type?: string | null, value?: string | null }> | null, resistances?: Array<{ __typename?: 'PokemonCardResistance', id: string, type?: string | null, value?: string | null }> | null }> | null };
+
+export type GetCardCollectionEntryQueryVariables = Exact<{
+  cardWhere: PokemonCardWhereUniqueInput;
+}>;
+
+
+export type GetCardCollectionEntryQuery = { __typename?: 'Query', pokemonCard?: { __typename?: 'PokemonCard', id: string, collections?: Array<{ __typename?: 'PokemonCollectionItem', id: string, user?: { __typename?: 'User', id: string } | null }> | null } | null };
+
+export type AddCardToCollectionMutationVariables = Exact<{
+  data: PokemonCollectionItemCreateInput;
+}>;
+
+
+export type AddCardToCollectionMutation = { __typename?: 'Mutation', createPokemonCollectionItem?: { __typename?: 'PokemonCollectionItem', id: string, card?: { __typename?: 'PokemonCard', id: string } | null } | null };
+
+export type RemoveCardFromCollectionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type RemoveCardFromCollectionMutation = { __typename?: 'Mutation', deletePokemonCollectionItem?: { __typename?: 'PokemonCollectionItem', id: string } | null };
 
 export type PokemonSetItemFragment = { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, logoStorageUrl?: string | null };
 
@@ -2744,6 +2966,121 @@ export type GetPokemonCardsQueryHookResult = ReturnType<typeof useGetPokemonCard
 export type GetPokemonCardsLazyQueryHookResult = ReturnType<typeof useGetPokemonCardsLazyQuery>;
 export type GetPokemonCardsSuspenseQueryHookResult = ReturnType<typeof useGetPokemonCardsSuspenseQuery>;
 export type GetPokemonCardsQueryResult = Apollo.QueryResult<GetPokemonCardsQuery, GetPokemonCardsQueryVariables>;
+export const GetCardCollectionEntryDocument = gql`
+    query GetCardCollectionEntry($cardWhere: PokemonCardWhereUniqueInput!) {
+  pokemonCard(where: $cardWhere) {
+    id
+    collections {
+      id
+      user {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCardCollectionEntryQuery__
+ *
+ * To run a query within a React component, call `useGetCardCollectionEntryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCardCollectionEntryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCardCollectionEntryQuery({
+ *   variables: {
+ *      cardWhere: // value for 'cardWhere'
+ *   },
+ * });
+ */
+export function useGetCardCollectionEntryQuery(baseOptions: Apollo.QueryHookOptions<GetCardCollectionEntryQuery, GetCardCollectionEntryQueryVariables> & ({ variables: GetCardCollectionEntryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCardCollectionEntryQuery, GetCardCollectionEntryQueryVariables>(GetCardCollectionEntryDocument, options);
+      }
+export function useGetCardCollectionEntryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCardCollectionEntryQuery, GetCardCollectionEntryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCardCollectionEntryQuery, GetCardCollectionEntryQueryVariables>(GetCardCollectionEntryDocument, options);
+        }
+export function useGetCardCollectionEntrySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCardCollectionEntryQuery, GetCardCollectionEntryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCardCollectionEntryQuery, GetCardCollectionEntryQueryVariables>(GetCardCollectionEntryDocument, options);
+        }
+export type GetCardCollectionEntryQueryHookResult = ReturnType<typeof useGetCardCollectionEntryQuery>;
+export type GetCardCollectionEntryLazyQueryHookResult = ReturnType<typeof useGetCardCollectionEntryLazyQuery>;
+export type GetCardCollectionEntrySuspenseQueryHookResult = ReturnType<typeof useGetCardCollectionEntrySuspenseQuery>;
+export type GetCardCollectionEntryQueryResult = Apollo.QueryResult<GetCardCollectionEntryQuery, GetCardCollectionEntryQueryVariables>;
+export const AddCardToCollectionDocument = gql`
+    mutation AddCardToCollection($data: PokemonCollectionItemCreateInput!) {
+  createPokemonCollectionItem(data: $data) {
+    id
+    card {
+      id
+    }
+  }
+}
+    `;
+export type AddCardToCollectionMutationFn = Apollo.MutationFunction<AddCardToCollectionMutation, AddCardToCollectionMutationVariables>;
+
+/**
+ * __useAddCardToCollectionMutation__
+ *
+ * To run a mutation, you first call `useAddCardToCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCardToCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCardToCollectionMutation, { data, loading, error }] = useAddCardToCollectionMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAddCardToCollectionMutation(baseOptions?: Apollo.MutationHookOptions<AddCardToCollectionMutation, AddCardToCollectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddCardToCollectionMutation, AddCardToCollectionMutationVariables>(AddCardToCollectionDocument, options);
+      }
+export type AddCardToCollectionMutationHookResult = ReturnType<typeof useAddCardToCollectionMutation>;
+export type AddCardToCollectionMutationResult = Apollo.MutationResult<AddCardToCollectionMutation>;
+export type AddCardToCollectionMutationOptions = Apollo.BaseMutationOptions<AddCardToCollectionMutation, AddCardToCollectionMutationVariables>;
+export const RemoveCardFromCollectionDocument = gql`
+    mutation RemoveCardFromCollection($id: ID!) {
+  deletePokemonCollectionItem(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type RemoveCardFromCollectionMutationFn = Apollo.MutationFunction<RemoveCardFromCollectionMutation, RemoveCardFromCollectionMutationVariables>;
+
+/**
+ * __useRemoveCardFromCollectionMutation__
+ *
+ * To run a mutation, you first call `useRemoveCardFromCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveCardFromCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeCardFromCollectionMutation, { data, loading, error }] = useRemoveCardFromCollectionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveCardFromCollectionMutation(baseOptions?: Apollo.MutationHookOptions<RemoveCardFromCollectionMutation, RemoveCardFromCollectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveCardFromCollectionMutation, RemoveCardFromCollectionMutationVariables>(RemoveCardFromCollectionDocument, options);
+      }
+export type RemoveCardFromCollectionMutationHookResult = ReturnType<typeof useRemoveCardFromCollectionMutation>;
+export type RemoveCardFromCollectionMutationResult = Apollo.MutationResult<RemoveCardFromCollectionMutation>;
+export type RemoveCardFromCollectionMutationOptions = Apollo.BaseMutationOptions<RemoveCardFromCollectionMutation, RemoveCardFromCollectionMutationVariables>;
 export const GetPokemonSetDocument = gql`
     query GetPokemonSet($where: PokemonSetWhereUniqueInput!) {
   pokemonSet(where: $where) {

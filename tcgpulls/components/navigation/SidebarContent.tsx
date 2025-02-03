@@ -18,7 +18,9 @@ import { usePathname } from "@/i18n/routing";
 import useTcgLanguage from "@/hooks/context/useTcgLanguage";
 import AuthButton from "@/components/misc/AuthButton";
 import { HiHome, HiUserCircle } from "react-icons/hi";
-import { HiRectangleStack } from "react-icons/hi2";
+import { TbCardsFilled } from "react-icons/tb";
+import { BiGridAlt } from "react-icons/bi";
+import { MdCollectionsBookmark } from "react-icons/md";
 
 type SidebarItem = {
   href: string;
@@ -57,17 +59,26 @@ const SidebarContent = () => {
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}`,
           label: t("tcg-pokemon-short"),
-          icon: <HiRectangleStack size={20} />,
+          // icon: <HiRectangleStack size={20} />,
+          className: `pl-2`,
+        },
+        {
+          href: `/app/tcg/pokemon/${currentTcgLanguage}/collection`,
+          label: t("my-collection"),
+          className: "pl-4 text-xs! text-primary-300",
+          icon: <MdCollectionsBookmark />,
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/booster-packs`,
           label: t("booster-packs"),
-          className: "pl-8 text-xs text-primary-300",
+          className: "pl-4 text-xs! text-primary-300",
+          icon: <TbCardsFilled />,
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/sets`,
           label: t("sets"),
-          className: "pl-8 text-xs text-primary-300",
+          className: "pl-4 text-xs! text-primary-300",
+          icon: <BiGridAlt />,
         },
       ],
     },

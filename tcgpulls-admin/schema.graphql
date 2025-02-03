@@ -317,6 +317,8 @@ type PokemonCard {
   set: PokemonSet
   priceHistories(where: PokemonCardPriceHistoryWhereInput! = {}, orderBy: [PokemonCardPriceHistoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCardPriceHistoryWhereUniqueInput): [PokemonCardPriceHistory!]
   priceHistoriesCount(where: PokemonCardPriceHistoryWhereInput! = {}): Int
+  collections(where: PokemonCollectionItemWhereInput! = {}, orderBy: [PokemonCollectionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCollectionItemWhereUniqueInput): [PokemonCollectionItem!]
+  collectionsCount(where: PokemonCollectionItemWhereInput! = {}): Int
 }
 
 input PokemonCardWhereUniqueInput {
@@ -356,6 +358,7 @@ input PokemonCardWhereInput {
   resistances: PokemonCardResistanceManyRelationFilter
   set: PokemonSetWhereInput
   priceHistories: PokemonCardPriceHistoryManyRelationFilter
+  collections: PokemonCollectionItemManyRelationFilter
 }
 
 input IntNullableFilter {
@@ -397,6 +400,12 @@ input PokemonCardPriceHistoryManyRelationFilter {
   every: PokemonCardPriceHistoryWhereInput
   some: PokemonCardPriceHistoryWhereInput
   none: PokemonCardPriceHistoryWhereInput
+}
+
+input PokemonCollectionItemManyRelationFilter {
+  every: PokemonCollectionItemWhereInput
+  some: PokemonCollectionItemWhereInput
+  none: PokemonCollectionItemWhereInput
 }
 
 input PokemonCardOrderByInput {
@@ -456,6 +465,7 @@ input PokemonCardUpdateInput {
   resistances: PokemonCardResistanceRelateToManyForUpdateInput
   set: PokemonSetRelateToOneForUpdateInput
   priceHistories: PokemonCardPriceHistoryRelateToManyForUpdateInput
+  collections: PokemonCollectionItemRelateToManyForUpdateInput
 }
 
 input PokemonCardAbilityRelateToManyForUpdateInput {
@@ -491,6 +501,13 @@ input PokemonCardPriceHistoryRelateToManyForUpdateInput {
   set: [PokemonCardPriceHistoryWhereUniqueInput!]
   create: [PokemonCardPriceHistoryCreateInput!]
   connect: [PokemonCardPriceHistoryWhereUniqueInput!]
+}
+
+input PokemonCollectionItemRelateToManyForUpdateInput {
+  disconnect: [PokemonCollectionItemWhereUniqueInput!]
+  set: [PokemonCollectionItemWhereUniqueInput!]
+  create: [PokemonCollectionItemCreateInput!]
+  connect: [PokemonCollectionItemWhereUniqueInput!]
 }
 
 input PokemonCardUpdateArgs {
@@ -530,6 +547,7 @@ input PokemonCardCreateInput {
   resistances: PokemonCardResistanceRelateToManyForCreateInput
   set: PokemonSetRelateToOneForCreateInput
   priceHistories: PokemonCardPriceHistoryRelateToManyForCreateInput
+  collections: PokemonCollectionItemRelateToManyForCreateInput
 }
 
 input PokemonCardAbilityRelateToManyForCreateInput {
@@ -555,6 +573,11 @@ input PokemonCardResistanceRelateToManyForCreateInput {
 input PokemonCardPriceHistoryRelateToManyForCreateInput {
   create: [PokemonCardPriceHistoryCreateInput!]
   connect: [PokemonCardPriceHistoryWhereUniqueInput!]
+}
+
+input PokemonCollectionItemRelateToManyForCreateInput {
+  create: [PokemonCollectionItemCreateInput!]
+  connect: [PokemonCollectionItemWhereUniqueInput!]
 }
 
 type PokemonCardPriceHistory {
@@ -827,6 +850,103 @@ input PokemonCardResistanceCreateInput {
   card: PokemonCardRelateToOneForCreateInput
 }
 
+type PokemonCollectionItem {
+  id: ID!
+  user: User
+  card: PokemonCard
+  quantity: Int
+  price: Decimal
+  condition: String
+  gradingCompany: String
+  gradingRating: String
+  acquiredAt: DateTime
+  notes: String
+}
+
+scalar Decimal
+
+input PokemonCollectionItemWhereUniqueInput {
+  id: ID
+}
+
+input PokemonCollectionItemWhereInput {
+  AND: [PokemonCollectionItemWhereInput!]
+  OR: [PokemonCollectionItemWhereInput!]
+  NOT: [PokemonCollectionItemWhereInput!]
+  id: IDFilter
+  user: UserWhereInput
+  card: PokemonCardWhereInput
+  quantity: IntFilter
+  price: DecimalNullableFilter
+  condition: StringNullableFilter
+  gradingCompany: StringNullableFilter
+  gradingRating: StringNullableFilter
+  acquiredAt: DateTimeNullableFilter
+  notes: StringFilter
+}
+
+input DecimalNullableFilter {
+  equals: Decimal
+  in: [Decimal!]
+  notIn: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  gt: Decimal
+  gte: Decimal
+  not: DecimalNullableFilter
+}
+
+input PokemonCollectionItemOrderByInput {
+  id: OrderDirection
+  quantity: OrderDirection
+  price: OrderDirection
+  condition: OrderDirection
+  gradingCompany: OrderDirection
+  gradingRating: OrderDirection
+  acquiredAt: OrderDirection
+  notes: OrderDirection
+}
+
+input PokemonCollectionItemUpdateInput {
+  user: UserRelateToOneForUpdateInput
+  card: PokemonCardRelateToOneForUpdateInput
+  quantity: Int
+  price: Decimal
+  condition: String
+  gradingCompany: String
+  gradingRating: String
+  acquiredAt: DateTime
+  notes: String
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PokemonCollectionItemUpdateArgs {
+  where: PokemonCollectionItemWhereUniqueInput!
+  data: PokemonCollectionItemUpdateInput!
+}
+
+input PokemonCollectionItemCreateInput {
+  user: UserRelateToOneForCreateInput
+  card: PokemonCardRelateToOneForCreateInput
+  quantity: Int
+  price: Decimal
+  condition: String
+  gradingCompany: String
+  gradingRating: String
+  acquiredAt: DateTime
+  notes: String
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
 type User {
   id: ID!
   name: String
@@ -845,6 +965,8 @@ type User {
   authenticatorsCount(where: AuthenticatorWhereInput! = {}): Int
   sessions(where: SessionWhereInput! = {}, orderBy: [SessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SessionWhereUniqueInput): [Session!]
   sessionsCount(where: SessionWhereInput! = {}): Int
+  collections(where: PokemonCollectionItemWhereInput! = {}, orderBy: [PokemonCollectionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCollectionItemWhereUniqueInput): [PokemonCollectionItem!]
+  collectionsCount(where: PokemonCollectionItemWhereInput! = {}): Int
 }
 
 enum UserAccessType {
@@ -876,6 +998,7 @@ input UserWhereInput {
   accounts: AccountManyRelationFilter
   authenticators: AuthenticatorManyRelationFilter
   sessions: SessionManyRelationFilter
+  collections: PokemonCollectionItemManyRelationFilter
 }
 
 input UserAccessTypeNullableFilter {
@@ -931,6 +1054,7 @@ input UserUpdateInput {
   accounts: AccountRelateToManyForUpdateInput
   authenticators: AuthenticatorRelateToManyForUpdateInput
   sessions: SessionRelateToManyForUpdateInput
+  collections: PokemonCollectionItemRelateToManyForUpdateInput
 }
 
 input AccountRelateToManyForUpdateInput {
@@ -973,6 +1097,7 @@ input UserCreateInput {
   accounts: AccountRelateToManyForCreateInput
   authenticators: AuthenticatorRelateToManyForCreateInput
   sessions: SessionRelateToManyForCreateInput
+  collections: PokemonCollectionItemRelateToManyForCreateInput
 }
 
 input AccountRelateToManyForCreateInput {
@@ -1064,12 +1189,6 @@ input AccountUpdateInput {
   updatedAt: DateTime
 }
 
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
 input AccountUpdateArgs {
   where: AccountWhereUniqueInput!
   data: AccountUpdateInput!
@@ -1089,11 +1208,6 @@ input AccountCreateInput {
   sessionState: String
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 type Session {
@@ -1421,6 +1535,12 @@ type Mutation {
   updatePokemonCardResistances(data: [PokemonCardResistanceUpdateArgs!]!): [PokemonCardResistance]
   deletePokemonCardResistance(where: PokemonCardResistanceWhereUniqueInput!): PokemonCardResistance
   deletePokemonCardResistances(where: [PokemonCardResistanceWhereUniqueInput!]!): [PokemonCardResistance]
+  createPokemonCollectionItem(data: PokemonCollectionItemCreateInput!): PokemonCollectionItem
+  createPokemonCollectionItems(data: [PokemonCollectionItemCreateInput!]!): [PokemonCollectionItem]
+  updatePokemonCollectionItem(where: PokemonCollectionItemWhereUniqueInput!, data: PokemonCollectionItemUpdateInput!): PokemonCollectionItem
+  updatePokemonCollectionItems(data: [PokemonCollectionItemUpdateArgs!]!): [PokemonCollectionItem]
+  deletePokemonCollectionItem(where: PokemonCollectionItemWhereUniqueInput!): PokemonCollectionItem
+  deletePokemonCollectionItems(where: [PokemonCollectionItemWhereUniqueInput!]!): [PokemonCollectionItem]
   createUser(data: UserCreateInput!): User
   createUsers(data: [UserCreateInput!]!): [User]
   updateUser(where: UserWhereUniqueInput!, data: UserUpdateInput!): User
@@ -1500,6 +1620,9 @@ type Query {
   pokemonCardResistance(where: PokemonCardResistanceWhereUniqueInput!): PokemonCardResistance
   pokemonCardResistances(where: PokemonCardResistanceWhereInput! = {}, orderBy: [PokemonCardResistanceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCardResistanceWhereUniqueInput): [PokemonCardResistance!]
   pokemonCardResistancesCount(where: PokemonCardResistanceWhereInput! = {}): Int
+  pokemonCollectionItem(where: PokemonCollectionItemWhereUniqueInput!): PokemonCollectionItem
+  pokemonCollectionItems(where: PokemonCollectionItemWhereInput! = {}, orderBy: [PokemonCollectionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PokemonCollectionItemWhereUniqueInput): [PokemonCollectionItem!]
+  pokemonCollectionItemsCount(where: PokemonCollectionItemWhereInput! = {}): Int
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int

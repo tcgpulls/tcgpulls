@@ -53,10 +53,12 @@ const baseSession = statelessSessions<MySession>({
 
 const session: SessionStrategy<MySession> = {
   async get({ context }) {
+    serverLog(">>> In session get() - headers:", context.req?.headers);
     const authHeader = context.req?.headers.authorization || "";
 
     // 1) Check if it's the sudo token
     if (authHeader === `Bearer ${process.env.KEYSTONE_ADMIN_TOKEN}`) {
+      serverLog(">>> SUDO token detected");
       return {
         listKey: "CmsUser",
         itemId: "__SUDO__",
@@ -70,6 +72,8 @@ const session: SessionStrategy<MySession> = {
       try {
         const secret = new TextEncoder().encode(process.env.AUTH_SECRET!);
         const { payload } = await jwtVerify(token, secret);
+
+        serverLog(">>> Verified user token with payload:", payload);
 
         // Return a “User” session
         return {
@@ -86,10 +90,12 @@ const session: SessionStrategy<MySession> = {
     // 3) Otherwise, fallback to checking the Keystone Admin UI cookie
     const adminSession = await baseSession.get({ context });
     if (adminSession?.itemId) {
+      serverLog(">>> Admin UI session found:", adminSession);
       return { ...adminSession, listKey: "CmsUser" };
     }
 
     // 4) No session
+    serverLog(">>> No session found");
     return undefined;
   },
 
