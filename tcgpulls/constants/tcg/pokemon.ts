@@ -1,4 +1,6 @@
 // GENERAL CONSTANTS
+import { TcgSortByT } from "@/types/Tcg";
+
 export const POKEMON_SUPPORTED_LANGUAGES = ["en"];
 export const POKEMON_SUPPORTED_TCG_LANGUAGES = ["en", "ja"];
 
@@ -13,8 +15,8 @@ export const POKEMON_SETS_WITH_SUBSETS: { [mainSetId: string]: string } = {
   swsh12pt5: "swsh12pt5gg",
 };
 
-export const POKEMON_SETS_SORT_OPTIONS = ["releaseDate", "name"];
-export const POKEMON_SETS_PAGE_SIZE = 24;
+export const POKEMON_SETS_SORT_OPTIONS: TcgSortByT[] = ["releaseDate", "name"];
+export const POKEMON_SETS_PAGE_SIZE = 28;
 
 // CARDS CONSTANTS
 export const POKEMON_CARDS_SORT_OPTIONS = ["normalizedNumber"];

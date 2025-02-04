@@ -118,6 +118,7 @@ export default function AddToCollectionDialog({
           <Field>
             <Label>{t("tcg.quantity-label")}</Label>
             <Input
+              required
               type="number"
               name="quantity"
               min={1}
@@ -136,6 +137,7 @@ export default function AddToCollectionDialog({
           <Field>
             <Label>{t("tcg.price-label")}</Label>
             <Input
+              required
               type="number"
               name="price"
               min={0}

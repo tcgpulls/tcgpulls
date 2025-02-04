@@ -16,7 +16,7 @@ const useInfiniteScroll = <T>({
 }: Props<T>) => {
   const [items, setItems] = useState<T[]>(initialItems);
   const [loading, setLoading] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -35,7 +35,7 @@ const useInfiniteScroll = <T>({
   }, [page, pageSize, fetchMore]);
 
   useEffect(() => {
-    if (page > 1) {
+    if (page > 0) {
       loadMoreItems().then((r) => r);
     }
   }, [page, loadMoreItems]);

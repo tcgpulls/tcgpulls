@@ -13,7 +13,6 @@ type Props = {
 
 export default function CardPageAddToCollection({ cardId }: Props) {
   const { status } = useSession();
-  console.log(status);
   const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
 

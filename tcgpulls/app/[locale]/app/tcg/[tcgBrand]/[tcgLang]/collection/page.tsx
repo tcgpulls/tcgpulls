@@ -48,8 +48,6 @@ const CollectionCardsPage = async ({ params }: Props) => {
     },
   });
 
-  console.log(data);
-
   if (loading) {
     return (
       <div>
