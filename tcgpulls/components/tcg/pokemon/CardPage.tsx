@@ -12,6 +12,11 @@ import CardImage from "@/components/tcg/pokemon/misc/CardImage";
 import ResistancesList from "@/components/tcg/pokemon/misc/ResistancesList";
 import RetreatCost from "@/components/tcg/pokemon/misc/RetreatCost";
 import { Divider } from "@/components/catalyst-ui/divider";
+import { GET_USER_POKEMON_COLLECTION_ITEMS_FOR_CARD } from "@/graphql/tcg/pokemon/collection/queries";
+import { OrderDirection, PokemonCollectionItem } from "@/graphql/generated";
+import { auth } from "@/auth";
+import createApolloClient from "@/lib/clients/createApolloClient";
+import CollectionDetails from "@/components/tcg/pokemon/misc/CollectionDetails";
 
 interface Props {
   params: UrlParamsT;
@@ -19,19 +24,35 @@ interface Props {
 
 const PokemonCardPage = async ({ params }: Props) => {
   const { locale, tcgBrand, tcgCategory, tcgLang, cardSlug } = await params;
-
-  // i18n translations
+  const session = await auth();
   const t = await getTranslations();
 
-  try {
-    // Fetch card data with our updated query
-    const card = await getPokemonCard(cardSlug);
+  if (!session?.user?.id) {
+    return <p>{t("common.auth.not-authorized")}</p>;
+  }
 
+  const client = createApolloClient(session.user.id);
+
+  try {
+    const card = await getPokemonCard(cardSlug);
     if (!card) {
       return <p>{t("card-page.not-found")}</p>;
     }
 
-    // Setup
+    // Fetch ALL items (unchanged)
+    const collectionResponse = await client.query({
+      query: GET_USER_POKEMON_COLLECTION_ITEMS_FOR_CARD,
+      variables: {
+        where: { card: { id: { equals: card.id } } },
+        orderBy: [{ acquiredAt: OrderDirection.Desc }],
+        take: 999,
+        skip: 0,
+      },
+    });
+
+    const collectionItems: PokemonCollectionItem[] =
+      collectionResponse.data?.pokemonCollectionItems ?? [];
+
     const {
       tcgSetId,
       flavorText,
@@ -55,14 +76,14 @@ const PokemonCardPage = async ({ params }: Props) => {
         />
 
         {/* Main Content Container */}
-        <div className="flex flex-col md:flex-row gap-8 py-4 md:py-6">
+        <div className="flex flex-col md:flex-row gap-12 py-4 md:py-6">
           {/* Left Column: Card Image */}
-          <div className="flex justify-center min-w-[420px] items-start">
+          <div className="flex justify-center items-center min-w-[460px]">
             <CardImage card={card} />
           </div>
 
           {/* Right Column: Card Info */}
-          <div className="flex flex-col gap-4 grow max-w-[520px]">
+          <div className="flex flex-col gap-4 grow max-w-[640px]">
             <BasicInfo card={card} tcgLang={tcgLang!} />
 
             <Divider />
@@ -82,7 +103,12 @@ const PokemonCardPage = async ({ params }: Props) => {
             </div>
 
             {artist && <ArtistInfo artist={artist} />}
+
+            {/* …existing card content */}
           </div>
+        </div>
+        <div className={`py-8`}>
+          <CollectionDetails collectionItems={collectionItems} />
         </div>
       </>
     );

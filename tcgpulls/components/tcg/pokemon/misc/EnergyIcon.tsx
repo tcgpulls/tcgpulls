@@ -4,13 +4,14 @@ import { PokemonEnergyT } from "@/types/Pokemon";
 
 type Props = {
   type: PokemonEnergyT;
+  size?: number;
 };
 
-const EnergyIcon = ({ type }: Props) => {
+const EnergyIcon = ({ type, size = 20 }: Props) => {
   return (
     <Image
-      width={20}
-      height={20}
+      width={size}
+      height={size}
       src={assetsUrl(`/img/tcg/pokemon/energy/${type.toLowerCase()}.png`)}
       alt={`Pokemon ${type} type`}
     />

@@ -20,4 +20,6 @@ export const POKEMON_SETS_PAGE_SIZE = 28;
 
 // CARDS CONSTANTS
 export const POKEMON_CARDS_SORT_OPTIONS = ["normalizedNumber"];
-export const POKEMON_CARDS_PAGE_SIZE = 24;
+export const POKEMON_CARDS_PAGE_SIZE = 28;
+
+export const POKEMON_COLLECTION_DETAILS_PAGE_SIZE = 5;

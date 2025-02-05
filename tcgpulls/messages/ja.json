@@ -4,6 +4,22 @@
     "loading": "ロード中",
     "error": "エラー",
     "success": "成功",
+    "warning": "警告",
+    "info": "情報",
+    "search": "検索",
+    "optional": "任意",
+    "required": "必須",
+    "add": "追加",
+    "edit": "編集",
+    "delete": "削除",
+    "remove": "削除",
+    "view": "表示",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "submit": "送信",
+    "next": "次へ",
+    "previous": "前へ",
     "back": "戻る",
     "home": "ホーム",
     "profile": "プロフィール",
@@ -12,6 +28,19 @@
     "packs": "パック",
     "booster-pack": "ブースターパック",
     "booster-packs": "ブースターパック",
+    "box": "ボックス",
+    "boxes": "ボックス",
+    "case": "ケース",
+    "cases": "ケース",
+    "card": "カード",
+    "cards": "カード",
+    "card-s": "カード(複数)",
+    "pull": "開封",
+    "pulls": "開封結果",
+    "collection": "コレクション",
+    "collections": "コレクション",
+    "my-collection": "マイコレクション",
+    "my-collections": "マイコレクション",
     "set": "拡張パック",
     "sets": "拡張パック",
     "pokemon": "ポケモン",
@@ -38,7 +67,8 @@
     },
     "auth": {
       "sign-in": "ログイン",
-      "sign-out": "ログアウト"
+      "sign-out": "ログアウト",
+      "not-authorized": "権限がありません"
     },
     "forms": {
       "submit": "送信",
@@ -55,6 +85,85 @@
     }
   },
   "tcg": {
+    "categories": "カテゴリ",
+    "quantity-label": "数量",
+    "price-label": "価格",
+    "acquired-date-label": "入手日",
+    "notes-label": "メモ",
+    "notes-placeholder": "メモを入力してください。（例：右上に小さな凹み、友人からの贈り物など）",
+    "collection": {
+      "add-form-title": "コレクションにカードを追加",
+      "edit-form-title": "コレクションのカードを編集",
+      "add-form-description": "以下の詳細を入力してください。（空欄の場合はデフォルトが使用されます。）",
+      "edit-form-description": "以下の詳細を更新してください。",
+      "sign-in-to-add": "コレクションに追加するにはログインしてください",
+      "add": "コレクションに追加",
+      "remove": "コレクションから削除",
+      "remove-confirm-title": "コレクションから削除",
+      "remove-confirm-description": "このアイテムをコレクションから削除しますか？",
+      "adding": "コレクションに追加中...",
+      "removing": "コレクションから削除中...",
+      "added": "コレクションに追加しました",
+      "updating": "コレクションを更新中...",
+      "updated": "コレクションを更新しました",
+      "update-error": "コレクションを更新できませんでした。",
+      "update-success": "コレクションが正常に更新されました！",
+      "removed": "コレクションから削除しました",
+      "add-success": "カードをコレクションに正常に追加しました！",
+      "add-error": "カードをコレクションに追加できませんでした。",
+      "remove-success": "カードをコレクションから正常に削除しました！",
+      "remove-error": "カードをコレクションから削除できませんでした。",
+      "details": {
+        "quantity": "数量",
+        "price": "価格",
+        "acquired-on": "入手日",
+        "notes": "メモ",
+        "company": "グレーディング会社",
+        "condition": "状態",
+        "rating": "評価",
+        "actions": "操作"
+      }
+    },
+    "grading": {
+      "condition-label": "状態",
+      "condition-placeholder": "状態を選択",
+      "conditions-list": {
+        "graded": "グレード付き",
+        "near-mint": "ニアミント",
+        "lightly-played": "ライトプレイ",
+        "moderately-played": "モデレートプレイ",
+        "heavily-played": "ヘビープレイ",
+        "damaged": "ダメージ",
+        "unknown": "不明"
+      },
+      "companies-label": "グレーディング会社",
+      "companies-placeholder": "会社を選択",
+      "companies-list": {
+        "psa": "PSA",
+        "beckett": "ベケット",
+        "cgc": "CGC"
+      },
+      "ratings-label": "グレーディング評価",
+      "ratings-placeholder": "評価を選択",
+      "ratings-list": {
+        "ten": "10",
+        "nine_half": "9.5",
+        "nine_plus": "9+",
+        "nine": "9",
+        "eight_half": "8.5",
+        "eight_plus": "8+",
+        "eight": "8",
+        "seven": "7",
+        "six": "6",
+        "five": "5",
+        "four": "4",
+        "three": "3",
+        "two": "2",
+        "one": "1",
+        "black-label": "ブラックラベル",
+        "other": "その他"
+      }
+    },
     "pokemon": {
       "energy": {
         "name": "エネルギー",
@@ -79,6 +188,8 @@
       "cost": "エネルギーコスト",
       "series": "シリーズ",
       "ability": "特性",
+      "poke-body": "ポケボディ",
+      "poke-power": "ポケパワー",
       "abilities": "特性一覧",
       "attack": "ワザ",
       "attacks": "ワザ一覧",
@@ -141,6 +252,8 @@
     }
   },
   "card-page": {
-    "not-found": "カードが見つかりません"
+    "not-found": "カードが見つかりません",
+    "collection": "コレクション",
+    "collection-empty": "コレクションにカードがありません。"
   }
 }

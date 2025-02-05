@@ -64,7 +64,7 @@ const SidebarContent = () => {
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/collection`,
-          label: t("my-collection"),
+          label: t("collection"),
           className: "pl-4 text-xs! text-primary-300",
           icon: <MdCollectionsBookmark />,
         },
