@@ -33,6 +33,40 @@ export const GET_USER_POKEMON_COLLECTION_ITEMS = gql`
 `;
 
 /**
+ * Fetches the user's collection items for a specific card.
+ */
+export const GET_USER_POKEMON_COLLECTION_ITEMS_FOR_CARD = gql`
+  query GetUserPokemonCollectionItemsForCard(
+    $where: PokemonCollectionItemWhereInput!
+    $orderBy: [PokemonCollectionItemOrderByInput!]!
+    $take: Int!
+    $skip: Int!
+  ) {
+    pokemonCollectionItems(
+      where: $where
+      orderBy: $orderBy
+      take: $take
+      skip: $skip
+    ) {
+      id
+      price
+      quantity
+      condition
+      gradingCompany
+      gradingRating
+      notes
+      acquiredAt
+      card {
+        id
+        name
+        imageSmallApiUrl
+        imageSmallStorageUrl
+      }
+    }
+  }
+`;
+
+/**
  * Checks whether the user has a particular card in their collection.
  * We use a "where" filter that matches the `card.id` = cardId.
  * Because of your Keystone "filter" access control, this returns only
@@ -66,6 +100,31 @@ export const ADD_CARD_TO_POKEMON_COLLECTION = gql`
       id
       card {
         id
+      }
+    }
+  }
+`;
+
+/**
+ * Updates an existing collection record by ID.
+ */
+export const UPDATE_CARD_IN_COLLECTION = gql`
+  mutation UpdateCardInCollection(
+    $id: ID!
+    $data: PokemonCollectionItemUpdateInput!
+  ) {
+    updatePokemonCollectionItem(where: { id: $id }, data: $data) {
+      id
+      price
+      quantity
+      condition
+      gradingCompany
+      gradingRating
+      notes
+      acquiredAt
+      card {
+        id
+        name
       }
     }
   }

@@ -4,17 +4,17 @@ type Props = {
   children: ReactNode;
 };
 
-const CardsGrid = ({ children }: Props) => {
+const SetsGrid = ({ children }: Props) => {
   return (
     <div
       className={`
         grid
         gap-4
-        grid-cols-2
+        grid-cols-1
+        xs:grid-cols-2
         sm:grid-cols-3
-        md:grid-cols-4
-        xl:grid-cols-5
-        2xl:grid-cols-7
+        xl:grid-cols-4
+        2xl:grid-cols-5
         pb-12
       `}
     >
@@ -23,4 +23,4 @@ const CardsGrid = ({ children }: Props) => {
   );
 };
 
-export default CardsGrid;
+export default SetsGrid;

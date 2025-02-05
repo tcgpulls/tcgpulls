@@ -50,9 +50,9 @@ const styles = {
   ],
   plain: [
     // Base
-    "border-transparent text-primary-950 data-[active]:bg-primary-950/5 data-[hover]:bg-primary-950/5",
+    "border-transparent text-primary-950 data-[active]:text-accent-500 data-[hover]:text-accent-500",
     // Dark mode
-    "dark:text-white dark:data-[active]:bg-white/10 dark:data-[hover]:bg-white/10",
+    "dark:text-white",
     // Icon
     "[--btn-icon:theme(colors.zinc.500)] data-[active]:[--btn-icon:theme(colors.zinc.700)] data-[hover]:[--btn-icon:theme(colors.zinc.700)] dark:[--btn-icon:theme(colors.zinc.500)] dark:data-[active]:[--btn-icon:theme(colors.zinc.400)] dark:data-[hover]:[--btn-icon:theme(colors.zinc.400)]",
   ],
@@ -213,7 +213,7 @@ export const Button = forwardRef(function Button(
   ) : (
     <Headless.Button
       {...props}
-      className={clsx(classes, "cursor-default")}
+      className={clsx(classes, "cursor-pointer")}
       ref={ref}
     >
       <TouchTarget>{children}</TouchTarget>

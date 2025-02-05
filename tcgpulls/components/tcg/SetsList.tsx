@@ -2,7 +2,6 @@
 
 import React from "react";
 import SetCard from "@/components/tcg/SetCard";
-import CardsGrid from "@/components/misc/CardsGrid";
 import InfiniteList from "@/components/misc/InfiniteList";
 import {
   TcgBrandT,
@@ -16,6 +15,8 @@ import {
   useGetPokemonSetsQuery,
 } from "@/graphql/generated";
 import { POKEMON_SETS_PAGE_SIZE } from "@/constants/tcg/pokemon";
+import SetsGrid from "@/components/misc/SetsGrid";
+import Spinner from "@/components/misc/Spinner";
 
 interface SetsListProps {
   initialSets: PokemonSetItemFragment[];
@@ -49,7 +50,6 @@ export function SetsList({
   });
 
   const fetchMoreSets = async (offset: number) => {
-    // use the `fetchMore` from Apollo
     const { data: moreData } = await fetchMore({
       variables: { skip: offset },
     });
@@ -57,7 +57,7 @@ export function SetsList({
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
 
   if (!data?.pokemonSets) {
@@ -65,7 +65,7 @@ export function SetsList({
   }
 
   return (
-    <CardsGrid>
+    <SetsGrid>
       <InfiniteList<PokemonSetItemFragment>
         initialItems={initialSets}
         fetchMore={fetchMoreSets}
@@ -78,7 +78,7 @@ export function SetsList({
           />
         )}
       />
-    </CardsGrid>
+    </SetsGrid>
   );
 }
 

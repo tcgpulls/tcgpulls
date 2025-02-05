@@ -48,8 +48,6 @@ const CollectionCardsPage = async ({ params }: Props) => {
     },
   });
 
-  console.log(data);
-
   if (loading) {
     return (
       <div>
@@ -79,13 +77,13 @@ const CollectionCardsPage = async ({ params }: Props) => {
         previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}`}
       />
       <CollectionList
-        key={`updatedAt-${OrderDirection.Asc}`}
+        key={`acquiredAt-${OrderDirection.Asc}`}
         initialItems={cards}
         tcgLang={tcgLang}
         userId={userId!}
         setId={setId}
-        sortBy="updatedAt"
-        sortOrder={OrderDirection.Asc}
+        sortBy="acquiredAt"
+        sortOrder={OrderDirection.Desc}
       />
     </>
   );

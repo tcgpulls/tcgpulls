@@ -16,7 +16,7 @@ const CardImage = ({ card }: Props) => {
             : assetsUrl("img/tcg/pokemon/card-placeholder.jpg")
       }
       alt={`${name} card`}
-      width={420}
+      width={460}
       height={586}
       className="object-contain rounded-3xl shadow-md"
     />

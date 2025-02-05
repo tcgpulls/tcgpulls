@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useTranslations } from "use-intl";
 import { signIn, useSession } from "next-auth/react";
 import { MdAddBox } from "react-icons/md";
-import AddToCollectionDialog from "@/components/tcg/pokemon/misc/AddToCollectionDialog";
 import { Badge } from "@/components/catalyst-ui/badge";
+import CollectionDialog from "@/components/tcg/pokemon/misc/CollectionDialog";
 
 type Props = {
   cardId: string;
@@ -13,7 +13,6 @@ type Props = {
 
 export default function CardPageAddToCollection({ cardId }: Props) {
   const { status } = useSession();
-  console.log(status);
   const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,11 +40,7 @@ export default function CardPageAddToCollection({ cardId }: Props) {
       >
         <MdAddBox /> {t("tcg.collection.add")}
       </Badge>
-      <AddToCollectionDialog
-        cardId={cardId}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-      />
+      <CollectionDialog cardId={cardId} isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 }

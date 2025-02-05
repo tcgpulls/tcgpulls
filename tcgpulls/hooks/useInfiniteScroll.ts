@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import serverLog from "@/utils/serverLog";
 
 type Props<T> = {
   initialItems: T[];
@@ -9,52 +8,81 @@ type Props<T> = {
   pageSize: number;
 };
 
-const useInfiniteScroll = <T>({
+export default function useInfiniteScroll<T>({
   initialItems,
   fetchMore,
   pageSize,
-}: Props<T>) => {
+}: Props<T>) {
+  // The final array of items
   const [items, setItems] = useState<T[]>(initialItems);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(1);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+
+  // True while a fetch is in progress
+  const [loading, setLoading] = useState(false);
+
+  // The "page" index (0-based). Each new page increments
+  const [page, setPage] = useState(0);
+
+  // Whether we believe there are more items to load
+  const [hasMore, setHasMore] = useState(true);
+
+  // Intersection observer reference
   const observer = useRef<IntersectionObserver | null>(null);
 
+  // A function to fetch the next chunk
   const loadMoreItems = useCallback(async () => {
     setLoading(true);
     const offset = page * pageSize;
+
     try {
       const newItems = await fetchMore(offset);
-      setItems((prevItems) => [...prevItems, ...newItems]);
-      setHasMore(newItems.length === pageSize);
-    } catch (error) {
-      serverLog("error", "Error loading more items:", error);
+
+      setItems((prev) => [...prev, ...newItems]);
+
+      // If we get fewer than a full page, that presumably means no more data
+      const nextHasMore = newItems.length === pageSize;
+      setHasMore(nextHasMore);
+    } catch (err) {
+      console.error("useInfiniteScroll: Error loading more items:", err);
+      setHasMore(false);
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, fetchMore]);
+  }, [fetchMore, page, pageSize]);
 
+  // If page > 0, fetch next chunk
   useEffect(() => {
-    if (page > 1) {
-      loadMoreItems().then((r) => r);
+    if (page > 0) {
+      loadMoreItems().then();
     }
   }, [page, loadMoreItems]);
 
+  // Intersection observer callback
   const lastItemRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (loading) return;
-      if (observer.current) observer.current.disconnect();
+
+      // Disconnect old observer
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+
+      // Create a new observer
       observer.current = new IntersectionObserver((entries) => {
+        // We only care about the first entry
         if (entries[0].isIntersecting && hasMore) {
           setPage((prevPage) => prevPage + 1);
         }
       });
-      if (node) observer.current.observe(node);
+
+      if (node) {
+        observer.current.observe(node);
+      }
     },
     [loading, hasMore],
   );
 
-  return { items, loading, lastItemRef };
-};
+  // (Optional) Debug effect to log changes in items
+  useEffect(() => {}, [items]);
 
-export default useInfiniteScroll;
+  return { items, loading, lastItemRef };
+}

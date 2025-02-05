@@ -67,7 +67,8 @@
     },
     "auth": {
       "sign-in": "Sign In",
-      "sign-out": "Sign Out"
+      "sign-out": "Sign Out",
+      "not-authorized": "Not Authorized"
     },
     "forms": {
       "submit": "Submit",
@@ -92,16 +93,36 @@
     "notes-placeholder": "Enter a note. (e.g. small dent on top-right corner, gift from friend, etc.)",
     "collection": {
       "add-form-title": "Add Card(s) to Collection",
+      "edit-form-title": "Edit Card(s) in Collection",
       "add-form-description": "Please enter the details below. (Defaults will be used if left blank.)",
+      "edit-form-description": "Please update the details below.",
       "sign-in-to-add": "Sign in to collect",
       "add": "Add to Collection",
       "remove": "Remove from Collection",
+      "remove-confirm-title": "Remove from Collection",
+      "remove-confirm-description": "Are you sure you want to remove this item from your collection?",
+      "adding": "Adding to Collection...",
+      "removing": "Removing from Collection...",
       "added": "Added to Collection",
+      "updating": "Updating Collection...",
+      "updated": "Updated Collection",
+      "update-error": "Collection could not be updated.",
+      "update-success": "Collection updated successfully!",
       "removed": "Removed from Collection",
       "add-success": "Card added to collection successfully!",
       "add-error": "Card could not be added to collection.",
       "remove-success": "Card removed from collection successfully!",
-      "remove-error": "Card could not be removed from collection."
+      "remove-error": "Card could not be removed from collection.",
+      "details": {
+        "quantity": "Quantity",
+        "price": "Price",
+        "acquired-on": "Acquired on",
+        "notes": "Notes",
+        "company": "Company",
+        "condition": "Condition",
+        "rating": "Rating",
+        "actions": "Actions"
+      }
     },
     "grading": {
       "condition-label": "Condition",
@@ -144,6 +165,7 @@
       }
     },
     "pokemon": {
+      "variant": "Variant",
       "energy": {
         "name": "Energy",
         "types": {
@@ -231,6 +253,8 @@
     }
   },
   "card-page": {
-    "not-found": "Card not found"
+    "not-found": "Card not found",
+    "collection": "Collection",
+    "collection-empty": "No cards in collection."
   }
 }

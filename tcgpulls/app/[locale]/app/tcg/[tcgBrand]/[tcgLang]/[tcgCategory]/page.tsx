@@ -9,7 +9,10 @@ import {
   GetPokemonSetsQueryVariables,
   OrderDirection,
 } from "@/graphql/generated";
-import { POKEMON_SETS_PAGE_SIZE } from "@/constants/tcg/pokemon";
+import {
+  POKEMON_SETS_PAGE_SIZE,
+  POKEMON_SETS_SORT_OPTIONS,
+} from "@/constants/tcg/pokemon";
 import Header from "@/components/misc/Header";
 import createApolloClient from "@/lib/clients/createApolloClient";
 
@@ -18,12 +21,13 @@ interface Props {
 }
 
 const TcgTypeSetsPage = async ({ params }: Props) => {
-  const { locale, tcgLang, tcgBrand, tcgCategory } = await params;
+  const { locale, tcgBrand, tcgLang, tcgCategory } = await params;
   const client = createApolloClient();
   const t = await getTranslations();
 
-  const sortBy = "releaseDate";
+  const sortBy = POKEMON_SETS_SORT_OPTIONS[0];
   const sortOrder: OrderDirection = OrderDirection.Desc;
+  const isShowNonBoosterPacks = tcgCategory === "sets";
 
   if (!tcgBrand || !tcgCategory || !tcgLang) {
     notFound();
@@ -38,7 +42,7 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
       where: {
         language: { equals: tcgLang },
         ...(tcgCategory === "booster-packs" && {
-          isBoosterPack: { equals: true },
+          isBoosterPack: { equals: !isShowNonBoosterPacks },
         }),
       },
       orderBy: [{ [sortBy]: sortOrder }],

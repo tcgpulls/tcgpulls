@@ -13,17 +13,32 @@ const TcgLangPage = async ({ params }: Props) => {
   const t = await getTranslations();
 
   return (
-    <div className={`flex flex-col gap-4`}>
-      <Link href={`/app/tcg/pokemon/${tcgLang}/booster-packs`}>
-        <Card isClickable={true}>
-          <p>{t("common.booster-packs")}</p>
-        </Card>
-      </Link>
-      <Link href={`/app/tcg/pokemon/${tcgLang}/sets`}>
-        <Card isClickable={true}>
-          <p>{t("common.sets")}</p>
-        </Card>
-      </Link>
+    <div className={`grid gap-8`}>
+      <div>
+        <Link href={`/app/tcg/pokemon/${tcgLang}/collection`}>
+          <Card className={`h-96 p-4`} isClickable={true}>
+            <h2 className={`font-bold text-3xl text-center`}>
+              {t("common.collection")}
+            </h2>
+          </Card>
+        </Link>
+      </div>
+      <div className={`grid grid-cols-2 gap-8`}>
+        <Link href={`/app/tcg/pokemon/${tcgLang}/booster-packs`}>
+          <Card className={`h-96 p-4`} isClickable={true}>
+            <h2 className={`font-bold text-3xl text-center`}>
+              {t("common.booster-packs")}
+            </h2>
+          </Card>
+        </Link>
+        <Link href={`/app/tcg/pokemon/${tcgLang}/sets`}>
+          <Card className={`h-96 p-4`} isClickable={true}>
+            <h2 className={`font-bold text-3xl text-center`}>
+              {t("common.sets")}
+            </h2>
+          </Card>
+        </Link>
+      </div>
     </div>
   );
 };

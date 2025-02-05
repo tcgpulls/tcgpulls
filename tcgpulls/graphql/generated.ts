@@ -2782,7 +2782,17 @@ export type GetUserPokemonCollectionItemsQueryVariables = Exact<{
 }>;
 
 
-export type GetUserPokemonCollectionItemsQuery = { __typename?: 'Query', pokemonCollectionItems?: Array<{ __typename?: 'PokemonCollectionItem', id: string, acquiredAt?: any | null, card?: { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, variant?: string | null, name?: string | null } | null }> | null };
+export type GetUserPokemonCollectionItemsQuery = { __typename?: 'Query', pokemonCollectionItems?: Array<{ __typename?: 'PokemonCollectionItem', id: string, acquiredAt?: any | null, card?: { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, variant?: string | null, name?: string | null, imageSmallStorageUrl?: string | null, imageSmallApiUrl?: string | null } | null }> | null };
+
+export type GetUserPokemonCollectionItemsForCardQueryVariables = Exact<{
+  where: PokemonCollectionItemWhereInput;
+  orderBy: Array<PokemonCollectionItemOrderByInput> | PokemonCollectionItemOrderByInput;
+  take: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
+}>;
+
+
+export type GetUserPokemonCollectionItemsForCardQuery = { __typename?: 'Query', pokemonCollectionItems?: Array<{ __typename?: 'PokemonCollectionItem', id: string, price?: any | null, quantity?: number | null, condition?: string | null, gradingCompany?: string | null, gradingRating?: string | null, notes?: string | null, acquiredAt?: any | null, card?: { __typename?: 'PokemonCard', id: string, name?: string | null, imageSmallApiUrl?: string | null, imageSmallStorageUrl?: string | null } | null }> | null };
 
 export type GetPokemonCollectionCardQueryVariables = Exact<{
   cardWhere: PokemonCardWhereUniqueInput;
@@ -2797,6 +2807,14 @@ export type AddCardToPokemonCollectionMutationVariables = Exact<{
 
 
 export type AddCardToPokemonCollectionMutation = { __typename?: 'Mutation', createPokemonCollectionItem?: { __typename?: 'PokemonCollectionItem', id: string, card?: { __typename?: 'PokemonCard', id: string } | null } | null };
+
+export type UpdateCardInCollectionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  data: PokemonCollectionItemUpdateInput;
+}>;
+
+
+export type UpdateCardInCollectionMutation = { __typename?: 'Mutation', updatePokemonCollectionItem?: { __typename?: 'PokemonCollectionItem', id: string, price?: any | null, quantity?: number | null, condition?: string | null, gradingCompany?: string | null, gradingRating?: string | null, notes?: string | null, acquiredAt?: any | null, card?: { __typename?: 'PokemonCard', id: string, name?: string | null } | null } | null };
 
 export type RemoveCardFromCollectionMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2992,6 +3010,8 @@ export const GetUserPokemonCollectionItemsDocument = gql`
       tcgCardId
       variant
       name
+      imageSmallStorageUrl
+      imageSmallApiUrl
     }
   }
 }
@@ -3032,6 +3052,67 @@ export type GetUserPokemonCollectionItemsQueryHookResult = ReturnType<typeof use
 export type GetUserPokemonCollectionItemsLazyQueryHookResult = ReturnType<typeof useGetUserPokemonCollectionItemsLazyQuery>;
 export type GetUserPokemonCollectionItemsSuspenseQueryHookResult = ReturnType<typeof useGetUserPokemonCollectionItemsSuspenseQuery>;
 export type GetUserPokemonCollectionItemsQueryResult = Apollo.QueryResult<GetUserPokemonCollectionItemsQuery, GetUserPokemonCollectionItemsQueryVariables>;
+export const GetUserPokemonCollectionItemsForCardDocument = gql`
+    query GetUserPokemonCollectionItemsForCard($where: PokemonCollectionItemWhereInput!, $orderBy: [PokemonCollectionItemOrderByInput!]!, $take: Int!, $skip: Int!) {
+  pokemonCollectionItems(
+    where: $where
+    orderBy: $orderBy
+    take: $take
+    skip: $skip
+  ) {
+    id
+    price
+    quantity
+    condition
+    gradingCompany
+    gradingRating
+    notes
+    acquiredAt
+    card {
+      id
+      name
+      imageSmallApiUrl
+      imageSmallStorageUrl
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserPokemonCollectionItemsForCardQuery__
+ *
+ * To run a query within a React component, call `useGetUserPokemonCollectionItemsForCardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserPokemonCollectionItemsForCardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserPokemonCollectionItemsForCardQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useGetUserPokemonCollectionItemsForCardQuery(baseOptions: Apollo.QueryHookOptions<GetUserPokemonCollectionItemsForCardQuery, GetUserPokemonCollectionItemsForCardQueryVariables> & ({ variables: GetUserPokemonCollectionItemsForCardQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserPokemonCollectionItemsForCardQuery, GetUserPokemonCollectionItemsForCardQueryVariables>(GetUserPokemonCollectionItemsForCardDocument, options);
+      }
+export function useGetUserPokemonCollectionItemsForCardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserPokemonCollectionItemsForCardQuery, GetUserPokemonCollectionItemsForCardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserPokemonCollectionItemsForCardQuery, GetUserPokemonCollectionItemsForCardQueryVariables>(GetUserPokemonCollectionItemsForCardDocument, options);
+        }
+export function useGetUserPokemonCollectionItemsForCardSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserPokemonCollectionItemsForCardQuery, GetUserPokemonCollectionItemsForCardQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserPokemonCollectionItemsForCardQuery, GetUserPokemonCollectionItemsForCardQueryVariables>(GetUserPokemonCollectionItemsForCardDocument, options);
+        }
+export type GetUserPokemonCollectionItemsForCardQueryHookResult = ReturnType<typeof useGetUserPokemonCollectionItemsForCardQuery>;
+export type GetUserPokemonCollectionItemsForCardLazyQueryHookResult = ReturnType<typeof useGetUserPokemonCollectionItemsForCardLazyQuery>;
+export type GetUserPokemonCollectionItemsForCardSuspenseQueryHookResult = ReturnType<typeof useGetUserPokemonCollectionItemsForCardSuspenseQuery>;
+export type GetUserPokemonCollectionItemsForCardQueryResult = Apollo.QueryResult<GetUserPokemonCollectionItemsForCardQuery, GetUserPokemonCollectionItemsForCardQueryVariables>;
 export const GetPokemonCollectionCardDocument = gql`
     query GetPokemonCollectionCard($cardWhere: PokemonCardWhereUniqueInput!) {
   pokemonCard(where: $cardWhere) {
@@ -3114,6 +3195,51 @@ export function useAddCardToPokemonCollectionMutation(baseOptions?: Apollo.Mutat
 export type AddCardToPokemonCollectionMutationHookResult = ReturnType<typeof useAddCardToPokemonCollectionMutation>;
 export type AddCardToPokemonCollectionMutationResult = Apollo.MutationResult<AddCardToPokemonCollectionMutation>;
 export type AddCardToPokemonCollectionMutationOptions = Apollo.BaseMutationOptions<AddCardToPokemonCollectionMutation, AddCardToPokemonCollectionMutationVariables>;
+export const UpdateCardInCollectionDocument = gql`
+    mutation UpdateCardInCollection($id: ID!, $data: PokemonCollectionItemUpdateInput!) {
+  updatePokemonCollectionItem(where: {id: $id}, data: $data) {
+    id
+    price
+    quantity
+    condition
+    gradingCompany
+    gradingRating
+    notes
+    acquiredAt
+    card {
+      id
+      name
+    }
+  }
+}
+    `;
+export type UpdateCardInCollectionMutationFn = Apollo.MutationFunction<UpdateCardInCollectionMutation, UpdateCardInCollectionMutationVariables>;
+
+/**
+ * __useUpdateCardInCollectionMutation__
+ *
+ * To run a mutation, you first call `useUpdateCardInCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCardInCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCardInCollectionMutation, { data, loading, error }] = useUpdateCardInCollectionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateCardInCollectionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCardInCollectionMutation, UpdateCardInCollectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCardInCollectionMutation, UpdateCardInCollectionMutationVariables>(UpdateCardInCollectionDocument, options);
+      }
+export type UpdateCardInCollectionMutationHookResult = ReturnType<typeof useUpdateCardInCollectionMutation>;
+export type UpdateCardInCollectionMutationResult = Apollo.MutationResult<UpdateCardInCollectionMutation>;
+export type UpdateCardInCollectionMutationOptions = Apollo.BaseMutationOptions<UpdateCardInCollectionMutation, UpdateCardInCollectionMutationVariables>;
 export const RemoveCardFromCollectionDocument = gql`
     mutation RemoveCardFromCollection($id: ID!) {
   deletePokemonCollectionItem(where: {id: $id}) {
