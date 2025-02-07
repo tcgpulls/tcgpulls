@@ -21,6 +21,7 @@
     "next": "Next",
     "previous": "Previous",
     "back": "Back",
+    "return-to-home": "Return to Home",
     "home": "Home",
     "profile": "Profile",
     "tcg": "Trading Card Games",
@@ -68,7 +69,8 @@
     "auth": {
       "sign-in": "Sign In",
       "sign-out": "Sign Out",
-      "not-authorized": "Not Authorized"
+      "not-authorized": "Not Authorized",
+      "not-authenticated": "You need to be signed in to view this page."
     },
     "forms": {
       "submit": "Submit",
@@ -121,7 +123,8 @@
         "company": "Company",
         "condition": "Condition",
         "rating": "Rating",
-        "actions": "Actions"
+        "actions": "Actions",
+        "sign-in-message": "to add to your collection."
       }
     },
     "grading": {

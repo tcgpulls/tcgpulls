@@ -32,7 +32,7 @@ import { Input } from "@/components/catalyst-ui/input";
 import DatePicker from "@/components/catalyst-ui/datepicker";
 import { Textarea } from "@/components/catalyst-ui/textarea";
 import toast from "react-hot-toast";
-import CollectionRemoveDialog from "@/components/tcg/pokemon/misc/CollectionRemoveDialog";
+import CollectionRemoveDialog from "@/components/tcg/pokemon/collection/CollectionRemoveDialog";
 import { PokemonCollectionItem } from "@/graphql/generated";
 import { useRouter } from "next/navigation";
 

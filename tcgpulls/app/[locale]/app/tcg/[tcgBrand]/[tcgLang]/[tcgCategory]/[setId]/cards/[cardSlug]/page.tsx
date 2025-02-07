@@ -20,7 +20,7 @@ const CardPage = async ({ params }: Props) => {
     // Import the CardPage component based on the tcgBrand e.g: components/tcg/pokemon/CardPage
     // Add other brands here as needed
     TcgBrandCardPage = dynamic(
-      () => import(`@/components/tcg/${tcgBrand}/CardPage`),
+      () => import(`@/components/tcg/${tcgBrand}/card-page/CardPage`),
     );
   } catch (error) {
     console.error(`Failed to load CardPage for brand: ${tcgBrand}`, error);

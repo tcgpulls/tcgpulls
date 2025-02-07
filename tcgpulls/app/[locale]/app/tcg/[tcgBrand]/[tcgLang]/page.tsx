@@ -3,36 +3,53 @@ import { Link } from "@/components/catalyst-ui/link";
 import Card from "@/components/misc/Card";
 import { UrlParamsT } from "@/types/Params";
 import { getTranslations } from "next-intl/server";
+import { auth } from "@/auth";
+import { FaLock } from "react-icons/fa6";
 
 type Props = {
   params: UrlParamsT;
 };
 
 const TcgLangPage = async ({ params }: Props) => {
+  const session = await auth();
   const { tcgLang } = await params;
   const t = await getTranslations();
+
+  const userId = session?.user?.id;
 
   return (
     <div className={`grid gap-8`}>
       <div>
         <Link href={`/app/tcg/pokemon/${tcgLang}/collection`}>
-          <Card className={`h-96 p-4`} isClickable={true}>
-            <h2 className={`font-bold text-3xl text-center`}>
+          <Card
+            className={`h-96 p-4 flex items-center justify-center`}
+            isClickable={true}
+          >
+            <h2
+              className={`flex gap-3 items-center font-bold text-3xl text-center`}
+            >
               {t("common.collection")}
+              {!userId && <FaLock className={`text-primary-600`} size={32} />}
             </h2>
           </Card>
         </Link>
       </div>
       <div className={`grid grid-cols-2 gap-8`}>
         <Link href={`/app/tcg/pokemon/${tcgLang}/booster-packs`}>
-          <Card className={`h-96 p-4`} isClickable={true}>
+          <Card
+            className={`h-96 p-4 flex items-center justify-center`}
+            isClickable={true}
+          >
             <h2 className={`font-bold text-3xl text-center`}>
               {t("common.booster-packs")}
             </h2>
           </Card>
         </Link>
         <Link href={`/app/tcg/pokemon/${tcgLang}/sets`}>
-          <Card className={`h-96 p-4`} isClickable={true}>
+          <Card
+            className={`h-96 p-4 flex items-center justify-center`}
+            isClickable={true}
+          >
             <h2 className={`font-bold text-3xl text-center`}>
               {t("common.sets")}
             </h2>

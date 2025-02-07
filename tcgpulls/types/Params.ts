@@ -1,5 +1,6 @@
 import { Locale } from "@/i18n/routing";
 import { TcgCategoryT, TcgLangT, TcgBrandT } from "@/types/Tcg";
+import { RedirectReasons } from "@/types/Redirect";
 
 export type UrlParamsKeyT = {
   locale: Locale;
@@ -14,6 +15,10 @@ export type UrlParamsT = Promise<Partial<UrlParamsKeyT>>;
 
 export type SearchParamsKeyT = {
   page: string;
+  requiresAuth: boolean;
+  callbackUrl: string;
+  redirectReason: RedirectReasons;
+  error: string;
 };
 
 export type SearchParamsT = Promise<Partial<SearchParamsKeyT>>;

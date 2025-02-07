@@ -32,7 +32,7 @@ export function Pagination({
 
   return (
     <div
-      className="mt-4 flex items-center justify-center gap-2"
+      className="flex items-center justify-center gap-2"
       role="navigation"
       aria-label="Pagination"
     >
@@ -48,7 +48,7 @@ export function Pagination({
       </button>
 
       {/* Page number buttons */}
-      <div className={`grow flex gap-2 justify-center`}>
+      <div className={`grow flex gap-1 justify-center`}>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => {
           const isActive = num === page;
           return (
@@ -56,7 +56,7 @@ export function Pagination({
               key={num}
               onClick={() => onPageChange(num)}
               className={`px-3 py-1.5 text-sm rounded 
-              ${isActive ? " text-accent-400 bg-primary-800" : "hover:bg-primary-800 hover:text-accent-400"}`}
+              ${isActive ? " text-accent-400 bg-primary-800" : "hover:bg-primary-700 hover:text-accent-400"}`}
             >
               {num}
             </button>
@@ -67,7 +67,7 @@ export function Pagination({
       {/* Next button */}
       <button
         className={`px-3 py-1.5 text-sm rounded 
-          ${page === totalPages ? "text-primary-400 cursor-not-allowed" : "hover:text-accent-400 hover:bg-primary-800"}
+          ${page === totalPages ? "text-primary-400 cursor-not-allowed" : "hover:text-accent-400 hover:bg-primary-700"}
         `}
         onClick={handleNext}
         disabled={page === totalPages}

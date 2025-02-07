@@ -9,6 +9,8 @@ import { auth } from "@/auth";
 import createApolloClient from "@/lib/clients/createApolloClient";
 import Spinner from "@/components/misc/Spinner";
 import CollectionList from "@/components/tcg/CollectionList";
+import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
+import { RedirectReasons } from "@/types/Redirect";
 
 interface Props {
   params: UrlParamsT;
@@ -16,6 +18,10 @@ interface Props {
 
 const CollectionCardsPage = async ({ params }: Props) => {
   const { locale, setId, tcgLang, tcgBrand } = await params;
+  const redirectReasonParam = `redirectReason=${RedirectReasons.NotAuthenticated}`;
+  await requireAuthOrRedirect({
+    redirectRoute: `/${locale}/app/tcg/${tcgBrand}/${tcgLang}/collection?${redirectReasonParam}`,
+  });
   const session = await auth();
 
   // Validate
@@ -24,6 +30,9 @@ const CollectionCardsPage = async ({ params }: Props) => {
   }
 
   const userId = session?.user?.id;
+
+  if (!userId) {
+  }
 
   const client = createApolloClient(userId);
 

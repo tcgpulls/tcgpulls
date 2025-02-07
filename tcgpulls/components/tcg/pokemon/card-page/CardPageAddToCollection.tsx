@@ -5,7 +5,7 @@ import { useTranslations } from "use-intl";
 import { signIn, useSession } from "next-auth/react";
 import { MdAddBox } from "react-icons/md";
 import { Badge } from "@/components/catalyst-ui/badge";
-import CollectionDialog from "@/components/tcg/pokemon/misc/CollectionDialog";
+import CollectionDialog from "@/components/tcg/pokemon/collection/CollectionDialog";
 
 type Props = {
   cardId: string;
