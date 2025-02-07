@@ -20,17 +20,22 @@ import { SignJWT } from "jose";
 // we need to set this to avoid lingering cache issues when handling auth
 const FETCH_POLICY = "network-only";
 
+const providers = [
+  GoogleProvider({
+    clientId: process.env.GOOGLE_CLIENT_ID as string,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+  }),
+];
+
 export const authConfig: NextAuthConfig = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/app/sign-in",
+  },
   secret: process.env.AUTH_SECRET,
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    }),
-  ],
+  providers,
   callbacks: {
     /**
      * signIn callback is called whenever a user signs in (OAuth, credentials, etc.)
@@ -236,5 +241,9 @@ export const authConfig: NextAuthConfig = {
     },
   },
 };
+
+export const providerMap = providers
+  .map((provider) => ({ id: provider.id, name: provider.name }))
+  .filter((provider) => provider.id !== "credentials");
 
 export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);

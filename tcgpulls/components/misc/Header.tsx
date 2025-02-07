@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import Link from "next/link";
 import { HiChevronLeft } from "react-icons/hi";
+import { Link } from "@/i18n/routing";
 
 type Props = {
   title: string | ReactNode;

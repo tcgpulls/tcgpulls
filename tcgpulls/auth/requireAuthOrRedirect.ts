@@ -17,8 +17,6 @@ export async function requireAuthOrRedirect(
 
   // If not authenticated => redirect them to sign-in with google
   if (!session?.user?.id) {
-    // IMPORTANT: in v5, do `/api/auth/signin?provider=google&callbackUrl=...`
-    // not `/api/auth/signin/google`
     const signInUrl = `/api/auth/signin?callbackUrl=${encodeURIComponent(
       redirectRoute,
     )}`;

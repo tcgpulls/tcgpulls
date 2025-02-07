@@ -4,6 +4,7 @@ import { UrlParamsT } from "@/types/Params";
 import Header from "@/components/misc/Header";
 import ProfileForm from "@/components/profile/ProfileForm";
 import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
+import { RedirectReasons } from "@/types/Redirect";
 
 type Props = {
   params: UrlParamsT;
@@ -11,7 +12,10 @@ type Props = {
 
 const ProfilePage = async ({ params }: Props) => {
   const { locale } = await params;
-  await requireAuthOrRedirect({ redirectRoute: `/${locale}/app/profile` });
+  const redirectReasonParam = `redirectReason=${RedirectReasons.NotAuthenticated}`;
+  await requireAuthOrRedirect({
+    redirectRoute: `/${locale}/app/profile?${redirectReasonParam}`,
+  });
   const t = await getTranslations("profile-page");
 
   return (

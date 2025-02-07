@@ -21,25 +21,31 @@ import { HiHome, HiUserCircle } from "react-icons/hi";
 import { TbCardsFilled } from "react-icons/tb";
 import { BiGridAlt } from "react-icons/bi";
 import { MdCollectionsBookmark } from "react-icons/md";
+import { FaLock } from "react-icons/fa6";
+import { useSession } from "next-auth/react";
 
 type SidebarItem = {
   href: string;
   label: string;
   icon?: ReactNode;
   className?: string;
+  needAuth?: boolean;
 };
 
 type SidebarSection = {
   heading?: string;
   items: SidebarItem[];
+  needAuth?: boolean;
 };
 
 type SidebarConfig = Array<SidebarItem | SidebarSection>;
 
 const SidebarContent = () => {
   const t = useTranslations("common");
+  const { status } = useSession();
   const pathname = usePathname();
   const { currentTcgLanguage } = useTcgLanguage();
+  const isAuth = status === "authenticated";
 
   // Sidebar configuration
   const sidebarItems: SidebarConfig = [
@@ -52,6 +58,7 @@ const SidebarContent = () => {
       href: "/app/profile",
       label: t("profile"),
       icon: <HiUserCircle size={20} />,
+      needAuth: true,
     },
     {
       heading: t("tcg"),
@@ -59,7 +66,6 @@ const SidebarContent = () => {
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}`,
           label: t("tcg-pokemon-short"),
-          // icon: <HiRectangleStack size={20} />,
           className: `pl-2`,
         },
         {
@@ -67,6 +73,7 @@ const SidebarContent = () => {
           label: t("collection"),
           className: "pl-4 text-xs! text-primary-300",
           icon: <MdCollectionsBookmark />,
+          needAuth: true,
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/booster-packs`,
@@ -106,7 +113,12 @@ const SidebarContent = () => {
                   className={item.className}
                 >
                   {item.icon && item.icon}
-                  <SidebarLabel>{item.label}</SidebarLabel>
+                  <SidebarLabel className={`flex gap-2 items-center`}>
+                    {item.label}
+                    {item.needAuth && !isAuth && (
+                      <FaLock className={`text-primary-600`} size={10} />
+                    )}
+                  </SidebarLabel>
                 </SidebarItem>
               ))}
             </SidebarSection>
@@ -118,7 +130,12 @@ const SidebarContent = () => {
               className={section.className}
             >
               {section.icon && section.icon}
-              <SidebarLabel>{section.label}</SidebarLabel>
+              <SidebarLabel className={`flex gap-2 items-center`}>
+                {section.label}
+                {section.needAuth && !isAuth && (
+                  <FaLock className={`text-primary-600`} size={10} />
+                )}
+              </SidebarLabel>
             </SidebarItem>
           ),
         )}

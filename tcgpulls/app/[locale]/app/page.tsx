@@ -1,10 +1,10 @@
 import { Metadata } from "next";
-import { Link } from "@/components/catalyst-ui/link";
 import Card from "@/components/misc/Card";
 import { getTranslations } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
 import getTcgLanguage from "@/utils/getTcgLanguage";
 import Header from "@/components/misc/Header";
+import { Link } from "@/i18n/routing";
 
 const AppPage = async () => {
   const tcgLang = await getTcgLanguage();

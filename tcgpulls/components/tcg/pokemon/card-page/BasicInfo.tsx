@@ -9,7 +9,7 @@ import { Badge } from "@/components/catalyst-ui/badge";
 import { HiHeart, HiStar } from "react-icons/hi2";
 import { HiHashtag } from "react-icons/hi";
 import { getTranslations } from "next-intl/server";
-import CardPageAddToCollection from "@/components/tcg/pokemon/misc/CardPageAddToCollection";
+import CardPageAddToCollection from "@/components/tcg/pokemon/card-page/CardPageAddToCollection";
 import { BsStars } from "react-icons/bs";
 
 type Props = {
@@ -36,7 +36,7 @@ const BasicInfo = async ({ card, tcgLang }: Props) => {
           {set?.name} - {set?.series}
         </span>
       </p>
-      <h1 className="flex items-center gap-4 text-3xl font-bold mb-2">
+      <h1 className="flex items-center gap-4 text-3xl font-bold mb-6">
         {types &&
           types.length > 0 &&
           types.map((type: PokemonEnergyT) => (

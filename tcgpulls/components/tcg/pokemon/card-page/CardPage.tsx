@@ -2,21 +2,21 @@ import Header from "@/components/misc/Header";
 import { UrlParamsT } from "@/types/Params";
 import { getPokemonCard } from "@/lib/tcg/pokemon/getPokemonCard";
 import { getTranslations } from "next-intl/server";
-import AbilitiesList from "@/components/tcg/pokemon/misc/AbilitiesList";
-import AttacksList from "@/components/tcg/pokemon/misc/AttacksList";
-import WeaknessesList from "@/components/tcg/pokemon/misc/WeaknessesList";
-import BasicInfo from "@/components/tcg/pokemon/misc/BasicInfo";
-import FlavorText from "@/components/tcg/pokemon/misc/FlavorText";
-import ArtistInfo from "@/components/tcg/pokemon/misc/ArtistInfo";
-import CardImage from "@/components/tcg/pokemon/misc/CardImage";
-import ResistancesList from "@/components/tcg/pokemon/misc/ResistancesList";
-import RetreatCost from "@/components/tcg/pokemon/misc/RetreatCost";
+import AbilitiesList from "@/components/tcg/pokemon/card-page/AbilitiesList";
+import AttacksList from "@/components/tcg/pokemon/card-page/AttacksList";
+import WeaknessesList from "@/components/tcg/pokemon/card-page/WeaknessesList";
+import BasicInfo from "@/components/tcg/pokemon/card-page/BasicInfo";
+import FlavorText from "@/components/tcg/pokemon/card-page/FlavorText";
+import ArtistInfo from "@/components/tcg/pokemon/card-page/ArtistInfo";
+import CardImage from "@/components/tcg/pokemon/card-page/CardImage";
+import ResistancesList from "@/components/tcg/pokemon/card-page/ResistancesList";
+import RetreatCost from "@/components/tcg/pokemon/card-page/RetreatCost";
 import { Divider } from "@/components/catalyst-ui/divider";
 import { GET_USER_POKEMON_COLLECTION_ITEMS_FOR_CARD } from "@/graphql/tcg/pokemon/collection/queries";
 import { OrderDirection, PokemonCollectionItem } from "@/graphql/generated";
 import { auth } from "@/auth";
 import createApolloClient from "@/lib/clients/createApolloClient";
-import CollectionDetails from "@/components/tcg/pokemon/misc/CollectionDetails";
+import CollectionDetails from "@/components/tcg/pokemon/collection/CollectionDetails";
 
 interface Props {
   params: UrlParamsT;
@@ -27,11 +27,9 @@ const PokemonCardPage = async ({ params }: Props) => {
   const session = await auth();
   const t = await getTranslations();
 
-  if (!session?.user?.id) {
-    return <p>{t("common.auth.not-authorized")}</p>;
-  }
-
-  const client = createApolloClient(session.user.id);
+  const client = createApolloClient(
+    !session?.user?.id ? session?.user?.id : undefined,
+  );
 
   try {
     const card = await getPokemonCard(cardSlug);
