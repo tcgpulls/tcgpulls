@@ -20,7 +20,6 @@ import { createAuth } from "@keystone-6/auth";
 import { statelessSessions } from "@keystone-6/core/session";
 import { SessionStrategy } from "@keystone-6/core/types";
 import { jwtVerify } from "jose";
-import serverLog from "./utils/serverLog";
 import { CmsUserRoles } from "./types/CmsUser";
 
 // withAuth is a function we can use to wrap our base configuration
@@ -82,7 +81,6 @@ const session: SessionStrategy<MySession> = {
           data: payload,
         };
       } catch (err) {
-        serverLog("JWT verification failed:", err);
         return undefined;
       }
     }

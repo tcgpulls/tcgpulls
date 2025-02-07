@@ -22,6 +22,10 @@
     "previous": "Previous",
     "back": "Back",
     "return-to-home": "Return to Home",
+    "sort-by": "Sort by",
+    "order-by": "Order by",
+    "order-by-asc": "Asc.",
+    "order-by-desc": "Desc.",
     "home": "Home",
     "profile": "Profile",
     "tcg": "Trading Card Games",
@@ -250,10 +254,14 @@
   },
   "sets-page": {
     "title": "Sets",
+    "no-sets": "No sets found.",
     "metadata": {
       "title": "Sets - tcgpulls.xyz",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     }
+  },
+  "cards-page": {
+    "no-cards": "No cards found."
   },
   "card-page": {
     "not-found": "Card not found",

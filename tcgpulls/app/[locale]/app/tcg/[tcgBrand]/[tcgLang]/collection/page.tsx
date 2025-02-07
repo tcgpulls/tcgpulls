@@ -1,44 +1,48 @@
 import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
-import { POKEMON_CARDS_PAGE_SIZE } from "@/constants/tcg/pokemon";
+import {
+  POKEMON_COLLECTION_PAGE_SIZE,
+  POKEMON_COLLECTION_SORT_OPTIONS,
+} from "@/constants/tcg/pokemon";
 import { OrderDirection } from "@/graphql/generated";
 import { getTranslations } from "next-intl/server";
 import { GET_USER_POKEMON_COLLECTION_ITEMS } from "@/graphql/tcg/pokemon/collection/queries";
 import Header from "@/components/misc/Header";
 import { auth } from "@/auth";
 import createApolloClient from "@/lib/clients/createApolloClient";
-import Spinner from "@/components/misc/Spinner";
 import CollectionList from "@/components/tcg/CollectionList";
 import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
 import { RedirectReasons } from "@/types/Redirect";
+import { Divider } from "@/components/catalyst-ui/divider";
+import buildCollectionsOrderBy from "@/utils/buildCollectionsOrderBy";
 
 interface Props {
   params: UrlParamsT;
 }
 
-const CollectionCardsPage = async ({ params }: Props) => {
+export default async function CollectionCardsPage({ params }: Props) {
   const { locale, setId, tcgLang, tcgBrand } = await params;
   const redirectReasonParam = `redirectReason=${RedirectReasons.NotAuthenticated}`;
   await requireAuthOrRedirect({
     redirectRoute: `/${locale}/app/tcg/${tcgBrand}/${tcgLang}/collection?${redirectReasonParam}`,
   });
-  const session = await auth();
 
-  // Validate
+  // 1) Validate & Auth
   if (!locale || !tcgBrand || !tcgLang) {
     notFound();
   }
-
+  const session = await auth();
   const userId = session?.user?.id;
-
   if (!userId) {
+    notFound(); // or handle differently if needed
   }
 
+  // 2) Create Apollo client for this user
   const client = createApolloClient(userId);
 
+  // 3) Build the SSR query variables
   const whereFilter = {
     user: { id: { equals: userId } },
-    // only if you want to filter by set:
     card: {
       set: {
         tcgSetId: { equals: setId },
@@ -47,55 +51,55 @@ const CollectionCardsPage = async ({ params }: Props) => {
     },
   };
 
-  const { data, loading, error } = await client.query({
+  // 4) Choose a default sort
+  const sortBy = POKEMON_COLLECTION_SORT_OPTIONS[0];
+  const sortOrder = OrderDirection.Desc;
+  const orderBy = buildCollectionsOrderBy(sortBy, sortOrder);
+
+  // 5) Fetch initial items
+  const { data, error } = await client.query({
     query: GET_USER_POKEMON_COLLECTION_ITEMS,
     variables: {
       where: whereFilter,
-      orderBy: [{ acquiredAt: OrderDirection.Desc }], // or "addedAt", etc.
-      take: POKEMON_CARDS_PAGE_SIZE,
+      orderBy,
+      take: POKEMON_COLLECTION_PAGE_SIZE,
       skip: 0,
     },
   });
 
-  if (loading) {
-    return (
-      <div>
-        <Spinner />
-      </div>
-    );
-  }
-
   if (error) {
-    return <p>Error fetching cards: {error.message}</p>;
+    return <p>Error fetching collectionItems: {error.message}</p>;
   }
 
-  const cards = data?.pokemonCollectionItems;
+  const collectionItems = data?.pokemonCollectionItems || [];
 
-  if (!cards || cards.length === 0) {
-    return <p>No cards found in your collection for this set.</p>;
+  // 6) If no items, bail out
+  if (collectionItems.length === 0) {
+    return <p>No collectionItems found in your collection for this set.</p>;
   }
 
+  // 7) SSR done—render a header + the client component
   const t = await getTranslations();
 
   return (
     <>
       <Header
-        title={t(`common.collection`)}
+        title={t(`common.tcg-pokemon-short`)}
         size="small"
         withBackButton
-        previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}`}
+        previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}`}
       />
+      <Divider />
       <CollectionList
-        key={`acquiredAt-${OrderDirection.Asc}`}
-        initialItems={cards}
+        // Force a unique key per default sort (optional)
+        key={`${sortBy}-${sortOrder}`}
+        initialItems={collectionItems}
         tcgLang={tcgLang}
-        userId={userId!}
+        userId={userId}
         setId={setId}
-        sortBy="acquiredAt"
-        sortOrder={OrderDirection.Desc}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
       />
     </>
   );
-};
-
-export default CollectionCardsPage;
+}

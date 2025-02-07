@@ -20,12 +20,14 @@ import { Pagination } from "@/components/navigation/Pagination";
 import { useSession } from "next-auth/react";
 import CollectionDetailsNotLoggedIn from "@/components/tcg/pokemon/collection/CollectionDetailsNotLoggedIn";
 import Spinner from "@/components/misc/Spinner";
+import CardPageAddToCollection from "../card-page/CardPageAddToCollection";
 
 type Props = {
+  cardId: string;
   collectionItems: PokemonCollectionItem[];
 };
 
-export default function CollectionDetails({ collectionItems }: Props) {
+export default function CollectionDetails({ cardId, collectionItems }: Props) {
   const t = useTranslations();
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
@@ -97,9 +99,14 @@ export default function CollectionDetails({ collectionItems }: Props) {
         setIsOpen={setIsRemoveDialogOpen}
       />
 
-      <h4 className="text-2xl font-semibold mb-4">
-        {t("card-page.collection")}{" "}
-        {userId && collectionItems.length > 0 && `(${collectionItems.length})`}
+      <h4 className="text-2xl font-semibold mb-4 flex gap-2 justify-between">
+        <span>
+          {t("card-page.collection")}{" "}
+          {userId &&
+            collectionItems.length > 0 &&
+            `(${collectionItems.length})`}
+        </span>
+        <CardPageAddToCollection cardId={cardId} />
       </h4>
       <div>
         <div
@@ -193,14 +200,18 @@ export default function CollectionDetails({ collectionItems }: Props) {
                       </TableRow>
                     );
                   })}
-                  {collectionItems.length < 1 && (
-                    <TableRow className={`flex justify-center w-full p-4`}>
-                      {t("card-page.collection-empty")}
-                    </TableRow>
-                  )}
                 </TableBody>
               </Table>
 
+              {collectionItems.length < 1 && (
+                <div
+                  className={`flex w-full  justify-center items-center grow`}
+                >
+                  <p className={`text font-medium`}>
+                    {t("card-page.collection-empty")}
+                  </p>
+                </div>
+              )}
               {totalPages > 1 && (
                 <div className={`mt-2`}>
                   <Pagination

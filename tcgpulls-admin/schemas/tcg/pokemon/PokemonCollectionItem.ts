@@ -83,6 +83,8 @@ export const PokemonCollectionItem = list({
       ui: {
         hideCreate: true,
       },
+      isOrderable: true,
+      isFilterable: true,
     }),
     quantity: integer({
       defaultValue: 1,

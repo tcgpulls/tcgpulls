@@ -2782,7 +2782,7 @@ export type GetUserPokemonCollectionItemsQueryVariables = Exact<{
 }>;
 
 
-export type GetUserPokemonCollectionItemsQuery = { __typename?: 'Query', pokemonCollectionItems?: Array<{ __typename?: 'PokemonCollectionItem', id: string, acquiredAt?: any | null, card?: { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, variant?: string | null, name?: string | null, imageSmallStorageUrl?: string | null, imageSmallApiUrl?: string | null } | null }> | null };
+export type GetUserPokemonCollectionItemsQuery = { __typename?: 'Query', pokemonCollectionItems?: Array<{ __typename?: 'PokemonCollectionItem', id: string, acquiredAt?: any | null, price?: any | null, quantity?: number | null, condition?: string | null, gradingCompany?: string | null, gradingRating?: string | null, card?: { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, variant?: string | null, name?: string | null, imageSmallStorageUrl?: string | null, imageSmallApiUrl?: string | null } | null }> | null };
 
 export type GetUserPokemonCollectionItemsForCardQueryVariables = Exact<{
   where: PokemonCollectionItemWhereInput;
@@ -3004,6 +3004,11 @@ export const GetUserPokemonCollectionItemsDocument = gql`
   ) {
     id
     acquiredAt
+    price
+    quantity
+    condition
+    gradingCompany
+    gradingRating
     card {
       id
       tcgSetId

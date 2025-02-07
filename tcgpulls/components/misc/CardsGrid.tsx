@@ -14,7 +14,7 @@ const CardsGrid = ({ children }: Props) => {
         sm:grid-cols-3
         md:grid-cols-4
         xl:grid-cols-5
-        2xl:grid-cols-7
+        2xl:grid-cols-6
         pb-12
       `}
     >

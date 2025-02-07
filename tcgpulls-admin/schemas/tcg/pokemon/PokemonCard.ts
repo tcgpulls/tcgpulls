@@ -37,7 +37,11 @@ const PokemonCard = list({
     // ----------------------------
     // EDITABLE FIELDS
     // ----------------------------
-    name: text({ validation: { isRequired: true } }),
+    name: text({
+      validation: { isRequired: true },
+      isOrderable: true,
+      isFilterable: true,
+    }),
     displayName: virtual({
       field: graphql.field({
         type: graphql.String,
