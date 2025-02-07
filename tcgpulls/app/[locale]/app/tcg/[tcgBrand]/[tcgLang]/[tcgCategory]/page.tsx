@@ -15,19 +15,19 @@ import {
 } from "@/constants/tcg/pokemon";
 import Header from "@/components/misc/Header";
 import createApolloClient from "@/lib/clients/createApolloClient";
+import { Divider } from "@/components/catalyst-ui/divider";
 
 interface Props {
   params: UrlParamsT;
 }
 
 const TcgTypeSetsPage = async ({ params }: Props) => {
-  const { locale, tcgBrand, tcgLang, tcgCategory } = await params;
+  const { tcgBrand, tcgLang, tcgCategory } = await params;
   const client = createApolloClient();
   const t = await getTranslations();
 
   const sortBy = POKEMON_SETS_SORT_OPTIONS[0];
   const sortOrder: OrderDirection = OrderDirection.Desc;
-  const isShowNonBoosterPacks = tcgCategory === "sets";
 
   if (!tcgBrand || !tcgCategory || !tcgLang) {
     notFound();
@@ -42,7 +42,7 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
       where: {
         language: { equals: tcgLang },
         ...(tcgCategory === "booster-packs" && {
-          isBoosterPack: { equals: !isShowNonBoosterPacks },
+          isBoosterPack: { equals: true },
         }),
       },
       orderBy: [{ [sortBy]: sortOrder }],
@@ -52,21 +52,26 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
   });
 
   if (error) {
-    return <p>Error: {error.message}</p>;
+    return (
+      <p>
+        ${t("common.error")}: {error.message}
+      </p>
+    );
   }
 
   if (!data?.pokemonSets) {
-    return <p>No sets found</p>;
+    return <p>{t("sets-page.no-sets")}</p>;
   }
 
   return (
     <>
       <Header
-        title={t(`tcg.categories`)}
+        title={t(`common.tcg-pokemon-short`)}
         size={`small`}
         withBackButton
-        previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}`}
+        previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}`}
       />
+      <Divider />
       <SetsList
         key={`${sortBy}-${sortOrder}`}
         initialSets={data.pokemonSets}

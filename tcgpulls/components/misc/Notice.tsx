@@ -20,7 +20,7 @@ const icons: { [key: string]: ReactNode } = {
 const bgClasses: Record<NoticeT["type"], string> = {
   success: "bg-success-600",
   error: "bg-error-600",
-  warning: "bg-warning-600",
+  warning: "bg-warning-500",
   info: "bg-info-600",
 };
 

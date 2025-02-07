@@ -23,7 +23,7 @@ interface Props {
 }
 
 const PokemonCardPage = async ({ params }: Props) => {
-  const { locale, tcgBrand, tcgCategory, tcgLang, cardSlug } = await params;
+  const { tcgBrand, tcgCategory, tcgLang, cardSlug } = await params;
   const session = await auth();
   const t = await getTranslations();
 
@@ -70,7 +70,7 @@ const PokemonCardPage = async ({ params }: Props) => {
           title={`${set?.name}`}
           size="small"
           withBackButton
-          previousUrl={`/${locale}/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${tcgSetId}`}
+          previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${tcgSetId}`}
         />
 
         {/* Main Content Container */}
@@ -106,7 +106,10 @@ const PokemonCardPage = async ({ params }: Props) => {
           </div>
         </div>
         <div className={`py-8`}>
-          <CollectionDetails collectionItems={collectionItems} />
+          <CollectionDetails
+            cardId={card.id}
+            collectionItems={collectionItems}
+          />
         </div>
       </>
     );

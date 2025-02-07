@@ -1,21 +1,21 @@
 "use client";
 
-import React from "react";
-import SetCard from "@/components/tcg/SetCard";
+import React, { useEffect, useState } from "react";
 import InfiniteList from "@/components/misc/InfiniteList";
-import {
-  TcgBrandT,
-  TcgCategoryT,
-  TcgLangT,
-  TcgSortByT,
-  TcgSortOrderT,
-} from "@/types/Tcg";
-import {
-  PokemonSetItemFragment,
-  useGetPokemonSetsQuery,
-} from "@/graphql/generated";
-import { POKEMON_SETS_PAGE_SIZE } from "@/constants/tcg/pokemon";
+import SetCard from "@/components/tcg/SetCard";
 import SetsGrid from "@/components/misc/SetsGrid";
+
+import {
+  useGetPokemonSetsQuery,
+  OrderDirection,
+  PokemonSetItemFragment,
+} from "@/graphql/generated";
+import { TcgBrandT, TcgCategoryT, TcgLangT, TcgSetSortByT } from "@/types/Tcg";
+import {
+  POKEMON_SETS_PAGE_SIZE,
+  POKEMON_SETS_SORT_OPTIONS,
+} from "@/constants/tcg/pokemon";
+import { FilterBar } from "@/components/navigation/FilterBar";
 import Spinner from "@/components/misc/Spinner";
 
 interface SetsListProps {
@@ -23,18 +23,29 @@ interface SetsListProps {
   tcgLang: TcgLangT;
   tcgBrand: TcgBrandT;
   tcgCategory: TcgCategoryT;
-  sortBy: TcgSortByT;
-  sortOrder: TcgSortOrderT;
+  sortBy: TcgSetSortByT;
+  sortOrder: OrderDirection;
 }
 
-export function SetsList({
+export default function SetsList({
   initialSets,
   tcgLang,
   tcgBrand,
   tcgCategory,
-  sortBy,
-  sortOrder,
+  sortBy: initialSortBy,
+  sortOrder: initialSortOrder,
 }: SetsListProps) {
+  // 1) Local state for sorting
+  const [sortBy, setSortBy] = useState<string>(initialSortBy);
+  const [sortOrder, setSortOrder] = useState<OrderDirection>(initialSortOrder);
+
+  // 2) Force re-mount of InfiniteList on changes
+  const [resetKey, setResetKey] = useState(0);
+  useEffect(() => {
+    setResetKey((prev) => prev + 1);
+  }, [sortBy, sortOrder]);
+
+  // 3) Apollo query
   const { data, loading, fetchMore } = useGetPokemonSetsQuery({
     variables: {
       where: {
@@ -49,6 +60,12 @@ export function SetsList({
     },
   });
 
+  // 4) Our current sets
+  // If data is undefined on first render, fallback to initialSets
+  // but once data arrives, prefer data from the query.
+  const sets = data?.pokemonSets?.length ? data?.pokemonSets : initialSets;
+
+  // 5) fetchMore for infinite scroll
   const fetchMoreSets = async (offset: number) => {
     const { data: moreData } = await fetchMore({
       variables: { skip: offset },
@@ -56,30 +73,41 @@ export function SetsList({
     return moreData?.pokemonSets ?? [];
   };
 
-  if (loading) {
-    return <Spinner />;
-  }
-
-  if (!data?.pokemonSets) {
-    return <p>No sets found</p>;
-  }
-
+  // 6) Rendering
   return (
-    <SetsGrid>
-      <InfiniteList<PokemonSetItemFragment>
-        initialItems={initialSets}
-        fetchMore={fetchMoreSets}
-        pageSize={POKEMON_SETS_PAGE_SIZE}
-        renderItem={(set) => (
-          <SetCard
-            key={set.id}
-            set={set}
-            href={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${set.tcgSetId}`}
-          />
-        )}
+    <div className={`pt-2`}>
+      <FilterBar
+        sortBy={sortBy}
+        onSortByChange={setSortBy}
+        sortOrder={sortOrder}
+        onSortOrderChange={setSortOrder}
+        sortOptions={POKEMON_SETS_SORT_OPTIONS} // e.g. ["releaseDate", "name"]
       />
-    </SetsGrid>
+
+      {loading ? (
+        <div className={`w-full flex items-center justify-center py-36`}>
+          <Spinner />
+        </div>
+      ) : (
+        <SetsGrid>
+          <InfiniteList<PokemonSetItemFragment>
+            key={resetKey}
+            // Pass current sets from the query (or SSR fallback)
+            initialItems={sets}
+            fetchMore={fetchMoreSets}
+            pageSize={POKEMON_SETS_PAGE_SIZE}
+            renderItem={(item) => {
+              return (
+                <SetCard
+                  key={item.id}
+                  set={item}
+                  href={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${item.tcgSetId}`}
+                />
+              );
+            }}
+          />
+        </SetsGrid>
+      )}
+    </div>
   );
 }
-
-export default SetsList;

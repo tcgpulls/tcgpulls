@@ -14,9 +14,12 @@ export const GET_USER_POKEMON_COLLECTION_ITEMS = gql`
       skip: $skip
     ) {
       id
-      # The user’s collection-specific fields:
       acquiredAt
-      # or “addedAt,” “condition,” etc.
+      price
+      quantity
+      condition
+      gradingCompany
+      gradingRating
 
       # Include nested card data
       card {

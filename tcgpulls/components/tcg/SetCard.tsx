@@ -15,7 +15,7 @@ type Props = {
 const SetCard = ({ set, href }: Props) => {
   return (
     <Link href={href}>
-      <Card isClickable={true} className={`p-4`}>
+      <Card isClickable={true} className={`p-8`}>
         <Image
           src={
             set.logoStorageUrl
