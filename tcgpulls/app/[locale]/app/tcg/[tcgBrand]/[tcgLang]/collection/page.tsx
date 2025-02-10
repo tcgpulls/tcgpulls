@@ -73,11 +73,6 @@ export default async function CollectionCardsPage({ params }: Props) {
 
   const collectionItems = data?.pokemonCollectionItems || [];
 
-  // 6) If no items, bail out
-  if (collectionItems.length === 0) {
-    return <p>No collectionItems found in your collection for this set.</p>;
-  }
-
   // 7) SSR done—render a header + the client component
   const t = await getTranslations();
 
@@ -95,6 +90,7 @@ export default async function CollectionCardsPage({ params }: Props) {
         key={`${sortBy}-${sortOrder}`}
         initialItems={collectionItems}
         tcgLang={tcgLang}
+        tcgBrand={tcgBrand}
         userId={userId}
         setId={setId}
         sortBy={sortBy}

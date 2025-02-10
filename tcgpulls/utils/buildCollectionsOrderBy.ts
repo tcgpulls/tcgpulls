@@ -14,22 +14,10 @@ export default function buildCollectionsOrderBy(
     sortBy = POKEMON_COLLECTION_SORT_OPTIONS[0];
   }
 
-  if (sortBy.startsWith("card.")) {
-    // e.g. "card.name" => subField = "name"
-    const subField = sortBy.slice("card.".length);
-    return [
-      {
-        card: {
-          [subField]: sortOrder,
-        },
-      } as unknown as PokemonCollectionItemOrderByInput,
-    ];
-  }
-
   // top-level field
   return [
     {
       [sortBy]: sortOrder,
-    } as unknown as PokemonCollectionItemOrderByInput,
+    },
   ];
 }

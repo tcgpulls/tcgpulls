@@ -5,7 +5,7 @@ import { Select } from "@/components/catalyst-ui/select";
 import { OrderDirection } from "@/graphql/generated";
 import { Field, Label } from "@/components/catalyst-ui/fieldset";
 import { useTranslations } from "use-intl";
-import camelCaseToWords from "@/utils/camelCaseToWords";
+import slugifyText from "@/utils/slugifyText";
 
 interface FilterBarProps {
   sortBy: string;
@@ -14,8 +14,6 @@ interface FilterBarProps {
   onSortOrderChange: (newSortOrder: OrderDirection) => void;
   sortOptions: string[];
 }
-
-const replaceDotWithColon = (str: string) => str.replace(".", ": ");
 
 export function FilterBar({
   sortBy,
@@ -31,7 +29,7 @@ export function FilterBar({
       <div className="flex gap-12 mb-4 items-center">
         <Field className={`flex gap-4 items-center`}>
           <Label className={`whitespace-nowrap mt-2`}>
-            {t("common.sort-by")}:
+            {t("filter-bar.sort-by")}:
           </Label>
           <Select
             value={sortBy}
@@ -40,7 +38,7 @@ export function FilterBar({
             {sortOptions.map((option) => (
               <option key={option} value={option}>
                 {/* Convert something like "releaseDate" to user-friendly text */}
-                {camelCaseToWords(replaceDotWithColon(option))}
+                {t(`filter-bar.${slugifyText(option)}`)}
               </option>
             ))}
           </Select>
@@ -48,7 +46,7 @@ export function FilterBar({
 
         <Field className={`flex gap-4 items-center`}>
           <Label className={`whitespace-nowrap mt-2`}>
-            {t("common.order-by")}:
+            {t("filter-bar.order-by")}:
           </Label>
           <Select
             value={sortOrder}
@@ -57,10 +55,10 @@ export function FilterBar({
             }
           >
             <option value={OrderDirection.Desc}>
-              {t("common.order-by-desc")}
+              {t("filter-bar.order-by-desc")}
             </option>
             <option value={OrderDirection.Asc}>
-              {t("common.order-by-asc")}
+              {t("filter-bar.order-by-asc")}
             </option>
           </Select>
         </Field>

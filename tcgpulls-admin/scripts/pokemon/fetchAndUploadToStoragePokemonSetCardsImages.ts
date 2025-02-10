@@ -18,9 +18,9 @@ const onlyMissingLocals = args.includes("--only-missing-locals");
 
 // Pagination + concurrency
 const BATCH_SIZE = 500;
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 5;
 const DELAY_BETWEEN_RETRIES_MS = 500;
-const CONCURRENCY_LIMIT = 10;
+const CONCURRENCY_LIMIT = 5;
 
 const limit = pLimit(CONCURRENCY_LIMIT);
 

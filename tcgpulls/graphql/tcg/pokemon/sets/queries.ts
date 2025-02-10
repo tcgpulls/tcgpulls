@@ -5,9 +5,14 @@ export const PokemonSetItem = gql`
     id
     tcgSetId
     name
+    series
+    language
     releaseDate
+    ptcgoCode
     logoApiUrl
     logoStorageUrl
+    total
+    printedTotal
   }
 `;
 

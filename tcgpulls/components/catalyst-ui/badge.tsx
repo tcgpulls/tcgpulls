@@ -10,7 +10,7 @@ const colors = {
   secondary:
     "bg-secondary-600/10 text-secondary-700 group-data-[hover]:bg-secondary-600/20 dark:bg-white/5 dark:text-secondary-400 dark:group-data-[hover]:bg-white/10",
   accent:
-    "bg-accent-600/10 text-accent-700 group-data-[hover]:bg-accent-600/20 dark:bg-white/5 dark:text-accent-400 dark:group-data-[hover]:bg-white/10",
+    "bg-accent-600/10 text-accent-700 group-data-[hover]:bg-accent-600/20 dark:bg-primary-700 dark:text-accent-400 dark:group-data-[hover]:bg-white/10",
   red: "bg-red-500/15 text-red-700 group-data-[hover]:bg-red-500/25 dark:bg-red-500/10 dark:text-red-400 dark:group-data-[hover]:bg-red-500/20",
   orange:
     "bg-orange-500/15 text-orange-700 group-data-[hover]:bg-orange-500/25 dark:bg-orange-500/10 dark:text-orange-400 dark:group-data-[hover]:bg-orange-500/20",
