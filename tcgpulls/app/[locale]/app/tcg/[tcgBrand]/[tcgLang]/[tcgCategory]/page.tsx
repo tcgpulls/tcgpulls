@@ -1,4 +1,4 @@
-import SetsList from "@/components/tcg/SetsList";
+import SetsList from "@/components/tcg/pokemon/sets-page/SetsList";
 import { UrlParamsT } from "@/types/Params";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -15,7 +15,6 @@ import {
 } from "@/constants/tcg/pokemon";
 import Header from "@/components/misc/Header";
 import createApolloClient from "@/lib/clients/createApolloClient";
-import { Divider } from "@/components/catalyst-ui/divider";
 
 interface Props {
   params: UrlParamsT;
@@ -71,7 +70,6 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
         withBackButton
         previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}`}
       />
-      <Divider />
       <SetsList
         key={`${sortBy}-${sortOrder}`}
         initialSets={data.pokemonSets}

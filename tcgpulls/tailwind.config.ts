@@ -91,6 +91,9 @@ export default {
       fontFamily: {
         sans: ["InterVariable", ...defaultTheme.fontFamily.sans],
       },
+      borderRadius: {
+        card: "20px",
+      },
       screens: {
         xs: "480px", // ≥480px
         sm: "640px", // ≥640px

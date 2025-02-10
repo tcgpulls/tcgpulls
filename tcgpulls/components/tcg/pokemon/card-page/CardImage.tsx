@@ -18,7 +18,7 @@ const CardImage = ({ card }: Props) => {
       alt={`${name} card`}
       width={460}
       height={586}
-      className="object-contain rounded-3xl shadow-md"
+      className="object-contain rounded-card shadow-md"
     />
   );
 };

@@ -854,6 +854,7 @@ type PokemonCollectionItem {
   id: ID!
   user: User
   card: PokemonCard
+  cardName: String
   quantity: Int
   price: Decimal
   condition: String
@@ -876,6 +877,7 @@ input PokemonCollectionItemWhereInput {
   id: IDFilter
   user: UserWhereInput
   card: PokemonCardWhereInput
+  cardName: StringFilter
   quantity: IntFilter
   price: DecimalNullableFilter
   condition: StringNullableFilter
@@ -898,6 +900,7 @@ input DecimalNullableFilter {
 
 input PokemonCollectionItemOrderByInput {
   id: OrderDirection
+  cardName: OrderDirection
   quantity: OrderDirection
   price: OrderDirection
   condition: OrderDirection
@@ -910,6 +913,7 @@ input PokemonCollectionItemOrderByInput {
 input PokemonCollectionItemUpdateInput {
   user: UserRelateToOneForUpdateInput
   card: PokemonCardRelateToOneForUpdateInput
+  cardName: String
   quantity: Int
   price: Decimal
   condition: String
@@ -933,6 +937,7 @@ input PokemonCollectionItemUpdateArgs {
 input PokemonCollectionItemCreateInput {
   user: UserRelateToOneForCreateInput
   card: PokemonCardRelateToOneForCreateInput
+  cardName: String
   quantity: Int
   price: Decimal
   condition: String

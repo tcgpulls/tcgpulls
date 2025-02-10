@@ -15,9 +15,8 @@ import { GET_POKEMON_CARDS } from "@/graphql/tcg/pokemon/cards/queries";
 import { GET_POKEMON_SET } from "@/graphql/tcg/pokemon/sets/queries";
 import createApolloClient from "@/lib/clients/createApolloClient";
 import { getTranslations } from "next-intl/server";
-import CardsList from "@/components/tcg/CardsList";
+import CardsList from "@/components/tcg/pokemon/cards-page/CardsList";
 import Header from "@/components/misc/Header";
-import { Divider } from "@/components/catalyst-ui/divider";
 
 interface Props {
   params: UrlParamsT;
@@ -29,7 +28,7 @@ export default async function SetCardsPage({ params }: Props) {
   const t = await getTranslations();
 
   // Validate
-  if (!setId || !tcgBrand || !tcgLang) {
+  if (!setId || !tcgBrand || !tcgLang || !tcgCategory) {
     notFound();
   }
 
@@ -56,7 +55,7 @@ export default async function SetCardsPage({ params }: Props) {
   }
 
   const sortBy = POKEMON_CARDS_SORT_OPTIONS[0]; // default sort
-  const sortOrder: OrderDirection = OrderDirection.Asc; // default order
+  const sortOrder: OrderDirection = OrderDirection.Desc; // default order
 
   // 3) Fetch initial cards with your default sorting
   const { data: cardsData, error: cardsError } = await client.query<
@@ -103,13 +102,14 @@ export default async function SetCardsPage({ params }: Props) {
         withBackButton
         previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}`}
       />
-      <Divider />
       <CardsList
         // The initial SSR data
         initialCards={cardsData.pokemonCards}
         // IDs and sort info
+        tcgBrand={tcgBrand}
         tcgLang={tcgLang}
-        setId={setId}
+        tcgCategory={tcgCategory}
+        set={setData.pokemonSet!}
         sortBy={sortBy}
         sortOrder={sortOrder}
       />

@@ -1811,6 +1811,7 @@ export type PokemonCollectionItem = {
   __typename?: 'PokemonCollectionItem';
   acquiredAt?: Maybe<Scalars['DateTime']['output']>;
   card?: Maybe<PokemonCard>;
+  cardName?: Maybe<Scalars['String']['output']>;
   condition?: Maybe<Scalars['String']['output']>;
   gradingCompany?: Maybe<Scalars['String']['output']>;
   gradingRating?: Maybe<Scalars['String']['output']>;
@@ -1824,6 +1825,7 @@ export type PokemonCollectionItem = {
 export type PokemonCollectionItemCreateInput = {
   acquiredAt?: InputMaybe<Scalars['DateTime']['input']>;
   card?: InputMaybe<PokemonCardRelateToOneForCreateInput>;
+  cardName?: InputMaybe<Scalars['String']['input']>;
   condition?: InputMaybe<Scalars['String']['input']>;
   gradingCompany?: InputMaybe<Scalars['String']['input']>;
   gradingRating?: InputMaybe<Scalars['String']['input']>;
@@ -1841,6 +1843,7 @@ export type PokemonCollectionItemManyRelationFilter = {
 
 export type PokemonCollectionItemOrderByInput = {
   acquiredAt?: InputMaybe<OrderDirection>;
+  cardName?: InputMaybe<OrderDirection>;
   condition?: InputMaybe<OrderDirection>;
   gradingCompany?: InputMaybe<OrderDirection>;
   gradingRating?: InputMaybe<OrderDirection>;
@@ -1870,6 +1873,7 @@ export type PokemonCollectionItemUpdateArgs = {
 export type PokemonCollectionItemUpdateInput = {
   acquiredAt?: InputMaybe<Scalars['DateTime']['input']>;
   card?: InputMaybe<PokemonCardRelateToOneForUpdateInput>;
+  cardName?: InputMaybe<Scalars['String']['input']>;
   condition?: InputMaybe<Scalars['String']['input']>;
   gradingCompany?: InputMaybe<Scalars['String']['input']>;
   gradingRating?: InputMaybe<Scalars['String']['input']>;
@@ -1885,6 +1889,7 @@ export type PokemonCollectionItemWhereInput = {
   OR?: InputMaybe<Array<PokemonCollectionItemWhereInput>>;
   acquiredAt?: InputMaybe<DateTimeNullableFilter>;
   card?: InputMaybe<PokemonCardWhereInput>;
+  cardName?: InputMaybe<StringFilter>;
   condition?: InputMaybe<StringNullableFilter>;
   gradingCompany?: InputMaybe<StringNullableFilter>;
   gradingRating?: InputMaybe<StringNullableFilter>;
@@ -2782,7 +2787,7 @@ export type GetUserPokemonCollectionItemsQueryVariables = Exact<{
 }>;
 
 
-export type GetUserPokemonCollectionItemsQuery = { __typename?: 'Query', pokemonCollectionItems?: Array<{ __typename?: 'PokemonCollectionItem', id: string, acquiredAt?: any | null, price?: any | null, quantity?: number | null, condition?: string | null, gradingCompany?: string | null, gradingRating?: string | null, card?: { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, variant?: string | null, name?: string | null, imageSmallStorageUrl?: string | null, imageSmallApiUrl?: string | null } | null }> | null };
+export type GetUserPokemonCollectionItemsQuery = { __typename?: 'Query', pokemonCollectionItems?: Array<{ __typename?: 'PokemonCollectionItem', id: string, acquiredAt?: any | null, price?: any | null, quantity?: number | null, condition?: string | null, gradingCompany?: string | null, gradingRating?: string | null, card?: { __typename?: 'PokemonCard', id: string, tcgSetId?: string | null, tcgCardId?: string | null, number?: string | null, variant?: string | null, name?: string | null, rarity?: string | null, imageSmallStorageUrl?: string | null, imageSmallApiUrl?: string | null, imageLargeStorageUrl?: string | null, imageLargeApiUrl?: string | null, set?: { __typename?: 'PokemonSet', id: string, name?: string | null, series?: string | null } | null } | null }> | null };
 
 export type GetUserPokemonCollectionItemsForCardQueryVariables = Exact<{
   where: PokemonCollectionItemWhereInput;
@@ -2823,14 +2828,14 @@ export type RemoveCardFromCollectionMutationVariables = Exact<{
 
 export type RemoveCardFromCollectionMutation = { __typename?: 'Mutation', deletePokemonCollectionItem?: { __typename?: 'PokemonCollectionItem', id: string } | null };
 
-export type PokemonSetItemFragment = { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, logoStorageUrl?: string | null };
+export type PokemonSetItemFragment = { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, language?: string | null, releaseDate?: any | null, ptcgoCode?: string | null, logoApiUrl?: string | null, logoStorageUrl?: string | null, total?: number | null, printedTotal?: number | null };
 
 export type GetPokemonSetQueryVariables = Exact<{
   where: PokemonSetWhereUniqueInput;
 }>;
 
 
-export type GetPokemonSetQuery = { __typename?: 'Query', pokemonSet?: { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, logoStorageUrl?: string | null } | null };
+export type GetPokemonSetQuery = { __typename?: 'Query', pokemonSet?: { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, language?: string | null, releaseDate?: any | null, ptcgoCode?: string | null, logoApiUrl?: string | null, logoStorageUrl?: string | null, total?: number | null, printedTotal?: number | null } | null };
 
 export type GetPokemonSetsQueryVariables = Exact<{
   where: PokemonSetWhereInput;
@@ -2840,7 +2845,7 @@ export type GetPokemonSetsQueryVariables = Exact<{
 }>;
 
 
-export type GetPokemonSetsQuery = { __typename?: 'Query', pokemonSets?: Array<{ __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, releaseDate?: any | null, logoApiUrl?: string | null, logoStorageUrl?: string | null }> | null };
+export type GetPokemonSetsQuery = { __typename?: 'Query', pokemonSets?: Array<{ __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, language?: string | null, releaseDate?: any | null, ptcgoCode?: string | null, logoApiUrl?: string | null, logoStorageUrl?: string | null, total?: number | null, printedTotal?: number | null }> | null };
 
 export const PokemonCardItemFragmentDoc = gql`
     fragment PokemonCardItem on PokemonCard {
@@ -2906,9 +2911,14 @@ export const PokemonSetItemFragmentDoc = gql`
   id
   tcgSetId
   name
+  series
+  language
   releaseDate
+  ptcgoCode
   logoApiUrl
   logoStorageUrl
+  total
+  printedTotal
 }
     `;
 export const GetPokemonCardDocument = gql`
@@ -3013,10 +3023,19 @@ export const GetUserPokemonCollectionItemsDocument = gql`
       id
       tcgSetId
       tcgCardId
+      number
       variant
       name
+      rarity
       imageSmallStorageUrl
       imageSmallApiUrl
+      imageLargeStorageUrl
+      imageLargeApiUrl
+      set {
+        id
+        name
+        series
+      }
     }
   }
 }

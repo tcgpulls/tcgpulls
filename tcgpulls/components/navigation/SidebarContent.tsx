@@ -18,9 +18,9 @@ import { usePathname } from "@/i18n/routing";
 import useTcgLanguage from "@/hooks/context/useTcgLanguage";
 import AuthButton from "@/components/misc/AuthButton";
 import { HiHome, HiUserCircle } from "react-icons/hi";
-import { TbCardsFilled } from "react-icons/tb";
+import { TbCards, TbPokeball } from "react-icons/tb";
 import { BiGridAlt } from "react-icons/bi";
-import { MdCollectionsBookmark } from "react-icons/md";
+import { MdOutlineCollectionsBookmark } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
 import { useSession } from "next-auth/react";
 
@@ -52,12 +52,12 @@ const SidebarContent = () => {
     {
       href: "/app",
       label: t("home"),
-      icon: <HiHome size={20} />,
+      icon: <HiHome size={24} />,
     },
     {
       href: "/app/profile",
       label: t("profile"),
-      icon: <HiUserCircle size={20} />,
+      icon: <HiUserCircle size={24} />,
       needAuth: true,
     },
     {
@@ -66,26 +66,27 @@ const SidebarContent = () => {
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}`,
           label: t("tcg-pokemon-short"),
-          className: `pl-2`,
+          icon: <TbPokeball size={24} />,
+          className: ``,
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/collection`,
           label: t("collection"),
           className: "pl-4 text-xs! text-primary-300",
-          icon: <MdCollectionsBookmark />,
+          icon: <MdOutlineCollectionsBookmark size={16} />,
           needAuth: true,
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/booster-packs`,
           label: t("booster-packs"),
           className: "pl-4 text-xs! text-primary-300",
-          icon: <TbCardsFilled />,
+          icon: <TbCards size={16} />,
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/sets`,
           label: t("sets"),
           className: "pl-4 text-xs! text-primary-300",
-          icon: <BiGridAlt />,
+          icon: <BiGridAlt size={16} />,
         },
       ],
     },

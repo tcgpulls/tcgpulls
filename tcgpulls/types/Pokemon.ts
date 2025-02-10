@@ -31,3 +31,9 @@ export enum PokemonEnergyT {
   Colorless = "Colorless",
   Free = "Free",
 }
+
+export enum PokemonCardVariantT {
+  Normal = "normal",
+  Holo = "holo",
+  ReverseHolo = "reverseHolo",
+}

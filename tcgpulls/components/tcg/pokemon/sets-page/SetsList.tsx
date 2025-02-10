@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import InfiniteList from "@/components/misc/InfiniteList";
-import SetCard from "@/components/tcg/SetCard";
+import SetCard from "@/components/tcg/pokemon/sets-page/SetCard";
 import SetsGrid from "@/components/misc/SetsGrid";
 
 import {
@@ -17,6 +17,16 @@ import {
 } from "@/constants/tcg/pokemon";
 import { FilterBar } from "@/components/navigation/FilterBar";
 import Spinner from "@/components/misc/Spinner";
+import SetsHeader from "@/components/tcg/pokemon/sets-page/SetsHeader";
+
+// 1. Define a mapping for default sort orders for sets.
+// For example, you might want "releaseDate" to be descending (most recent first)
+// and "name" to be ascending (A → Z).
+const defaultSetSortOrders: Record<string, OrderDirection> = {
+  releaseDate: OrderDirection.Desc,
+  name: OrderDirection.Asc,
+  // Add additional sort keys as needed.
+};
 
 interface SetsListProps {
   initialSets: PokemonSetItemFragment[];
@@ -35,17 +45,23 @@ export default function SetsList({
   sortBy: initialSortBy,
   sortOrder: initialSortOrder,
 }: SetsListProps) {
-  // 1) Local state for sorting
+  // 2) Local state for sorting.
   const [sortBy, setSortBy] = useState<string>(initialSortBy);
   const [sortOrder, setSortOrder] = useState<OrderDirection>(initialSortOrder);
 
-  // 2) Force re-mount of InfiniteList on changes
+  // 3) When the sort key changes, update both sortBy and sortOrder (using our mapping).
+  const handleSortByChange = (newSortBy: string) => {
+    setSortBy(newSortBy);
+    setSortOrder(defaultSetSortOrders[newSortBy] || OrderDirection.Asc);
+  };
+
+  // 4) Force re-mount of InfiniteList on changes.
   const [resetKey, setResetKey] = useState(0);
   useEffect(() => {
     setResetKey((prev) => prev + 1);
   }, [sortBy, sortOrder]);
 
-  // 3) Apollo query
+  // 5) Apollo query.
   const { data, loading, fetchMore } = useGetPokemonSetsQuery({
     variables: {
       where: {
@@ -60,12 +76,10 @@ export default function SetsList({
     },
   });
 
-  // 4) Our current sets
-  // If data is undefined on first render, fallback to initialSets
-  // but once data arrives, prefer data from the query.
-  const sets = data?.pokemonSets?.length ? data?.pokemonSets : initialSets;
+  // 6) Current sets (fallback to initialSets if data isn’t available yet).
+  const sets = data?.pokemonSets?.length ? data.pokemonSets : initialSets;
 
-  // 5) fetchMore for infinite scroll
+  // 7) Fetch more sets for infinite scroll.
   const fetchMoreSets = async (offset: number) => {
     const { data: moreData } = await fetchMore({
       variables: { skip: offset },
@@ -73,38 +87,38 @@ export default function SetsList({
     return moreData?.pokemonSets ?? [];
   };
 
-  // 6) Rendering
+  // 8) Render.
   return (
-    <div className={`pt-2`}>
+    <div className="pt-2">
+      <SetsHeader sets={data?.pokemonSets!} tcgCategory={tcgCategory} />
+
+      {/* Render FilterBar with our custom sort key change handler */}
       <FilterBar
         sortBy={sortBy}
-        onSortByChange={setSortBy}
+        onSortByChange={handleSortByChange}
         sortOrder={sortOrder}
         onSortOrderChange={setSortOrder}
         sortOptions={POKEMON_SETS_SORT_OPTIONS} // e.g. ["releaseDate", "name"]
       />
 
       {loading ? (
-        <div className={`w-full flex items-center justify-center py-36`}>
+        <div className="w-full flex items-center justify-center py-36">
           <Spinner />
         </div>
       ) : (
         <SetsGrid>
           <InfiniteList<PokemonSetItemFragment>
             key={resetKey}
-            // Pass current sets from the query (or SSR fallback)
             initialItems={sets}
             fetchMore={fetchMoreSets}
             pageSize={POKEMON_SETS_PAGE_SIZE}
-            renderItem={(item) => {
-              return (
-                <SetCard
-                  key={item.id}
-                  set={item}
-                  href={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${item.tcgSetId}`}
-                />
-              );
-            }}
+            renderItem={(item) => (
+              <SetCard
+                key={item.id}
+                set={item}
+                href={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${item.tcgSetId}`}
+              />
+            )}
           />
         </SetsGrid>
       )}

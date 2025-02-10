@@ -83,8 +83,11 @@ export const PokemonCollectionItem = list({
       ui: {
         hideCreate: true,
       },
+    }),
+    cardName: text({
+      label: "Card Name",
+      ui: { listView: { fieldMode: "read" } },
       isOrderable: true,
-      isFilterable: true,
     }),
     quantity: integer({
       defaultValue: 1,
@@ -166,20 +169,41 @@ export const PokemonCollectionItem = list({
         }
       }
     },
-    resolveInput: async ({ operation, resolvedData, context }) => {
+    resolveInput: async ({ resolvedData, operation, context, item }) => {
+      // On create, attach the user to the collection entry.
       if (operation === "create") {
-        // Force-fetch session manually
         const userSession = await session.get({ context });
-
         if (!userSession?.itemId) {
           throw new Error(
             "Session missing! Keystone is not passing session automatically.",
           );
         }
-
-        // Attach the user to the collection entry
         resolvedData.user = { connect: { id: userSession.itemId } };
       }
+
+      // Additional logic: set cardName from the connected card.
+      // Use `item` instead of `existingItem`
+      if (resolvedData.card || (item && !item.cardName)) {
+        let cardId: string | undefined;
+        if (resolvedData.card && typeof resolvedData.card === "object") {
+          // When connecting, the value is usually in resolvedData.card.connect.id
+          cardId = resolvedData.card.connect?.id;
+        } else if (item?.card) {
+          // Fallback: use the existing card if available
+          const existingCard = item.card as { id: string };
+          cardId = existingCard.id;
+        }
+
+        if (cardId) {
+          // Look up the card's name using Keystone's query API.
+          const card = await context.query.PokemonCard.findOne({
+            where: { id: cardId },
+            query: "name",
+          });
+          resolvedData.cardName = card?.name || "";
+        }
+      }
+
       return resolvedData;
     },
   },
