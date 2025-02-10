@@ -9,12 +9,14 @@ type Props = {
 
 const EnergyIcon = ({ type, size = 20 }: Props) => {
   return (
-    <Image
-      width={size}
-      height={size}
-      src={assetsUrl(`/img/tcg/pokemon/energy/${type.toLowerCase()}.png`)}
-      alt={`Pokemon ${type} type`}
-    />
+    <span className={`border border-primary-100 rounded-full`}>
+      <Image
+        width={size}
+        height={size}
+        src={assetsUrl(`/img/tcg/pokemon/energy/${type.toLowerCase()}.png`)}
+        alt={`Pokemon ${type} type`}
+      />
+    </span>
   );
 };
 

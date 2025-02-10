@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/catalyst-ui/table";
 import { FiEdit, FiTrash } from "react-icons/fi";
-import { PokemonCollectionItem } from "@/graphql/generated";
+import { OrderDirection, PokemonCollectionItem } from "@/graphql/generated";
 import CollectionDialog from "@/components/tcg/pokemon/collection/CollectionDialog";
 import CollectionRemoveDialog from "@/components/tcg/pokemon/collection/CollectionRemoveDialog";
 import { useTranslations } from "use-intl";
@@ -21,11 +21,18 @@ import { useSession } from "next-auth/react";
 import CollectionDetailsNotLoggedIn from "@/components/tcg/pokemon/collection/CollectionDetailsNotLoggedIn";
 import Spinner from "@/components/misc/Spinner";
 import CardPageAddToCollection from "../card-page/CardPageAddToCollection";
+import PriceFormatter from "@/components/misc/PriceFormatter";
+import SortableTableHeader from "@/components/misc/SortableTableHeader";
+import useSortableTable from "@/hooks/useSortableTable";
+import { TcgCollectionDetailsSortByT } from "@/types/Tcg";
 
 type Props = {
   cardId: string;
   collectionItems: PokemonCollectionItem[];
 };
+
+// Temporary constant for demonstration
+const TEMPORARY_PREV_PRICE = 100;
 
 export default function CollectionDetails({ cardId, collectionItems }: Props) {
   const t = useTranslations();
@@ -35,24 +42,81 @@ export default function CollectionDetails({ cardId, collectionItems }: Props) {
   // Local pagination state
   const [page, setPage] = useState(1);
 
-  // Compute total pages
+  // Define a custom compare function to handle special fields
+  const customCompare = (
+    a: PokemonCollectionItem,
+    b: PokemonCollectionItem,
+    key: TcgCollectionDetailsSortByT,
+  ) => {
+    let aValue;
+    let bValue;
+    switch (key) {
+      case "acquiredAt":
+        aValue = a.acquiredAt ? new Date(a.acquiredAt).getTime() : 0;
+        bValue = b.acquiredAt ? new Date(b.acquiredAt).getTime() : 0;
+        break;
+      case "price":
+        aValue = parseFloat(a.price || "0");
+        bValue = parseFloat(b.price || "0");
+        break;
+      case "condition":
+        // Compare condition strings (you could also map these to numeric values if needed)
+        aValue = a.condition || "";
+        bValue = b.condition || "";
+        break;
+      case "gradingCompany":
+        // Compare companies case-insensitively
+        aValue = a.gradingCompany ? a.gradingCompany.toLowerCase() : "";
+        bValue = b.gradingCompany ? b.gradingCompany.toLowerCase() : "";
+        break;
+      case "gradingRating":
+        aValue = a.gradingRating || "";
+        bValue = b.gradingRating || "";
+        break;
+      case "quantity":
+        aValue = a.quantity || 0;
+        bValue = b.quantity || 0;
+        break;
+      case "notes":
+        aValue = a.notes || "";
+        bValue = b.notes || "";
+        break;
+      default:
+        aValue = "";
+        bValue = "";
+        break;
+    }
+    if (aValue < bValue) return -1;
+    if (aValue > bValue) return 1;
+    return 0;
+  };
+
+  const { sortedItems, requestSort, sortConfig } = useSortableTable<
+    PokemonCollectionItem,
+    TcgCollectionDetailsSortByT
+  >(
+    collectionItems,
+    { key: "acquiredAt", direction: OrderDirection.Desc },
+    customCompare,
+  );
+
+  // Compute total pages based on sorted items
   const totalPages = Math.ceil(
-    collectionItems.length / POKEMON_COLLECTION_DETAILS_PAGE_SIZE,
+    sortedItems.length / POKEMON_COLLECTION_DETAILS_PAGE_SIZE,
   );
 
   // Slice items for the current page
-  const displayedItems = useMemo(() => {
+  const displayedItems: PokemonCollectionItem[] = useMemo(() => {
     const start = (page - 1) * POKEMON_COLLECTION_DETAILS_PAGE_SIZE;
-    return collectionItems.slice(
+    return sortedItems.slice(
       start,
       start + POKEMON_COLLECTION_DETAILS_PAGE_SIZE,
     );
-  }, [collectionItems, page]);
+  }, [sortedItems, page]);
 
   // Dialog states
   const [editItem, setEditItem] = useState<PokemonCollectionItem | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-
   const [removeItem, setRemoveItem] = useState<PokemonCollectionItem | null>(
     null,
   );
@@ -122,28 +186,55 @@ export default function CollectionDetails({ cardId, collectionItems }: Props) {
               <Table className="table-fixed w-full grow">
                 <TableHead>
                   <TableRow>
-                    {/* 2) Each TableHeader gets a fixed fraction, e.g. w-[12.5%] for 8 columns */}
-                    <TableHeader className="w-[15%]">
-                      {t("tcg.collection.details.acquired-on")}
-                    </TableHeader>
-                    <TableHeader className="w-[10%]">
-                      {t("tcg.collection.details.condition")}
-                    </TableHeader>
-                    <TableHeader className="w-[10%]">
-                      {t("tcg.collection.details.company")}
-                    </TableHeader>
-                    <TableHeader className="w-[10%]">
-                      {t("tcg.collection.details.rating")}
-                    </TableHeader>
-                    <TableHeader className="w-[10%]">
-                      {t("tcg.collection.details.quantity")}
-                    </TableHeader>
-                    <TableHeader className="w-[10%]">
-                      {t("tcg.collection.details.price")}
-                    </TableHeader>
-                    <TableHeader className="w-[30%]">
-                      {t("tcg.collection.details.notes")}
-                    </TableHeader>
+                    <SortableTableHeader
+                      label={t("tcg.collection.details.acquired-on")}
+                      field="acquiredAt"
+                      requestSort={requestSort}
+                      sortConfig={sortConfig}
+                      className="w-[15%]"
+                    />
+                    <SortableTableHeader
+                      label={t("tcg.collection.details.condition")}
+                      field="condition"
+                      requestSort={requestSort}
+                      sortConfig={sortConfig}
+                      className="w-[10%]"
+                    />
+                    <SortableTableHeader
+                      label={t("tcg.collection.details.company")}
+                      field="gradingCompany"
+                      requestSort={requestSort}
+                      sortConfig={sortConfig}
+                      className="w-[10%]"
+                    />
+                    <SortableTableHeader
+                      label={t("tcg.collection.details.rating")}
+                      field="gradingRating"
+                      requestSort={requestSort}
+                      sortConfig={sortConfig}
+                      className="w-[10%]"
+                    />
+                    <SortableTableHeader
+                      label={t("tcg.collection.details.quantity")}
+                      field="quantity"
+                      requestSort={requestSort}
+                      sortConfig={sortConfig}
+                      className="w-[10%]"
+                    />
+                    <SortableTableHeader
+                      label={t("tcg.collection.details.price")}
+                      field="price"
+                      requestSort={requestSort}
+                      sortConfig={sortConfig}
+                      className="w-[10%]"
+                    />
+                    <SortableTableHeader
+                      label={t("tcg.collection.details.notes")}
+                      field="notes"
+                      requestSort={requestSort}
+                      sortConfig={sortConfig}
+                      className="w-[30%]"
+                    />
                     <TableHeader className="w-[5%]">
                       {t("tcg.collection.details.actions")}
                     </TableHeader>
@@ -174,7 +265,12 @@ export default function CollectionDetails({ cardId, collectionItems }: Props) {
                         <TableCell>{item.gradingRating || "-"}</TableCell>
                         <TableCell>{item.quantity ?? "-"}</TableCell>
                         <TableCell>
-                          {item.price !== null ? `$${item.price}` : "-"}
+                          <PriceFormatter
+                            price={item.price}
+                            priceActionCondition={
+                              item.price < TEMPORARY_PREV_PRICE
+                            }
+                          />
                         </TableCell>
                         <TableCell className={`max-w-[320px]`}>
                           <p className="block max-w-full truncate">
@@ -204,9 +300,7 @@ export default function CollectionDetails({ cardId, collectionItems }: Props) {
               </Table>
 
               {collectionItems.length < 1 && (
-                <div
-                  className={`flex w-full  justify-center items-center grow`}
-                >
+                <div className={`flex w-full justify-center items-center grow`}>
                   <p className={`text font-medium`}>
                     {t("card-page.collection-empty")}
                   </p>

@@ -20,16 +20,23 @@ export const GET_USER_POKEMON_COLLECTION_ITEMS = gql`
       condition
       gradingCompany
       gradingRating
-
-      # Include nested card data
       card {
         id
         tcgSetId
         tcgCardId
+        number
         variant
         name
+        rarity
         imageSmallStorageUrl
         imageSmallApiUrl
+        imageLargeStorageUrl
+        imageLargeApiUrl
+        set {
+          id
+          name
+          series
+        }
       }
     }
   }

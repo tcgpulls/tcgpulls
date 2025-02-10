@@ -30,13 +30,14 @@ export const POKEMON_CARDS_SORT_OPTIONS: TcgCardSortByT[] = [
   "normalizedNumber",
   "name",
 ];
-export const POKEMON_CARDS_PAGE_SIZE = 24;
+export const POKEMON_CARDS_PAGE_SIZE = 20;
 
 export const POKEMON_COLLECTION_SORT_OPTIONS: TcgCollectionSortByT[] = [
   "acquiredAt",
   "price",
+  "cardName",
 ];
 
-export const POKEMON_COLLECTION_PAGE_SIZE = 24;
+export const POKEMON_COLLECTION_PAGE_SIZE = 20;
 
 export const POKEMON_COLLECTION_DETAILS_PAGE_SIZE = 5;

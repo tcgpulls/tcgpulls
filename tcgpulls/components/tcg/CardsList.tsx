@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CardsGrid from "@/components/misc/CardsGrid";
 import InfiniteList from "@/components/misc/InfiniteList";
 import CardCard from "@/components/tcg/CardCard";
@@ -11,40 +11,61 @@ import {
   PokemonCardItemFragment,
   useGetPokemonCardsQuery,
 } from "@/graphql/generated";
-import { TcgCardSortByT, TcgLangT } from "@/types/Tcg";
+import { TcgBrandT, TcgCardSortByT, TcgCategoryT, TcgLangT } from "@/types/Tcg";
 import {
   POKEMON_CARDS_PAGE_SIZE,
   POKEMON_CARDS_SORT_OPTIONS,
 } from "@/constants/tcg/pokemon";
-
 import { FilterBar } from "@/components/navigation/FilterBar";
+import { useTranslations } from "use-intl";
+import { Button } from "@/components/catalyst-ui/button";
+import EmptyList from "@/components/misc/EmptyList";
+
+// Even if both default orders are ascending, we can still define a mapping
+// to keep the code consistent and extensible.
+const defaultCardsSortOrders: Record<string, OrderDirection> = {
+  normalizedNumber: OrderDirection.Desc,
+  name: OrderDirection.Asc,
+  // If you have additional sort keys, define their defaults here.
+};
 
 interface CardsListProps {
   initialCards: PokemonCardItemFragment[];
   tcgLang: TcgLangT;
+  tcgBrand: TcgBrandT;
+  tcgCategory: TcgCategoryT;
   setId: string;
-  sortBy: TcgCardSortByT; // or TcgSetSortByT if you have a specialized type
+  sortBy: TcgCardSortByT;
   sortOrder: OrderDirection;
 }
 
 export function CardsList({
   initialCards,
+  tcgBrand,
   tcgLang,
+  tcgCategory,
   setId,
   sortBy: initialSortBy,
   sortOrder: initialSortOrder,
 }: CardsListProps) {
-  // 1) Local sort state
+  const t = useTranslations();
+  // 1) Local sort state.
   const [sortBy, setSortBy] = useState<string>(initialSortBy);
   const [sortOrder, setSortOrder] = useState<OrderDirection>(initialSortOrder);
 
-  // 2) "resetKey" forces <InfiniteList> to re-mount on sort changes
+  // 2) When the sort key changes, update both sortBy and sortOrder (defaulting to Asc).
+  const handleSortByChange = (newSortBy: string) => {
+    setSortBy(newSortBy);
+    setSortOrder(defaultCardsSortOrders[newSortBy] || OrderDirection.Asc);
+  };
+
+  // 3) "resetKey" forces <InfiniteList> to re-mount on sort changes.
   const [resetKey, setResetKey] = useState(0);
   useEffect(() => {
     setResetKey((prev) => prev + 1);
   }, [sortBy, sortOrder]);
 
-  // 3) Run the same GraphQL query to get the updated list
+  // 4) Execute the GraphQL query using the current sort state.
   const { data, loading, fetchMore } = useGetPokemonCardsQuery({
     variables: {
       where: {
@@ -57,14 +78,13 @@ export function CardsList({
       take: POKEMON_CARDS_PAGE_SIZE,
       skip: 0,
     },
-    // Optionally ensure fresh data:
-    // fetchPolicy: "cache-and-network",
+    // Optionally, you can set fetchPolicy to "cache-and-network" if needed.
   });
 
-  // 4) If the new query is empty at first, use SSR fallback
+  // 5) Use SSR fallback if data is not available yet.
   const cards = data?.pokemonCards?.length ? data.pokemonCards : initialCards;
 
-  // 5) "fetchMore" callback for <InfiniteList>
+  // 6) "fetchMore" callback for infinite scroll.
   const fetchMoreCards = async (offset: number) => {
     const { data: moreData } = await fetchMore({
       variables: { skip: offset },
@@ -72,44 +92,48 @@ export function CardsList({
     return moreData?.pokemonCards ?? [];
   };
 
-  // (Optional) Loading / empty states
-  if (loading && !data) {
-    return (
-      <div className="py-10 flex justify-center">
-        <Spinner />
-      </div>
-    );
-  }
   if (!cards.length) {
-    return <p>No cards found</p>;
+    return <p>{t("card-page.no-cards")}</p>;
   }
 
   return (
     <div className="pt-2">
-      {/* 6) FilterBar for user-driven sorting */}
+      {/* 7) Render the FilterBar with our custom handler */}
       <FilterBar
         sortBy={sortBy}
-        onSortByChange={(value) => setSortBy(value)}
+        onSortByChange={handleSortByChange}
         sortOrder={sortOrder}
-        onSortOrderChange={(value) => setSortOrder(value)}
+        onSortOrderChange={setSortOrder}
         sortOptions={POKEMON_CARDS_SORT_OPTIONS} // e.g. ["normalizedNumber"]
       />
 
-      <CardsGrid>
-        <InfiniteList<PokemonCardItemFragment>
-          key={resetKey} // Force re-mount on each sort change
-          initialItems={cards}
-          fetchMore={fetchMoreCards}
-          pageSize={POKEMON_CARDS_PAGE_SIZE}
-          renderItem={(card) => (
-            <CardCard
-              key={card.id}
-              card={card}
-              href={`/app/tcg/pokemon/${tcgLang}/sets/${card.tcgSetId}/cards/${card.tcgCardId}-${card.variant}-${tcgLang}`}
-            />
-          )}
-        />
-      </CardsGrid>
+      {loading ? (
+        <div className="w-full flex items-center justify-center py-36">
+          <Spinner />
+        </div>
+      ) : cards.length === 0 ? (
+        <EmptyList text={t("cards-page.no-cards")}>
+          <Button href={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}`}>
+            {t("common.view")} {t("common.pokemon")} {t("common.collectibles")}
+          </Button>
+        </EmptyList>
+      ) : (
+        <CardsGrid>
+          <InfiniteList<PokemonCardItemFragment>
+            key={resetKey} // Force re-mount on each sort change.
+            initialItems={cards}
+            fetchMore={fetchMoreCards}
+            pageSize={POKEMON_CARDS_PAGE_SIZE}
+            renderItem={(card) => (
+              <CardCard
+                key={card.id}
+                card={card}
+                href={`/app/tcg/pokemon/${tcgLang}/sets/${card.tcgSetId}/cards/${card.tcgCardId}-${card.variant}-${tcgLang}`}
+              />
+            )}
+          />
+        </CardsGrid>
+      )}
     </div>
   );
 }

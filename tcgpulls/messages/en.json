@@ -22,12 +22,9 @@
     "previous": "Previous",
     "back": "Back",
     "return-to-home": "Return to Home",
-    "sort-by": "Sort by",
-    "order-by": "Order by",
-    "order-by-asc": "Asc.",
-    "order-by-desc": "Desc.",
     "home": "Home",
     "profile": "Profile",
+    "collectibles": "Collectibles",
     "tcg": "Trading Card Games",
     "pack": "Pack",
     "packs": "Packs",
@@ -245,6 +242,23 @@
       }
     }
   },
+  "filter-bar": {
+    "search": "Search",
+    "search-placeholder": "Search...",
+    "sort-by": "Sort by",
+    "order-by": "Order by",
+    "order-by-asc": "Asc.",
+    "order-by-desc": "Desc.",
+    "release-date": "Release Date",
+    "name": "Name",
+    "quantity": "Quantity",
+    "price": "Price",
+    "acquired-at": "Acquired At",
+    "rarity": "Rarity",
+    "pull-rate": "Pull Rate",
+    "card-name": "Name",
+    "normalized-number": "Card Number"
+  },
   "tcg-page": {
     "title": "Trading Card Games",
     "metadata": {
@@ -257,6 +271,14 @@
     "no-sets": "No sets found.",
     "metadata": {
       "title": "Sets - tcgpulls.xyz",
+      "description": "Get your TCG pack pulls and pull rates all in one place!"
+    }
+  },
+  "collection-page": {
+    "title": "Collection",
+    "no-items": "There are currently no items in your collection.",
+    "metadata": {
+      "title": "Collection - tcgpulls.xyz",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     }
   },

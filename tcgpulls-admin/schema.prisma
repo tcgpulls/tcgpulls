@@ -141,6 +141,7 @@ model PokemonCollectionItem {
   userId         String?      @map("user")
   card           PokemonCard? @relation("PokemonCollectionItem_card", fields: [cardId], references: [id])
   cardId         String?      @map("card")
+  cardName       String       @default("")
   quantity       Int          @default(1)
   price          Decimal?     @default("0.00") @postgresql.Decimal(18, 2)
   condition      String?      @default("near-mint")

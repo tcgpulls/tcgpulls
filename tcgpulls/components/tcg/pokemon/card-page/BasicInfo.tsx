@@ -36,14 +36,14 @@ const BasicInfo = async ({ card, tcgLang }: Props) => {
           {set?.name} - {set?.series}
         </span>
       </p>
-      <h1 className="flex items-center gap-4 text-3xl font-bold mb-6">
+      <div className="flex items-center gap-4 mb-6">
         {types &&
           types.length > 0 &&
           types.map((type: PokemonEnergyT) => (
             <EnergyIcon type={type} key={type} size={32} />
           ))}
-        <span className={`flex items-center`}>{name}</span>
-      </h1>
+        <h1 className={`text-3xl font-bold`}>{name}</h1>
+      </div>
       <div className={`inline-flex flex-col gap-2`}>
         <div className="flex flex-wrap gap-2">
           <Badge title={`# ${card.number}`} color={`primary`}>

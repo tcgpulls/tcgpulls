@@ -29,7 +29,7 @@ export default async function SetCardsPage({ params }: Props) {
   const t = await getTranslations();
 
   // Validate
-  if (!setId || !tcgBrand || !tcgLang) {
+  if (!setId || !tcgBrand || !tcgLang || !tcgCategory) {
     notFound();
   }
 
@@ -56,7 +56,7 @@ export default async function SetCardsPage({ params }: Props) {
   }
 
   const sortBy = POKEMON_CARDS_SORT_OPTIONS[0]; // default sort
-  const sortOrder: OrderDirection = OrderDirection.Asc; // default order
+  const sortOrder: OrderDirection = OrderDirection.Desc; // default order
 
   // 3) Fetch initial cards with your default sorting
   const { data: cardsData, error: cardsError } = await client.query<
@@ -108,7 +108,9 @@ export default async function SetCardsPage({ params }: Props) {
         // The initial SSR data
         initialCards={cardsData.pokemonCards}
         // IDs and sort info
+        tcgBrand={tcgBrand}
         tcgLang={tcgLang}
+        tcgCategory={tcgCategory}
         setId={setId}
         sortBy={sortBy}
         sortOrder={sortOrder}
