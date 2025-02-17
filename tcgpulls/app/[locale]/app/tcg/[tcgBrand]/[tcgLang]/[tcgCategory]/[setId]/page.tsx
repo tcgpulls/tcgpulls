@@ -15,9 +15,8 @@ import { GET_POKEMON_CARDS } from "@/graphql/tcg/pokemon/cards/queries";
 import { GET_POKEMON_SET } from "@/graphql/tcg/pokemon/sets/queries";
 import createApolloClient from "@/lib/clients/createApolloClient";
 import { getTranslations } from "next-intl/server";
-import CardsList from "@/components/tcg/CardsList";
+import CardsList from "@/components/tcg/pokemon/cards-page/CardsList";
 import Header from "@/components/misc/Header";
-import { Divider } from "@/components/catalyst-ui/divider";
 
 interface Props {
   params: UrlParamsT;
@@ -103,7 +102,6 @@ export default async function SetCardsPage({ params }: Props) {
         withBackButton
         previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}`}
       />
-      <Divider />
       <CardsList
         // The initial SSR data
         initialCards={cardsData.pokemonCards}
@@ -111,7 +109,7 @@ export default async function SetCardsPage({ params }: Props) {
         tcgBrand={tcgBrand}
         tcgLang={tcgLang}
         tcgCategory={tcgCategory}
-        setId={setId}
+        set={setData.pokemonSet!}
         sortBy={sortBy}
         sortOrder={sortOrder}
       />

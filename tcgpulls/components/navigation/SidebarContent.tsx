@@ -11,14 +11,13 @@ import {
   SidebarSection,
 } from "@/components/catalyst-ui/sidebar";
 import { Link } from "@/components/catalyst-ui/link";
-import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
 import { useTranslations } from "use-intl";
 import { ReactNode } from "react";
 import { usePathname } from "@/i18n/routing";
 import useTcgLanguage from "@/hooks/context/useTcgLanguage";
 import AuthButton from "@/components/misc/AuthButton";
 import { HiHome, HiUserCircle } from "react-icons/hi";
-import { TbCards } from "react-icons/tb";
+import { TbCards, TbPokeball } from "react-icons/tb";
 import { BiGridAlt } from "react-icons/bi";
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
@@ -52,12 +51,12 @@ const SidebarContent = () => {
     {
       href: "/app",
       label: t("home"),
-      icon: <HiHome size={20} />,
+      icon: <HiHome size={24} />,
     },
     {
       href: "/app/profile",
       label: t("profile"),
-      icon: <HiUserCircle size={20} />,
+      icon: <HiUserCircle size={24} />,
       needAuth: true,
     },
     {
@@ -66,7 +65,8 @@ const SidebarContent = () => {
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}`,
           label: t("tcg-pokemon-short"),
-          className: `pl-2`,
+          icon: <TbPokeball size={24} />,
+          className: ``,
         },
         {
           href: `/app/tcg/pokemon/${currentTcgLanguage}/collection`,
@@ -94,9 +94,11 @@ const SidebarContent = () => {
   return (
     <Sidebar>
       <SidebarHeader className="mt-4">
-        <Link href="/app" aria-label="Home">
-          <p className="font-bold">{t("company")}</p>
-        </Link>
+        <div className={`flex items-center justify-between`}>
+          <Link href="/app" aria-label="Home">
+            <p className="font-bold">{t("company")}</p>
+          </Link>
+        </div>
       </SidebarHeader>
       <SidebarBody>
         {sidebarItems.map((section, index) =>
@@ -142,9 +144,8 @@ const SidebarContent = () => {
       </SidebarBody>
       <SidebarFooter>
         <SidebarSection>
-          <div className="flex justify-between">
+          <div className="flex justify-end">
             <AuthButton />
-            <LanguageSwitcher />
           </div>
         </SidebarSection>
       </SidebarFooter>

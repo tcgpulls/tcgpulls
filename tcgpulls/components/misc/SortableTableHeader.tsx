@@ -24,16 +24,20 @@ export default function SortableTableHeader<K extends string>({
       className={`cursor-pointer select-none ${className}`}
       onClick={() => requestSort(field)}
     >
-      {label}
-      {sortConfig && sortConfig.key === field && (
-        <>
-          {sortConfig.direction === OrderDirection.Asc ? (
-            <FaCaretUp className="inline-block ml-1 mt-0.5" />
-          ) : (
-            <FaCaretDown className="inline-block ml-1 -mt-0.5" />
+      <div className={`flex items-center gap-1`}>
+        {label}
+        <div className={`inline-block relative w-4 h-4`}>
+          {sortConfig && sortConfig.key === field && (
+            <>
+              {sortConfig.direction === OrderDirection.Asc ? (
+                <FaCaretUp className="absolute inset-0" />
+              ) : (
+                <FaCaretDown className="absolute inset-0" />
+              )}
+            </>
           )}
-        </>
-      )}
+        </div>
+      </div>
     </TableHeader>
   );
 }

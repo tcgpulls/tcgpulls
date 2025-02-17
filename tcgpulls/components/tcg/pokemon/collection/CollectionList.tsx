@@ -16,11 +16,10 @@ import {
 } from "@/constants/tcg/pokemon";
 import { FilterBar } from "@/components/navigation/FilterBar";
 import buildCollectionsOrderBy from "@/utils/buildCollectionsOrderBy";
-import CollectionCard from "@/components/tcg/CollectionCard";
+import CollectionCard from "@/components/tcg/pokemon/collection/CollectionCard";
 import { useTranslations } from "use-intl";
 import { Button } from "@/components/catalyst-ui/button";
 import EmptyList from "@/components/misc/EmptyList";
-
 // Define default orders for each sort key.
 const defaultSortOrders: Record<string, OrderDirection> = {
   acquiredAt: OrderDirection.Desc, // Most recent items first
@@ -103,6 +102,7 @@ export default function CollectionList({
     <div className="pt-2">
       {/* 7) Render the FilterBar with the custom sort key change handler */}
       <FilterBar
+        title={`${t("common.collection")}`}
         sortBy={sortBy}
         onSortByChange={handleSortByChange}
         sortOrder={sortOrder}
@@ -115,7 +115,6 @@ export default function CollectionList({
           <Spinner />
         </div>
       ) : items.length === 0 ? (
-        // TODO: make a component for empty state list
         <EmptyList text={t("collection-page.no-items")}>
           <Button href={`/app/tcg/${tcgBrand}/${tcgLang}`}>
             {t("common.view")} {t("common.pokemon")} {t("common.collectibles")}

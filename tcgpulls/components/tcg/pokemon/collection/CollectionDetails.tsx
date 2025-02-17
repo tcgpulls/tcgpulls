@@ -20,24 +20,24 @@ import { Pagination } from "@/components/navigation/Pagination";
 import { useSession } from "next-auth/react";
 import CollectionDetailsNotLoggedIn from "@/components/tcg/pokemon/collection/CollectionDetailsNotLoggedIn";
 import Spinner from "@/components/misc/Spinner";
-import CardPageAddToCollection from "../card-page/CardPageAddToCollection";
 import PriceFormatter from "@/components/misc/PriceFormatter";
 import SortableTableHeader from "@/components/misc/SortableTableHeader";
 import useSortableTable from "@/hooks/useSortableTable";
-import { TcgCollectionDetailsSortByT } from "@/types/Tcg";
+import {
+  TcgCollectionDetailsSortBy,
+  TcgCollectionDetailsSortByT,
+} from "@/types/Tcg";
 
 type Props = {
-  cardId: string;
   collectionItems: PokemonCollectionItem[];
 };
 
 // Temporary constant for demonstration
 const TEMPORARY_PREV_PRICE = 100;
 
-export default function CollectionDetails({ cardId, collectionItems }: Props) {
+export default function CollectionDetails({ collectionItems }: Props) {
   const t = useTranslations();
-  const { data: session, status } = useSession();
-  const userId = session?.user?.id;
+  const { status } = useSession();
 
   // Local pagination state
   const [page, setPage] = useState(1);
@@ -51,33 +51,33 @@ export default function CollectionDetails({ cardId, collectionItems }: Props) {
     let aValue;
     let bValue;
     switch (key) {
-      case "acquiredAt":
+      case TcgCollectionDetailsSortBy.AcquiredAt:
         aValue = a.acquiredAt ? new Date(a.acquiredAt).getTime() : 0;
         bValue = b.acquiredAt ? new Date(b.acquiredAt).getTime() : 0;
         break;
-      case "price":
+      case TcgCollectionDetailsSortBy.Price:
         aValue = parseFloat(a.price || "0");
         bValue = parseFloat(b.price || "0");
         break;
-      case "condition":
+      case TcgCollectionDetailsSortBy.Condition:
         // Compare condition strings (you could also map these to numeric values if needed)
         aValue = a.condition || "";
         bValue = b.condition || "";
         break;
-      case "gradingCompany":
+      case TcgCollectionDetailsSortBy.GradingCompany:
         // Compare companies case-insensitively
         aValue = a.gradingCompany ? a.gradingCompany.toLowerCase() : "";
         bValue = b.gradingCompany ? b.gradingCompany.toLowerCase() : "";
         break;
-      case "gradingRating":
+      case TcgCollectionDetailsSortBy.GradingRating:
         aValue = a.gradingRating || "";
         bValue = b.gradingRating || "";
         break;
-      case "quantity":
+      case TcgCollectionDetailsSortBy.Quantity:
         aValue = a.quantity || 0;
         bValue = b.quantity || 0;
         break;
-      case "notes":
+      case TcgCollectionDetailsSortBy.Notes:
         aValue = a.notes || "";
         bValue = b.notes || "";
         break;
@@ -96,7 +96,10 @@ export default function CollectionDetails({ cardId, collectionItems }: Props) {
     TcgCollectionDetailsSortByT
   >(
     collectionItems,
-    { key: "acquiredAt", direction: OrderDirection.Desc },
+    {
+      key: TcgCollectionDetailsSortBy.AcquiredAt,
+      direction: OrderDirection.Desc,
+    },
     customCompare,
   );
 
@@ -163,15 +166,15 @@ export default function CollectionDetails({ cardId, collectionItems }: Props) {
         setIsOpen={setIsRemoveDialogOpen}
       />
 
-      <h4 className="text-2xl font-semibold mb-4 flex gap-2 justify-between">
-        <span>
-          {t("card-page.collection")}{" "}
-          {userId &&
-            collectionItems.length > 0 &&
-            `(${collectionItems.length})`}
-        </span>
-        <CardPageAddToCollection cardId={cardId} />
-      </h4>
+      {/*<h4 className="text-2xl font-semibold mb-4 flex gap-2 justify-between">*/}
+      {/*  <span>*/}
+      {/*    {t("card-page.collection")}{" "}*/}
+      {/*    {userId &&*/}
+      {/*      collectionItems.length > 0 &&*/}
+      {/*      `(${collectionItems.length})`}*/}
+      {/*  </span>*/}
+      {/*  <CardPageAddToCollection cardId={cardId} />*/}
+      {/*</h4>*/}
       <div>
         <div
           className={`h-[382px] flex flex-col w-full justify-stretch items-stretch bg-primary-800 rounded-xl p-3 py-2`}
@@ -188,52 +191,52 @@ export default function CollectionDetails({ cardId, collectionItems }: Props) {
                   <TableRow>
                     <SortableTableHeader
                       label={t("tcg.collection.details.acquired-on")}
-                      field="acquiredAt"
+                      field={TcgCollectionDetailsSortBy.AcquiredAt}
                       requestSort={requestSort}
                       sortConfig={sortConfig}
                       className="w-[15%]"
                     />
                     <SortableTableHeader
                       label={t("tcg.collection.details.condition")}
-                      field="condition"
+                      field={TcgCollectionDetailsSortBy.Condition}
                       requestSort={requestSort}
                       sortConfig={sortConfig}
-                      className="w-[10%]"
+                      className="w-[15%]"
                     />
                     <SortableTableHeader
                       label={t("tcg.collection.details.company")}
-                      field="gradingCompany"
+                      field={TcgCollectionDetailsSortBy.GradingCompany}
                       requestSort={requestSort}
                       sortConfig={sortConfig}
-                      className="w-[10%]"
+                      className="w-[15%]"
                     />
                     <SortableTableHeader
                       label={t("tcg.collection.details.rating")}
-                      field="gradingRating"
+                      field={TcgCollectionDetailsSortBy.GradingRating}
                       requestSort={requestSort}
                       sortConfig={sortConfig}
                       className="w-[10%]"
                     />
                     <SortableTableHeader
                       label={t("tcg.collection.details.quantity")}
-                      field="quantity"
+                      field={TcgCollectionDetailsSortBy.Quantity}
                       requestSort={requestSort}
                       sortConfig={sortConfig}
                       className="w-[10%]"
                     />
                     <SortableTableHeader
                       label={t("tcg.collection.details.price")}
-                      field="price"
+                      field={TcgCollectionDetailsSortBy.Price}
                       requestSort={requestSort}
                       sortConfig={sortConfig}
                       className="w-[10%]"
                     />
                     <SortableTableHeader
                       label={t("tcg.collection.details.notes")}
-                      field="notes"
+                      field={TcgCollectionDetailsSortBy.Notes}
                       requestSort={requestSort}
                       sortConfig={sortConfig}
-                      className="w-[30%]"
+                      className="w-[20%]"
                     />
                     <TableHeader className="w-[5%]">
                       {t("tcg.collection.details.actions")}

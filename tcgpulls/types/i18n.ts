@@ -6,5 +6,4 @@ export type i18nT = {
 
 export type i18nLocaleT = {
   value: string;
-  label: string;
 };

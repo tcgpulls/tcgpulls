@@ -1,5 +1,5 @@
-import { Text } from "@/components/catalyst-ui/text";
 import { getTranslations } from "next-intl/server";
+import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
 
 const Footer = async () => {
   const t = await getTranslations("common");
@@ -7,9 +7,12 @@ const Footer = async () => {
 
   return (
     <footer className={`mt-8`}>
-      <Text className={`text-center`}>
-        &copy; {currentYear} {t("company")} - {t("footer.copyright")}
-      </Text>
+      <div className={`flex flex-col items-center justify-center gap-4`}>
+        <p>
+          &copy; {currentYear} {t("company")} - {t("footer.copyright")}
+        </p>
+        <LanguageSwitcher />
+      </div>
     </footer>
   );
 };

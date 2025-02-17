@@ -10,10 +10,9 @@ import { GET_USER_POKEMON_COLLECTION_ITEMS } from "@/graphql/tcg/pokemon/collect
 import Header from "@/components/misc/Header";
 import { auth } from "@/auth";
 import createApolloClient from "@/lib/clients/createApolloClient";
-import CollectionList from "@/components/tcg/CollectionList";
+import CollectionList from "@/components/tcg/pokemon/collection/CollectionList";
 import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
 import { RedirectReasons } from "@/types/Redirect";
-import { Divider } from "@/components/catalyst-ui/divider";
 import buildCollectionsOrderBy from "@/utils/buildCollectionsOrderBy";
 
 interface Props {
@@ -84,7 +83,6 @@ export default async function CollectionCardsPage({ params }: Props) {
         withBackButton
         previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}`}
       />
-      <Divider />
       <CollectionList
         // Force a unique key per default sort (optional)
         key={`${sortBy}-${sortOrder}`}

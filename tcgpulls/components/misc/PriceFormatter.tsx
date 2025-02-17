@@ -10,11 +10,11 @@ const PriceFormatter = ({
   side = PriceBadgeSide.Left,
 }: Props) => {
   return (
-    <>
+    <div className={`flex items-center gap-1`}>
       {priceActionCondition ? (
-        <FaCaretDown className={`text-red-500 -mt-0.5`} />
+        <FaCaretDown size={10} className={`text-red-500`} />
       ) : (
-        <FaCaretUp className={`text-green-500 mt-0.5`} />
+        <FaCaretUp size={10} className={`text-green-500 mt-0.5`} />
       )}
 
       <span
@@ -24,7 +24,7 @@ const PriceFormatter = ({
           ? `${currencySymbol}${price}`
           : `${price}${currencySymbol}`}
       </span>
-    </>
+    </div>
   );
 };
 

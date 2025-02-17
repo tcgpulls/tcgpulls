@@ -1,4 +1,8 @@
 {
+  "language": {
+    "en": "English",
+    "ja": "日本語"
+  },
   "common": {
     "company": "tcgpulls.xyz",
     "loading": "Loading",
@@ -45,6 +49,7 @@
     "my-collections": "My Collections",
     "set": "Set",
     "sets": "Sets",
+    "details": "Details",
     "pokemon": "Pokémon",
     "one-piece": "One Piece",
     "tcg-pokemon": "Pokémon Trading Card Game",

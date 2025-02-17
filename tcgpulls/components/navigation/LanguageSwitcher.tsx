@@ -7,12 +7,15 @@ import { useLocale } from "next-intl";
 import { ChangeEvent } from "react";
 import { Locale, usePathname, useRouter } from "@/i18n/routing";
 import { useParams } from "next/navigation";
+import { useTranslations } from "use-intl";
+import { IoMdGlobe } from "react-icons/io";
 
 const LanguageSwitcher = () => {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
+  const t = useTranslations("language");
 
   const handleChange = (e: ChangeEvent) => {
     const nextLocale = (e.target as HTMLSelectElement).value;
@@ -26,11 +29,14 @@ const LanguageSwitcher = () => {
   };
 
   return (
-    <Field>
+    <Field className={`flex items-center gap-2`}>
+      <label>
+        <IoMdGlobe />
+      </label>
       <Select name="language" value={locale} onChange={handleChange}>
         {i18n.locales.map((loc) => (
           <option value={loc.value} key={loc.value}>
-            {loc.label}
+            {t(`${loc.value}`)}
           </option>
         ))}
       </Select>

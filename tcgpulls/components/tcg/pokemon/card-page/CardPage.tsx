@@ -2,21 +2,15 @@ import Header from "@/components/misc/Header";
 import { UrlParamsT } from "@/types/Params";
 import { getPokemonCard } from "@/lib/tcg/pokemon/getPokemonCard";
 import { getTranslations } from "next-intl/server";
-import AbilitiesList from "@/components/tcg/pokemon/card-page/AbilitiesList";
-import AttacksList from "@/components/tcg/pokemon/card-page/AttacksList";
-import WeaknessesList from "@/components/tcg/pokemon/card-page/WeaknessesList";
 import BasicInfo from "@/components/tcg/pokemon/card-page/BasicInfo";
-import FlavorText from "@/components/tcg/pokemon/card-page/FlavorText";
-import ArtistInfo from "@/components/tcg/pokemon/card-page/ArtistInfo";
 import CardImage from "@/components/tcg/pokemon/card-page/CardImage";
-import ResistancesList from "@/components/tcg/pokemon/card-page/ResistancesList";
-import RetreatCost from "@/components/tcg/pokemon/card-page/RetreatCost";
-import { Divider } from "@/components/catalyst-ui/divider";
 import { GET_USER_POKEMON_COLLECTION_ITEMS_FOR_CARD } from "@/graphql/tcg/pokemon/collection/queries";
 import { OrderDirection, PokemonCollectionItem } from "@/graphql/generated";
 import { auth } from "@/auth";
 import createApolloClient from "@/lib/clients/createApolloClient";
 import CollectionDetails from "@/components/tcg/pokemon/collection/CollectionDetails";
+import Tabs from "@/components/misc/Tabs";
+import CardDetails from "@/components/tcg/pokemon/card-page/CardDetails";
 
 interface Props {
   params: UrlParamsT;
@@ -51,17 +45,7 @@ const PokemonCardPage = async ({ params }: Props) => {
     const collectionItems: PokemonCollectionItem[] =
       collectionResponse.data?.pokemonCollectionItems ?? [];
 
-    const {
-      tcgSetId,
-      flavorText,
-      artist,
-      set,
-      attacks,
-      abilities,
-      weaknesses,
-      resistances,
-      retreatCost,
-    } = card;
+    const { tcgSetId, set } = card;
 
     return (
       <>
@@ -74,42 +58,39 @@ const PokemonCardPage = async ({ params }: Props) => {
         />
 
         {/* Main Content Container */}
-        <div className="flex flex-col md:flex-row gap-12 py-4 md:py-6">
+        <div className="flex gap-8 py-4 md:py-6">
           {/* Left Column: Card Image */}
-          <div className="flex justify-center items-center min-w-[460px]">
+          <div className="min-w-[460px]">
             <CardImage card={card} />
           </div>
 
           {/* Right Column: Card Info */}
-          <div className="flex flex-col gap-4 grow max-w-[640px]">
+          <div className="flex flex-col gap-4 grow">
             <BasicInfo card={card} tcgLang={tcgLang!} />
 
-            <Divider />
+            {/*<Divider />*/}
 
-            {flavorText && <FlavorText flavorText={flavorText} />}
-
-            {abilities && abilities.length > 0 && (
-              <AbilitiesList abilities={abilities} />
-            )}
-
-            {attacks && attacks.length > 0 && <AttacksList attacks={attacks} />}
-
-            <div className={`grid grid-cols-3 gap-4`}>
-              <WeaknessesList weaknesses={weaknesses!} />
-              <ResistancesList resistances={resistances} />
-              <RetreatCost retreatCost={retreatCost} />
-            </div>
-
-            {artist && <ArtistInfo artist={artist} />}
-
-            {/* …existing card content */}
+            <Tabs
+              tabs={[
+                {
+                  label: t("common.collection"),
+                  content: (
+                    <div>
+                      <CollectionDetails collectionItems={collectionItems} />
+                    </div>
+                  ),
+                },
+                {
+                  label: t("common.details"),
+                  content: (
+                    <div className={`max-w-[640px]`}>
+                      <CardDetails card={card} />
+                    </div>
+                  ),
+                },
+              ]}
+            />
           </div>
-        </div>
-        <div className={`py-8`}>
-          <CollectionDetails
-            cardId={card.id}
-            collectionItems={collectionItems}
-          />
         </div>
       </>
     );

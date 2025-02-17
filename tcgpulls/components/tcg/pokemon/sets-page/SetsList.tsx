@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import InfiniteList from "@/components/misc/InfiniteList";
-import SetCard from "@/components/tcg/SetCard";
+import SetCard from "@/components/tcg/pokemon/sets-page/SetCard";
 import SetsGrid from "@/components/misc/SetsGrid";
 
 import {
@@ -17,6 +17,7 @@ import {
 } from "@/constants/tcg/pokemon";
 import { FilterBar } from "@/components/navigation/FilterBar";
 import Spinner from "@/components/misc/Spinner";
+import SetsHeader from "@/components/tcg/pokemon/sets-page/SetsHeader";
 
 // 1. Define a mapping for default sort orders for sets.
 // For example, you might want "releaseDate" to be descending (most recent first)
@@ -89,6 +90,10 @@ export default function SetsList({
   // 8) Render.
   return (
     <div className="pt-2">
+      {data?.pokemonSets && (
+        <SetsHeader sets={data?.pokemonSets} tcgCategory={tcgCategory} />
+      )}
+
       {/* Render FilterBar with our custom sort key change handler */}
       <FilterBar
         sortBy={sortBy}

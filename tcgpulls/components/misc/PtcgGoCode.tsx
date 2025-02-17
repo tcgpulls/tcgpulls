@@ -1,11 +1,12 @@
 type Props = {
+  className?: string;
   code: string;
   language?: string;
 };
 
-const PtcgGoCode = ({ code, language = "en" }: Props) => {
+const PtcgGoCode = ({ className, code, language = "en" }: Props) => {
   return (
-    <div>
+    <div className={className}>
       <p
         className={`bg-black border border-white text-white text-[12px] font-semibold rounded-md uppercase px-1 py-0.5 whitespace-nowrap`}
       >
