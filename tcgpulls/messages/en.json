@@ -1,4 +1,8 @@
 {
+  "language": {
+    "en": "English",
+    "ja": "日本語"
+  },
   "common": {
     "company": "tcgpulls.xyz",
     "loading": "Loading",

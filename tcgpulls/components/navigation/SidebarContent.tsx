@@ -11,7 +11,6 @@ import {
   SidebarSection,
 } from "@/components/catalyst-ui/sidebar";
 import { Link } from "@/components/catalyst-ui/link";
-import LanguageSwitcher from "@/components/navigation/LanguageSwitcher";
 import { useTranslations } from "use-intl";
 import { ReactNode } from "react";
 import { usePathname } from "@/i18n/routing";
@@ -95,9 +94,11 @@ const SidebarContent = () => {
   return (
     <Sidebar>
       <SidebarHeader className="mt-4">
-        <Link href="/app" aria-label="Home">
-          <p className="font-bold">{t("company")}</p>
-        </Link>
+        <div className={`flex items-center justify-between`}>
+          <Link href="/app" aria-label="Home">
+            <p className="font-bold">{t("company")}</p>
+          </Link>
+        </div>
       </SidebarHeader>
       <SidebarBody>
         {sidebarItems.map((section, index) =>
@@ -143,9 +144,8 @@ const SidebarContent = () => {
       </SidebarBody>
       <SidebarFooter>
         <SidebarSection>
-          <div className="flex justify-between">
+          <div className="flex justify-end">
             <AuthButton />
-            <LanguageSwitcher />
           </div>
         </SidebarSection>
       </SidebarFooter>

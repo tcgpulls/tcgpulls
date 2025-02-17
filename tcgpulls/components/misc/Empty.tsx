@@ -16,7 +16,9 @@ const Empty = ({ title, description, ctaText, ctaUrl, ctaOnClick }: Props) => {
         {(ctaUrl || ctaOnClick) && (
           <>
             {ctaUrl && <Link href={ctaUrl}>{ctaText}</Link>}
-            <Button onClick={ctaOnClick}>{ctaText}</Button>
+            <Button color={`primary`} onClick={ctaOnClick}>
+              {ctaText}
+            </Button>
           </>
         )}
         <p className={`font-semibold`}>{title}</p>

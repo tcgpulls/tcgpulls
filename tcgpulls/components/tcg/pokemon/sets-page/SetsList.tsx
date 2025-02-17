@@ -90,7 +90,9 @@ export default function SetsList({
   // 8) Render.
   return (
     <div className="pt-2">
-      <SetsHeader sets={data?.pokemonSets!} tcgCategory={tcgCategory} />
+      {data?.pokemonSets && (
+        <SetsHeader sets={data?.pokemonSets} tcgCategory={tcgCategory} />
+      )}
 
       {/* Render FilterBar with our custom sort key change handler */}
       <FilterBar

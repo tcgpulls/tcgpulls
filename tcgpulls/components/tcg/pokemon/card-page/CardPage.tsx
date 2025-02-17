@@ -76,10 +76,7 @@ const PokemonCardPage = async ({ params }: Props) => {
                   label: t("common.collection"),
                   content: (
                     <div>
-                      <CollectionDetails
-                        cardId={card.id}
-                        collectionItems={collectionItems}
-                      />
+                      <CollectionDetails collectionItems={collectionItems} />
                     </div>
                   ),
                 },

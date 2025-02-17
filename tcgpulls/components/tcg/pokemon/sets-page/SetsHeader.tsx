@@ -13,8 +13,8 @@ type Props = {
 };
 
 const SetsHeader = ({ sets, tcgCategory }: Props) => {
-  if (!sets) return null;
   const t = useTranslations();
+  if (!sets) return null;
 
   return (
     <ListHeader

@@ -2,10 +2,7 @@ import { i18nT } from "@/types/i18n";
 
 const i18n: i18nT = {
   defaultLocale: "en",
-  locales: [
-    { value: "en", label: "English" },
-    { value: "ja", label: "日本語" },
-  ],
+  locales: [{ value: "en" }, { value: "ja" }],
   pathnames: {
     // any localized pathnames go here
     /*

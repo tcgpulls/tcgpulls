@@ -1,4 +1,8 @@
 {
+  "language": {
+    "en": "English",
+    "ja": "日本語"
+  },
   "common": {
     "company": "tcgpulls.xyz",
     "loading": "ロード中",
@@ -21,6 +25,10 @@
     "next": "次へ",
     "previous": "前へ",
     "back": "戻る",
+    "return-to-home": "ホームへ戻る",
+    "collectibles": "コレクティブル",
+    "details": "詳細",
+    "not-authenticated": "このページを表示するにはログインが必要です。",
     "home": "ホーム",
     "profile": "プロフィール",
     "tcg": "トレーディングカードゲーム",
@@ -121,7 +129,8 @@
         "company": "グレーディング会社",
         "condition": "状態",
         "rating": "評価",
-        "actions": "操作"
+        "actions": "操作",
+        "sign-in-message": "コレクションに追加するにはログインしてください。"
       }
     },
     "grading": {
@@ -165,6 +174,7 @@
       }
     },
     "pokemon": {
+      "variant": "バリアント",
       "energy": {
         "name": "エネルギー",
         "types": {
@@ -237,6 +247,23 @@
       }
     }
   },
+  "filter-bar": {
+    "search": "検索",
+    "search-placeholder": "検索...",
+    "sort-by": "並び替え",
+    "order-by": "順序",
+    "order-by-asc": "昇順",
+    "order-by-desc": "降順",
+    "release-date": "発売日",
+    "name": "名前",
+    "quantity": "数量",
+    "price": "価格",
+    "acquired-at": "入手日",
+    "rarity": "レアリティ",
+    "pull-rate": "排出率",
+    "card-name": "カード名",
+    "normalized-number": "カード番号"
+  },
   "tcg-page": {
     "title": "トレーディングカードゲーム",
     "metadata": {
@@ -246,10 +273,18 @@
   },
   "sets-page": {
     "title": "拡張パック",
+    "no-sets": "拡張パックが見つかりません。",
     "metadata": {
       "title": "拡張パック - tcgpulls.xyz",
       "description": "TCGパックの開封結果や排出率を一元管理！"
     }
+  },
+  "collection-page": {
+    "title": "コレクション",
+    "no-items": "現在、コレクションにはアイテムがありません。"
+  },
+  "cards-page": {
+    "no-cards": "カードが見つかりません。"
   },
   "card-page": {
     "not-found": "カードが見つかりません",
