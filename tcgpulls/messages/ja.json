@@ -1,8 +1,5 @@
 {
-  "language": {
-    "en": "English",
-    "ja": "日本語"
-  },
+  "language": { "en": "English", "ja": "日本語" },
   "common": {
     "company": "tcgpulls.xyz",
     "loading": "ロード中",
@@ -28,7 +25,6 @@
     "return-to-home": "ホームへ戻る",
     "collectibles": "コレクティブル",
     "details": "詳細",
-    "not-authenticated": "このページを表示するにはログインが必要です。",
     "home": "ホーム",
     "profile": "プロフィール",
     "tcg": "トレーディングカードゲーム",
@@ -69,20 +65,14 @@
     "footer": {
       "copyright": "本ウェブサイトは、任天堂または株式会社ポケモンによって制作、承認、サポート、または提携されているものではありません。"
     },
-    "lang": {
-      "en_label": "英語",
-      "ja_label": "日本語"
-    },
+    "lang": { "en_label": "英語", "ja_label": "日本語" },
     "auth": {
       "sign-in": "ログイン",
       "sign-out": "ログアウト",
-      "not-authorized": "権限がありません"
+      "not-authorized": "権限がありません",
+      "not-authenticated": "このページを表示するにはサインインが必要です。"
     },
-    "forms": {
-      "submit": "送信",
-      "cancel": "キャンセル",
-      "save": "保存"
-    },
+    "forms": { "submit": "送信", "cancel": "キャンセル", "save": "保存" },
     "errors": {
       "generic": "エラーが発生しました。",
       "access-denied": "アクセスが拒否されました",
@@ -147,11 +137,7 @@
       },
       "companies-label": "グレーディング会社",
       "companies-placeholder": "会社を選択",
-      "companies-list": {
-        "psa": "PSA",
-        "beckett": "ベケット",
-        "cgc": "CGC"
-      },
+      "companies-list": { "psa": "PSA", "beckett": "ベケット", "cgc": "CGC" },
       "ratings-label": "グレーディング評価",
       "ratings-placeholder": "評価を選択",
       "ratings-list": {
@@ -281,11 +267,13 @@
   },
   "collection-page": {
     "title": "コレクション",
-    "no-items": "現在、コレクションにはアイテムがありません。"
+    "no-items": "現在、コレクションにはアイテムがありません。",
+    "metadata": {
+      "title": "コレクション - tcgpulls.xyz",
+      "description": "あなたのTCGパックを引いた結果と引き率をすべて一箇所でチェック！"
+    }
   },
-  "cards-page": {
-    "no-cards": "カードが見つかりません。"
-  },
+  "cards-page": { "no-cards": "カードが見つかりません。" },
   "card-page": {
     "not-found": "カードが見つかりません",
     "collection": "コレクション",

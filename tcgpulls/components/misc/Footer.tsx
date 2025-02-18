@@ -7,8 +7,8 @@ const Footer = async () => {
 
   return (
     <footer className={`mt-8`}>
-      <div className={`flex flex-col items-center justify-center gap-4`}>
-        <p>
+      <div className={`flex items-center justify-center gap-8`}>
+        <p className={`text-sm text-primary-400`}>
           &copy; {currentYear} {t("company")} - {t("footer.copyright")}
         </p>
         <LanguageSwitcher />
