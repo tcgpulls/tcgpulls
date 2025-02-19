@@ -20,6 +20,18 @@ const TcgLangPage = async ({ params }: Props) => {
   return (
     <div className={`grid gap-8`}>
       <div>
+        <Link href={`/app/tcg/pokemon/${tcgLang}/booster-packs`}>
+          <Card
+            className={`h-96 p-4 flex items-center justify-center`}
+            isClickable={true}
+          >
+            <h2 className={`font-bold text-3xl text-center`}>
+              {t("common.booster-packs")}
+            </h2>
+          </Card>
+        </Link>
+      </div>
+      <div className={`grid grid-cols-2 gap-8`}>
         <Link href={`/app/tcg/pokemon/${tcgLang}/collection`}>
           <Card
             className={`h-96 p-4 flex items-center justify-center`}
@@ -30,18 +42,6 @@ const TcgLangPage = async ({ params }: Props) => {
             >
               {t("common.collection")}
               {!userId && <FaLock className={`text-primary-600`} size={32} />}
-            </h2>
-          </Card>
-        </Link>
-      </div>
-      <div className={`grid grid-cols-2 gap-8`}>
-        <Link href={`/app/tcg/pokemon/${tcgLang}/booster-packs`}>
-          <Card
-            className={`h-96 p-4 flex items-center justify-center`}
-            isClickable={true}
-          >
-            <h2 className={`font-bold text-3xl text-center`}>
-              {t("common.booster-packs")}
             </h2>
           </Card>
         </Link>
