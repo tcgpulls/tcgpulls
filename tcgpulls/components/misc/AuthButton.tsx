@@ -20,13 +20,9 @@ const AuthButton = () => {
   return (
     <div>
       {session?.user ? (
-        <Button color={`primary`} onClick={() => signOut()}>
-          {t("auth.sign-out")}
-        </Button>
+        <Button onClick={() => signOut()}>{t("auth.sign-out")}</Button>
       ) : (
-        <Button color={`primary`} onClick={() => signIn()}>
-          {t("auth.sign-in")}
-        </Button>
+        <Button onClick={() => signIn()}>{t("auth.sign-in")}</Button>
       )}
     </div>
   );

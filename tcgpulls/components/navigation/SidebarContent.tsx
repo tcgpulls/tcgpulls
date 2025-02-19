@@ -22,6 +22,7 @@ import { BiGridAlt } from "react-icons/bi";
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
 import { useSession } from "next-auth/react";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 type SidebarItem = {
   href: string;
@@ -139,13 +140,14 @@ const SidebarContent = () => {
                 )}
               </SidebarLabel>
             </SidebarItem>
-          ),
+          )
         )}
       </SidebarBody>
       <SidebarFooter>
         <SidebarSection>
-          <div className="flex justify-end">
+          <div className="flex justify-between">
             <AuthButton />
+            <LanguageSwitcher />
           </div>
         </SidebarSection>
       </SidebarFooter>
