@@ -21,12 +21,16 @@ import rules from "./accessControl";
 
 const originRegexes = [
   /^http:\/\/localhost:\d+$/, // local dev
-  /^https:\/\/.*tcgpullsxyz\.vercel\.app$/, // ephemeral previews
+  /^https:\/\/.*tcgpullsxyz\.vercel\.app$/, // Vercel previews
   /^https:\/\/tcgpulls-admin-[A-Za-z0-9-]+\.herokuapp\.com$/,
-  /^https:\/\/(www\.)?tcgpulls\.xyz$/, // production domain
+  /^https:\/\/(www\.)?tcgpulls\.xyz$/, // Main domain
+  /^https:\/\/api\.tcgpulls\.xyz$/, // API subdomain
+  /^https:\/\/admin\.tcgpulls\.xyz$/, // Admin domain
 ];
 
-const originStrings = [process.env.APP_ORIGIN_CORS ?? ""]; // our custom env var
+const originStrings = process.env.APP_ORIGIN_CORS
+  ? [process.env.APP_ORIGIN_CORS]
+  : []; // our custom env var
 
 // Our custom function has signature: (origin, callback) => void
 const corsOptions: CorsOptions = {
@@ -53,7 +57,7 @@ const corsOptions: CorsOptions = {
 export default withAuth(
   config({
     server: {
-      port: 4000,
+      port: Number(process.env.PORT) || 4000,
       cors: corsOptions,
       extendExpressApp: (app, commonContext) => {
         app.use("/api/graphql", async (req, res, next) => {
@@ -86,5 +90,5 @@ export default withAuth(
     },
     lists,
     session,
-  }),
+  })
 );
