@@ -96,5 +96,28 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("description"),
+    keywords: t("keywords"),
+    openGraph: {
+      title: t("openGraph.title"),
+      description: t("openGraph.description"),
+      siteName: t("openGraph.siteName"),
+      type: "website",
+      locale: locale,
+      // images: [
+      //   {
+      //     url: "/og-image.png",
+      //     width: 1200,
+      //     height: 630,
+      //     alt: "tcgpulls.xyz",
+      //   },
+      // ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("twitter.title"),
+      description: t("twitter.description"),
+      creator: "@yourtwitterhandle",
+      // images: ["/twitter-image.png"],
+    },
   };
 }

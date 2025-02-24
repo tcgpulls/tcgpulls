@@ -2,7 +2,6 @@ import { PokemonSetItemFragment } from "@/graphql/generated";
 import Image from "next/image";
 import { assetsUrl } from "@/utils/assetsUrl";
 import { formatDateShort } from "@/utils/formatDate";
-import PtcgGoCode from "@/components/misc/PtcgGoCode";
 import { Badge } from "@/components/catalyst-ui/badge";
 import { GoListOrdered } from "react-icons/go";
 import { LuCalendarDays } from "react-icons/lu";
@@ -20,6 +19,12 @@ const CardsHeader = ({ set }: Props) => {
   const formattedReleaseDate = set.releaseDate
     ? formatDateShort(new Date(set.releaseDate))
     : "Unknown Release Date";
+
+  const symbolUrl = set.symbolStorageUrl
+    ? assetsUrl(set.symbolStorageUrl)
+    : set.symbolApiUrl
+      ? set.symbolApiUrl
+      : "https://placehold.co/40x40";
 
   return (
     <ListHeader
@@ -44,19 +49,27 @@ const CardsHeader = ({ set }: Props) => {
         <>
           <h1 className="flex items-end gap-4 font-bold text-primary-100">
             <span className={`text-3xl `}>{set.name}</span>
-            <PtcgGoCode className={`shrink mb-1`} code={set.ptcgoCode!} />
+            {set.symbolStorageUrl && (
+              <Image
+                src={symbolUrl}
+                alt={`${set.name} logo - ${set.tcgSetId}`}
+                width={300}
+                height={128}
+                className="w-8 h-6 mb-1 object-contain"
+              />
+            )}
           </h1>
           <div className={`flex items-start gap-2`}>
             {set.series && (
-              <Badge color={`primary`}>
+              <Badge>
                 <GoListOrdered /> {set.series}
               </Badge>
             )}
-            <Badge color={`primary`}>
+            <Badge>
               <LuCalendarDays /> {formattedReleaseDate}
             </Badge>
             {(set.total !== null || set.printedTotal !== null) && (
-              <Badge color={`primary`}>
+              <Badge>
                 <TbCards />
                 <span>
                   {set.printedTotal && ` ${set.printedTotal}`}{" "}

@@ -8,16 +8,18 @@ type Props = {
 
 const CardHeader = ({ title, subtitle, children }: Props) => {
   return (
-    <div className={`w-full flex justify-between gap-4`}>
-      <div className={`min-w-0 w-full`}>
-        <h2 className="truncate flex justify-between items-center gap-2 font-semibold text-sm text-primary-50">
-          <span>{title}</span>
-        </h2>
-        <p className={`truncate text-primary-400 text-xs pt-1`}>
-          <span>{subtitle}</span>
-        </p>
+    <div className={`w-full flex justify-between gap-6`}>
+      <div className={`min-w-0 grow`}>
+        <div className="flex justify-between items-center gap-2">
+          <h2 className="truncate font-semibold text-sm text-primary-50">
+            {title}
+          </h2>
+        </div>
+        {subtitle && (
+          <p className={`truncate text-primary-400 text-xs pt-1`}>{subtitle}</p>
+        )}
       </div>
-      <div>{children}</div>
+      <div className="flex-shrink-0">{children}</div>
     </div>
   );
 };
