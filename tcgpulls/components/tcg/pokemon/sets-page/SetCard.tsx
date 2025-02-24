@@ -8,7 +8,6 @@ import { useTranslations } from "use-intl";
 import { Badge } from "@/components/catalyst-ui/badge";
 import { LuCalendar } from "react-icons/lu";
 import { Divider } from "@/components/catalyst-ui/divider";
-import PtcgGoCode from "@/components/misc/PtcgGoCode";
 import CardHeader from "@/components/misc/CardHeader";
 import CardFooter from "@/components/misc/CardFooter";
 import { formatDateShort } from "@/utils/formatDate";

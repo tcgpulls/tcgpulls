@@ -2,7 +2,6 @@ import { PokemonSetItemFragment } from "@/graphql/generated";
 import Image from "next/image";
 import { assetsUrl } from "@/utils/assetsUrl";
 import { formatDateShort } from "@/utils/formatDate";
-import PtcgGoCode from "@/components/misc/PtcgGoCode";
 import { Badge } from "@/components/catalyst-ui/badge";
 import { GoListOrdered } from "react-icons/go";
 import { LuCalendarDays } from "react-icons/lu";
