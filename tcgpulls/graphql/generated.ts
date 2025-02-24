@@ -2828,14 +2828,14 @@ export type RemoveCardFromCollectionMutationVariables = Exact<{
 
 export type RemoveCardFromCollectionMutation = { __typename?: 'Mutation', deletePokemonCollectionItem?: { __typename?: 'PokemonCollectionItem', id: string } | null };
 
-export type PokemonSetItemFragment = { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, language?: string | null, releaseDate?: any | null, ptcgoCode?: string | null, logoApiUrl?: string | null, logoStorageUrl?: string | null, total?: number | null, printedTotal?: number | null };
+export type PokemonSetItemFragment = { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, language?: string | null, releaseDate?: any | null, ptcgoCode?: string | null, logoApiUrl?: string | null, logoStorageUrl?: string | null, symbolApiUrl?: string | null, symbolStorageUrl?: string | null, total?: number | null, printedTotal?: number | null };
 
 export type GetPokemonSetQueryVariables = Exact<{
   where: PokemonSetWhereUniqueInput;
 }>;
 
 
-export type GetPokemonSetQuery = { __typename?: 'Query', pokemonSet?: { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, language?: string | null, releaseDate?: any | null, ptcgoCode?: string | null, logoApiUrl?: string | null, logoStorageUrl?: string | null, total?: number | null, printedTotal?: number | null } | null };
+export type GetPokemonSetQuery = { __typename?: 'Query', pokemonSet?: { __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, language?: string | null, releaseDate?: any | null, ptcgoCode?: string | null, logoApiUrl?: string | null, logoStorageUrl?: string | null, symbolApiUrl?: string | null, symbolStorageUrl?: string | null, total?: number | null, printedTotal?: number | null } | null };
 
 export type GetPokemonSetsQueryVariables = Exact<{
   where: PokemonSetWhereInput;
@@ -2845,7 +2845,7 @@ export type GetPokemonSetsQueryVariables = Exact<{
 }>;
 
 
-export type GetPokemonSetsQuery = { __typename?: 'Query', pokemonSets?: Array<{ __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, language?: string | null, releaseDate?: any | null, ptcgoCode?: string | null, logoApiUrl?: string | null, logoStorageUrl?: string | null, total?: number | null, printedTotal?: number | null }> | null };
+export type GetPokemonSetsQuery = { __typename?: 'Query', pokemonSets?: Array<{ __typename?: 'PokemonSet', id: string, tcgSetId?: string | null, name?: string | null, series?: string | null, language?: string | null, releaseDate?: any | null, ptcgoCode?: string | null, logoApiUrl?: string | null, logoStorageUrl?: string | null, symbolApiUrl?: string | null, symbolStorageUrl?: string | null, total?: number | null, printedTotal?: number | null }> | null };
 
 export const PokemonCardItemFragmentDoc = gql`
     fragment PokemonCardItem on PokemonCard {
@@ -2917,6 +2917,8 @@ export const PokemonSetItemFragmentDoc = gql`
   ptcgoCode
   logoApiUrl
   logoStorageUrl
+  symbolApiUrl
+  symbolStorageUrl
   total
   printedTotal
 }

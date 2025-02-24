@@ -30,6 +30,12 @@ const SetCard = ({ set, href }: Props) => {
       ? set.logoApiUrl
       : "https://placehold.co/300x200";
 
+  const symbolUrl = set.symbolStorageUrl
+    ? assetsUrl(set.symbolStorageUrl)
+    : set.symbolApiUrl
+      ? set.symbolApiUrl
+      : "https://placehold.co/40x40";
+
   // Format the release date (you might have a helper; otherwise, use toLocaleDateString)
   const formattedReleaseDate = formatDateShort(new Date(set.releaseDate));
 
@@ -53,11 +59,17 @@ const SetCard = ({ set, href }: Props) => {
         <Divider />
 
         <CardHeader title={set.name!} subtitle={set.series!}>
-          <div className={`flex flex-col items-end gap-2`}>
-            {set.ptcgoCode && set.language && (
-              <PtcgGoCode code={set.ptcgoCode} language={set.language} />
-            )}
-          </div>
+          {set.symbolStorageUrl && (
+            <>
+              <Image
+                src={symbolUrl}
+                alt={`${set.name} logo - ${set.tcgSetId}`}
+                width={300}
+                height={128}
+                className="w-8 h-8 object-contain"
+              />
+            </>
+          )}
         </CardHeader>
 
         <CardFooter>

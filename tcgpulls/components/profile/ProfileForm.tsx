@@ -26,20 +26,20 @@ export default function ProfileForm() {
   }
 
   return (
-    <div className="max-w-lg mt-8 p-6 bg-white rounded-lg shadow-md dark:bg-primary-800">
+    <div className="max-w-lg mt-8 p-6 rounded-lg shadow-md bg-primary-800">
       {queryLoading ? (
         <div className="flex justify-center">
           <Spinner />
         </div>
       ) : (
         <>
-          <h2 className="text-xl font-semibold text-primary-900 dark:text-white mb-6">
+          <h2 className="text-xl font-semibold text-primary-900 text-white mb-6">
             {t("form.title")}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name Field */}
             <div>
-              <label className="block text-sm font-medium text-primary-700 dark:text-primary-300">
+              <label className="block text-sm font-medium text-primary-300">
                 {t("form.name")}
               </label>
               <Input
@@ -53,7 +53,7 @@ export default function ProfileForm() {
 
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-medium text-primary-700 dark:text-primary-300">
+              <label className="block text-sm font-medium text-primary-300">
                 {t("form.email")}
               </label>
               <Input
@@ -67,7 +67,7 @@ export default function ProfileForm() {
 
             {/* Username Field */}
             <div>
-              <label className="block text-sm font-medium text-primary-700 dark:text-primary-300">
+              <label className="block text-sm font-medium text-primary-300">
                 {t("form.username")}
               </label>
               <Input
@@ -80,7 +80,7 @@ export default function ProfileForm() {
 
             {/* Avatar */}
             <div>
-              <label className="block text-sm font-medium text-primary-700 dark:text-primary-300">
+              <label className="block text-sm font-medium text-primary-300">
                 {t("form.current-image")}
               </label>
               <Avatar

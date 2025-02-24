@@ -11,6 +11,8 @@ export const PokemonSetItem = gql`
     ptcgoCode
     logoApiUrl
     logoStorageUrl
+    symbolApiUrl
+    symbolStorageUrl
     total
     printedTotal
   }

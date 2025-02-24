@@ -14,6 +14,7 @@ import CollectionList from "@/components/tcg/pokemon/collection/CollectionList";
 import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
 import { RedirectReasons } from "@/types/Redirect";
 import buildCollectionsOrderBy from "@/utils/buildCollectionsOrderBy";
+import { Metadata } from "next";
 
 interface Props {
   params: UrlParamsT;
@@ -96,4 +97,41 @@ export default async function CollectionCardsPage({ params }: Props) {
       />
     </>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: UrlParamsT;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "common.metadata" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    keywords: t("keywords"),
+    openGraph: {
+      title: t("openGraph.title"),
+      description: t("openGraph.description"),
+      siteName: t("openGraph.siteName"),
+      type: "website",
+      locale: locale,
+      // images: [
+      //   {
+      //     url: "/og-image.png",
+      //     width: 1200,
+      //     height: 630,
+      //     alt: "tcgpulls.xyz",
+      //   },
+      // ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("twitter.title"),
+      description: t("twitter.description"),
+      creator: "@yourtwitterhandle",
+      // images: ["/twitter-image.png"],
+    },
+  };
 }

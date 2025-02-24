@@ -17,7 +17,7 @@ import createApolloClient from "@/lib/clients/createApolloClient";
 import { getTranslations } from "next-intl/server";
 import CardsList from "@/components/tcg/pokemon/cards-page/CardsList";
 import Header from "@/components/misc/Header";
-
+import { Metadata } from "next";
 interface Props {
   params: UrlParamsT;
 }
@@ -115,4 +115,46 @@ export default async function SetCardsPage({ params }: Props) {
       />
     </>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: UrlParamsT;
+}): Promise<Metadata> {
+  const { locale, setId, tcgLang } = await params;
+  const t = await getTranslations({ locale, namespace: "cards-page.metadata" });
+
+  const client = createApolloClient();
+  const { data: setData } = await client.query<
+    GetPokemonSetQuery,
+    GetPokemonSetQueryVariables
+  >({
+    query: GET_POKEMON_SET,
+    variables: {
+      where: {
+        tcgSetId_language: `${setId}-${tcgLang}`,
+      },
+    },
+  });
+
+  const setName = String(setData?.pokemonSet?.name ?? setId);
+
+  return {
+    title: t("title", { setName }),
+    description: t("description", { setName }),
+    keywords: t("keywords", { setName }),
+    openGraph: {
+      title: t("openGraph.title", { setName }),
+      description: t("openGraph.description", { setName }),
+      siteName: t("openGraph.siteName"),
+      type: "website",
+      locale: locale,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("twitter.title", { setName }),
+      description: t("twitter.description", { setName }),
+    },
+  };
 }

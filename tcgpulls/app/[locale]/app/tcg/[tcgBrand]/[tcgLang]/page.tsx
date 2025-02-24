@@ -5,6 +5,10 @@ import { UrlParamsT } from "@/types/Params";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { FaLock } from "react-icons/fa6";
+import BrandHeader from "@/components/tcg/pokemon/BrandHeader";
+import { TbCards } from "react-icons/tb";
+import { BiGridAlt } from "react-icons/bi";
+import { MdOutlineCollectionsBookmark } from "react-icons/md";
 
 type Props = {
   params: UrlParamsT;
@@ -18,45 +22,59 @@ const TcgLangPage = async ({ params }: Props) => {
   const userId = session?.user?.id;
 
   return (
-    <div className={`grid gap-8`}>
-      <div>
-        <Link href={`/app/tcg/pokemon/${tcgLang}/booster-packs`}>
-          <Card
-            className={`h-96 p-4 flex items-center justify-center`}
-            isClickable={true}
-          >
-            <h2 className={`font-bold text-3xl text-center`}>
-              {t("common.booster-packs")}
-            </h2>
-          </Card>
-        </Link>
-      </div>
-      <div className={`grid grid-cols-2 gap-8`}>
-        <Link href={`/app/tcg/pokemon/${tcgLang}/collection`}>
-          <Card
-            className={`h-96 p-4 flex items-center justify-center`}
-            isClickable={true}
-          >
-            <h2
-              className={`flex gap-3 items-center font-bold text-3xl text-center`}
+    <>
+      <BrandHeader />
+      <div className={`mt-8 grid gap-8`}>
+        <div>
+          <Link href={`/app/tcg/pokemon/${tcgLang}/booster-packs`}>
+            <Card
+              className={`h-80 p-4 flex items-center justify-center`}
+              isClickable={true}
             >
-              {t("common.collection")}
-              {!userId && <FaLock className={`text-primary-600`} size={32} />}
-            </h2>
-          </Card>
-        </Link>
-        <Link href={`/app/tcg/pokemon/${tcgLang}/sets`}>
-          <Card
-            className={`h-96 p-4 flex items-center justify-center`}
-            isClickable={true}
-          >
-            <h2 className={`font-bold text-3xl text-center`}>
-              {t("common.sets")}
-            </h2>
-          </Card>
-        </Link>
+              <h2
+                className={`flex flex-col items-center gap-4 font-bold text-2xl text-center`}
+              >
+                <TbCards size={42} />
+                {t("common.booster-packs")}
+              </h2>
+            </Card>
+          </Link>
+        </div>
+        <div className={`grid grid-cols-2 gap-8`}>
+          <Link href={`/app/tcg/pokemon/${tcgLang}/collection`}>
+            <Card
+              className={`h-80 p-4 flex items-center justify-center`}
+              isClickable={true}
+            >
+              <h2
+                className={`flex flex-col items-center gap-4 font-bold text-2xl text-center`}
+              >
+                <MdOutlineCollectionsBookmark size={42} />
+                <span className={`flex items-center gap-3`}>
+                  {t("common.collection")}
+                  {!userId && (
+                    <FaLock className={`text-primary-600`} size={32} />
+                  )}
+                </span>
+              </h2>
+            </Card>
+          </Link>
+          <Link href={`/app/tcg/pokemon/${tcgLang}/sets`}>
+            <Card
+              className={`h-80 p-4 flex items-center justify-center`}
+              isClickable={true}
+            >
+              <h2
+                className={`flex flex-col items-center gap-4 font-bold text-2xl text-center`}
+              >
+                <BiGridAlt size={42} />
+                {t("common.sets")}
+              </h2>
+            </Card>
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -73,5 +91,28 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("description"),
+    keywords: t("keywords"),
+    openGraph: {
+      title: t("openGraph.title"),
+      description: t("openGraph.description"),
+      siteName: t("openGraph.siteName"),
+      type: "website",
+      locale: locale,
+      // images: [
+      //   {
+      //     url: "/og-image.png",
+      //     width: 1200,
+      //     height: 630,
+      //     alt: "tcgpulls.xyz",
+      //   },
+      // ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("twitter.title"),
+      description: t("twitter.description"),
+      creator: "@yourtwitterhandle",
+      // images: ["/twitter-image.png"],
+    },
   };
 }

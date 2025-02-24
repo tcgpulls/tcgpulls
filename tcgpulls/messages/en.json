@@ -62,8 +62,18 @@
     "pull-rate": "Pull Rate",
     "pull-rates": "Pull Rates",
     "metadata": {
-      "title": "tcgpulls.xyz",
-      "description": "Get your TCG pack pulls and pull rates all in one place!"
+      "title": "tcgpulls.xyz - Track Your Trading Card Game Pulls & Collection",
+      "description": "Track your Trading Card Game pulls, manage your collection, and analyze your pull rates. Log your booster pack openings and build your TCG collection history.",
+      "keywords": "pokemon cards, pull rates, tcg collection, pack opening tracker, pokemon tcg, booster packs, card collecting",
+      "openGraph": {
+        "title": "tcgpulls.xyz - Track Your Trading  Pulls & Collection",
+        "description": "Track your Trading Card Game pulls, manage your collection, and analyze your pull rates.",
+        "siteName": "tcgpulls.xyz"
+      },
+      "twitter": {
+        "title": "tcgpulls.xyz - Track Your Trading  Pulls & Collection",
+        "description": "Track your Trading Card Game pulls, manage your collection, and analyze your pull rates."
+      }
     },
     "footer": {
       "copyright": "This website is not produced, endorsed, supported, or affiliated with Nintendo or The Pokémon Company."
@@ -216,21 +226,33 @@
   "landing-page": {
     "title": "Welcome to tcgpulls.xyz",
     "metadata": {
-      "title": "Home - tcgpulls.xyz",
+      "title": "tcgpulls.xyz - Home",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     }
   },
   "app-page": {
     "title": "Welcome to tcgpulls.xyz",
     "metadata": {
-      "title": "App - tcgpulls.xyz",
-      "description": "Get your TCG pack pulls and pull rates all in one place!"
+      "title": "tcgpulls.xyz - Choose Your Trading Card Game",
+      "description": "Start tracking your Trading Card Game collection and pull rates on tcgpulls.xyz. Log your pack openings and analyze your TCG collection journey.",
+      "keywords": "tcgpulls.xyz, pokemon cards, tcg tracker, card collection manager, pokemon tcg",
+      "openGraph": {
+        "title": "tcgpulls.xyz - Choose Your Trading Card Game",
+        "description": "Start tracking your Trading Card Game collection and pull rates on tcgpulls.xyz",
+        "siteName": "tcgpulls.xyz",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "tcgpulls.xyz - Choose Your Trading Card Game",
+        "description": "Start tracking your Trading Card Game collection and pull rates on tcgpulls.xyz"
+      }
     }
   },
   "profile-page": {
     "title": "Profile",
     "metadata": {
-      "title": "Profile - tcgpulls.xyz",
+      "title": "tcgpulls.xyz - Profile",
       "description": "Get your TCG pack pulls and pull rates all in one place!"
     },
     "form": {
@@ -275,24 +297,75 @@
     "title": "Sets",
     "no-sets": "No sets found.",
     "metadata": {
-      "title": "Sets - tcgpulls.xyz",
-      "description": "Get your TCG pack pulls and pull rates all in one place!"
+      "title": "tcgpulls.xyz - Pokémon Card Sets",
+      "description": "Browse and explore all Pokémon card sets on tcgpulls.xyz. Find detailed information about every Pokémon TCG expansion and series.",
+      "keywords": "pokemon card sets, tcg sets, pokemon expansions, pokemon series, tcgpulls.xyz, pokemon tcg sets",
+      "openGraph": {
+        "title": "tcgpulls.xyz - Pokémon Card Sets",
+        "description": "Browse and explore all Pokémon card sets on tcgpulls.xyz",
+        "siteName": "tcgpulls.xyz"
+      },
+      "twitter": {
+        "title": "tcgpulls.xyz - Pokémon Card Sets",
+        "description": "Browse and explore all Pokémon card sets on tcgpulls.xyz"
+      }
     }
   },
   "collection-page": {
     "title": "Collection",
     "no-items": "There are currently no items in your collection.",
     "metadata": {
-      "title": "Collection - tcgpulls.xyz",
-      "description": "Get your TCG pack pulls and pull rates all in one place!"
+      "title": "tcgpulls.xyz - My Pokémon Card Collection",
+      "description": "Manage and track your Trading Card Game collection on tcgpulls.xyz. Keep your collection organized and up to date with our easy-to-use collection manager.",
+      "keywords": "pokemon card collection, tcg collection tracker, pokemon cards, collection manager, tcgpulls.xyz",
+      "openGraph": {
+        "title": "tcgpulls.xyz - My Pokémon Card Collection",
+        "description": "Manage and track your Trading Card Game collection on tcgpulls.xyz",
+        "siteName": "tcgpulls.xyz",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "tcgpulls.xyz - My Pokémon Card Collection",
+        "description": "Manage and track your Trading Card Game collection on tcgpulls.xyz"
+      }
     }
   },
   "cards-page": {
-    "no-cards": "No cards found."
+    "no-cards": "No cards found.",
+    "metadata": {
+      "title": "tcgpulls.xyz - {setName} Cards",
+      "description": "Browse and collect cards from {setName}",
+      "keywords": "TCG, trading cards, {setName}, collection",
+      "openGraph": {
+        "title": "tcgpulls.xyz - {setName} Cards",
+        "description": "Explore the complete card list for {setName}",
+        "siteName": "TCG Pulls"
+      },
+      "twitter": {
+        "title": "tcgpulls.xyz - {setName} Cards",
+        "description": "View all cards from {setName}"
+      }
+    }
   },
   "card-page": {
     "not-found": "Card not found",
     "collection": "Collection",
-    "collection-empty": "No cards in collection."
+    "collection-empty": "No cards in collection.",
+    "metadata": {
+      "title": "tcgpulls.xyz - {cardName} ({setName}) | {series} Series",
+      "description": "{cardName} - Card #{number} from {setName} ({series} Series). {rarity} Pokémon card of type(s): {types}. View card details, prices, and add to your collection.",
+      "keywords": "pokemon card, {cardName}, {setName}, {series} series, {types}, pokemon tcg, trading cards",
+      "openGraph": {
+        "title": "tcgpulls.xyz - {cardName} from {setName} ({series})",
+        "description": "{cardName} - {rarity} Pokémon card from {setName} ({series} Series). View card details and add to collection on tcgpulls.xyz",
+        "siteName": "TCG Pulls",
+        "imageAlt": "{cardName} Pokémon Card"
+      },
+      "twitter": {
+        "title": "tcgpulls.xyz - {cardName} ({series})",
+        "description": "{cardName} - Card #{number} from {setName} ({series} Series). View details on tcgpulls.xyz"
+      }
+    }
   }
 }
