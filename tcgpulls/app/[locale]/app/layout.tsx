@@ -20,8 +20,8 @@ const AppLayout = async ({
 
   return (
     <SidebarLayout sidebar={<SidebarContent />} navbar={<NavbarContent />}>
-      <div className={`min-h-full flex flex-col justify-between flex-1`}>
-        <div>{children}</div>
+      <div className={`grow min-h-full flex flex-col justify-between flex-1`}>
+        <div className={`grow`}>{children}</div>
         <Footer />
       </div>
     </SidebarLayout>

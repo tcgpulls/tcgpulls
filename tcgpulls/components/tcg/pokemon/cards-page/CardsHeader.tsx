@@ -7,12 +7,14 @@ import { GoListOrdered } from "react-icons/go";
 import { LuCalendarDays } from "react-icons/lu";
 import { TbCards } from "react-icons/tb";
 import ListHeader from "@/components/tcg/pokemon/misc/ListHeader";
+import { useTranslations } from "next-intl";
 
 type Props = {
   set: PokemonSetItemFragment;
 };
 
 const CardsHeader = ({ set }: Props) => {
+  const t = useTranslations();
   if (!set) return null;
 
   // Format release date if available.
@@ -46,9 +48,9 @@ const CardsHeader = ({ set }: Props) => {
         </>
       }
       rightEl={
-        <>
+        <div className={`flex flex-col gap-4`}>
           <h1 className="flex items-end gap-4 font-bold text-primary-100">
-            <span className={`text-3xl `}>{set.name}</span>
+            <span className={`text-2xl md:text-3xl`}>{set.name}</span>
             {set.symbolStorageUrl && (
               <Image
                 src={symbolUrl}
@@ -59,7 +61,7 @@ const CardsHeader = ({ set }: Props) => {
               />
             )}
           </h1>
-          <div className={`flex items-start gap-2`}>
+          <div className={`flex flex-wrap items-start gap-2`}>
             {set.series && (
               <Badge>
                 <GoListOrdered /> {set.series}
@@ -72,14 +74,13 @@ const CardsHeader = ({ set }: Props) => {
               <Badge>
                 <TbCards />
                 <span>
-                  {set.printedTotal && ` ${set.printedTotal}`}{" "}
-                  {`(${set.total})`}
+                  {set.total} {t("common.cards")}
                 </span>
                 {}
               </Badge>
             )}
           </div>
-        </>
+        </div>
       }
     />
   );

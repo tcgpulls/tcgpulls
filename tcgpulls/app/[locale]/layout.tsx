@@ -34,7 +34,7 @@ const LocaleLayout = async ({
         <NextIntlClientProvider messages={messages}>
           <CustomApolloProvider>
             <html lang={locale} className={`min-h-screen`}>
-              <body className={`min-h-screen font-sans`}>
+              <body className={`flex flex-col min-h-screen grow font-sans`}>
                 <ToasterProvider />
                 {children}
               </body>

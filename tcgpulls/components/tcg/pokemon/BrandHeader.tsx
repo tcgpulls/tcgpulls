@@ -10,6 +10,7 @@ const BrandHeader = async ({}) => {
 
   return (
     <ListHeader
+      title={t("common.tcg-pokemon")}
       leftEl={
         <Image
           src={assetsUrl(`img/tcg/pokemon/pokemon-tcg-logo.png`)}
@@ -20,17 +21,12 @@ const BrandHeader = async ({}) => {
         />
       }
       rightEl={
-        <>
-          <h1 className="flex items-end gap-4 font-bold text-primary-100">
-            <span className={`text-3xl `}>{t("common.tcg-pokemon")}</span>
-          </h1>
-          <div className={`flex items-start gap-2`}>
-            <Badge>
-              <LuCalendarDays />
-              1999
-            </Badge>
-          </div>
-        </>
+        <div className={`flex items-start gap-2`}>
+          <Badge>
+            <LuCalendarDays />
+            1999
+          </Badge>
+        </div>
       }
     />
   );

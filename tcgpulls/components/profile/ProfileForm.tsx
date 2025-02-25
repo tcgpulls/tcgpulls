@@ -26,16 +26,13 @@ export default function ProfileForm() {
   }
 
   return (
-    <div className="max-w-lg mt-8 p-6 rounded-lg shadow-md bg-primary-800">
+    <div className="max-w-lg mt-8 rounded-lg shadow-md">
       {queryLoading ? (
         <div className="flex justify-center">
           <Spinner />
         </div>
       ) : (
         <>
-          <h2 className="text-xl font-semibold text-primary-900 text-white mb-6">
-            {t("form.title")}
-          </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name Field */}
             <div>

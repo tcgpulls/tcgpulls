@@ -37,7 +37,7 @@ export default async function SignInPage({
     : null;
 
   return (
-    <div className="min-h-screen flex flex-col gap-12 items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col gap-12 items-center justify-center p-4 -mt-14">
       {callbackUrl &&
         callbackUrl.indexOf(RedirectReasons.NotAuthenticated) > -1 && (
           <Notice
