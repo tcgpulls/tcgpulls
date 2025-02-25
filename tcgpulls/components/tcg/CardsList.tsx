@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CardsGrid from "@/components/misc/CardsGrid";
+import CardsGrid from "@/components/tcg/pokemon/cards-page/CardsGrid";
 import InfiniteList from "@/components/misc/InfiniteList";
 import CardCard from "@/components/tcg/CardCard";
 import Spinner from "@/components/misc/Spinner";

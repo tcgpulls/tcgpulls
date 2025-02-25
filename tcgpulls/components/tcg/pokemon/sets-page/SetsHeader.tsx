@@ -18,6 +18,7 @@ const SetsHeader = ({ sets, tcgCategory }: Props) => {
 
   return (
     <ListHeader
+      title={t("common.tcg-pokemon")}
       leftEl={
         <Image
           src={assetsUrl(`img/tcg/pokemon/pokemon-tcg-logo.png`)}
@@ -28,21 +29,16 @@ const SetsHeader = ({ sets, tcgCategory }: Props) => {
         />
       }
       rightEl={
-        <>
-          <h1 className="flex items-end gap-4 font-bold text-primary-100">
-            <span className={`text-3xl `}>{t("common.tcg-pokemon")}</span>
-          </h1>
-          <p
-            className={`flex gap-2 items-center text-lg text-primary-400 font-medium`}
-          >
-            {tcgCategory === TcgCategory.Sets ? (
-              <BiGridAlt size={20} />
-            ) : (
-              <TbCards size={20} />
-            )}
-            {t(`common.${tcgCategory}`)}
-          </p>
-        </>
+        <p
+          className={`flex gap-2 items-center text-lg text-primary-400 font-medium`}
+        >
+          {tcgCategory === TcgCategory.Sets ? (
+            <BiGridAlt size={20} />
+          ) : (
+            <TbCards size={20} />
+          )}
+          {t(`common.${tcgCategory}`)}
+        </p>
       }
     />
   );

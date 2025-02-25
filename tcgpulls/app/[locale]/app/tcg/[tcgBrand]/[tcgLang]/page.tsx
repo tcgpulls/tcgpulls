@@ -28,7 +28,7 @@ const TcgLangPage = async ({ params }: Props) => {
         <div>
           <Link href={`/app/tcg/pokemon/${tcgLang}/booster-packs`}>
             <Card
-              className={`h-80 p-4 flex items-center justify-center`}
+              className={`h-48 sm:h-80 p-4 flex items-center justify-center`}
               isClickable={true}
             >
               <h2
@@ -40,10 +40,10 @@ const TcgLangPage = async ({ params }: Props) => {
             </Card>
           </Link>
         </div>
-        <div className={`grid grid-cols-2 gap-8`}>
+        <div className={`grid sm:grid-cols-2 gap-8`}>
           <Link href={`/app/tcg/pokemon/${tcgLang}/collection`}>
             <Card
-              className={`h-80 p-4 flex items-center justify-center`}
+              className={`h-48 sm:h-80 p-4 flex items-center justify-center`}
               isClickable={true}
             >
               <h2
@@ -61,7 +61,7 @@ const TcgLangPage = async ({ params }: Props) => {
           </Link>
           <Link href={`/app/tcg/pokemon/${tcgLang}/sets`}>
             <Card
-              className={`h-80 p-4 flex items-center justify-center`}
+              className={`h-48 sm:h-80 p-4 flex items-center justify-center`}
               isClickable={true}
             >
               <h2

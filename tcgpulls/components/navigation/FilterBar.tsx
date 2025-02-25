@@ -30,14 +30,18 @@ export function FilterBar({
 
   return (
     <>
-      <Divider className={`mt-5 mb-2`} />
-      <div className={`flex items-center justify-between`}>
+      <Divider className={`sm:mt-5 mb-2`} />
+      <div
+        className={`flex flex-col sm:flex-row sm:items-center justify-between`}
+      >
         <div>
-          <p className={`text-lg font-semibold`}>{title}</p>
+          <p className={`text-xl my-4 sm:my-0 sm:text-lg font-semibold`}>
+            {title}
+          </p>
         </div>
-        <div className="flex gap-12 mb-6 items-center">
+        <div className="w-full sm:w-auto flex flex-col md:flex-row md:items-center md:gap-12 mb-6">
           <Field className={`flex gap-4 items-center`}>
-            <Label className={`whitespace-nowrap mt-2`}>
+            <Label className={`whitespace-nowrap mt-2 w-24 sm:w-auto`}>
               {t("filter-bar.sort-by")}:
             </Label>
             <Select
@@ -54,7 +58,7 @@ export function FilterBar({
           </Field>
 
           <Field className={`flex gap-4 items-center`}>
-            <Label className={`whitespace-nowrap mt-2`}>
+            <Label className={`whitespace-nowrap mt-2 w-24 sm:w-auto`}>
               {t("filter-bar.order-by")}:
             </Label>
             <Select

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import InfiniteList from "@/components/misc/InfiniteList";
 import SetCard from "@/components/tcg/pokemon/sets-page/SetCard";
-import SetsGrid from "@/components/misc/SetsGrid";
+import SetsGrid from "@/components/tcg/pokemon/sets-page/SetsGrid";
 
 import {
   useGetPokemonSetsQuery,
