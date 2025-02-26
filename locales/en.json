@@ -1,0 +1,18 @@
+{
+  "common": {
+    "metadata": {
+      "title": "tcgpulls.xyz - {setName} Cards",
+      "description": "Browse all cards from the {setName} Pokémon card set on tcgpulls.xyz. View card details, rarities, and add them to your collection.",
+      "keywords": "pokemon cards, {setName}, pokemon tcg, card list, tcgpulls.xyz, pokemon set cards",
+      "openGraph": {
+        "title": "tcgpulls.xyz - {setName} Cards",
+        "description": "Browse all cards from the {setName} Pokémon card set on tcgpulls.xyz",
+        "siteName": "tcgpulls.xyz"
+      },
+      "twitter": {
+        "title": "tcgpulls.xyz - {setName} Cards",
+        "description": "Browse all cards from the {setName} Pokémon card set on tcgpulls.xyz"
+      }
+    }
+  }
+} 
