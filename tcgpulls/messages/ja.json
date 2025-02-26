@@ -233,17 +233,17 @@
     },
     "cta-button": "今すぐ始める",
     "metadata": {
-      "title": "TCGPulls - トレーディングカードゲームのコレクション管理・分析ツール",
+      "title": "tcgpulls.xyz - トレーディングカードゲームのコレクション管理・分析ツール",
       "description": "TCGコレクションを管理し、パック開封を記録。ポケモンカードなどの引き率、コスト、コレクション価値について詳細な分析が可能です。",
       "keywords": "TCGコレクション管理, ポケモンカードコレクション, パック開封記録, 引き率分析, TCGコレクションマネージャー, ポケカ開封",
       "og": {
-        "title": "TCGPulls - TCGコレクションの最強コンパニオン",
+        "title": "tcgpulls.xyz - TCGコレクションの最強コンパニオン",
         "description": "TCGコレクションを記録し、パック開封を分析。引き率やコレクション価値についての洞察を得られます。",
         "site_name": "TCGPulls",
-        "image_alt": "TCGPulls - トレーディングカードゲームコレクション管理ツール"
+        "image_alt": "tcgpulls.xyz - トレーディングカードゲームコレクション管理ツール"
       },
       "twitter": {
-        "title": "TCGPulls - TCGコレクションを記録",
+        "title": "tcgpulls.xyz - TCGコレクションを記録",
         "description": "TCGPullsでトレーディングカードのコレクションを管理し、パック開封を分析"
       }
     }
@@ -358,7 +358,7 @@
       "openGraph": {
         "title": "tcgpulls.xyz - {setName}のカード",
         "description": "{setName}の完全なカードリストを探索",
-        "siteName": "TCG Pulls"
+        "siteName": "tcgpulls.xyz"
       },
       "twitter": {
         "title": "tcgpulls.xyz - {setName}のカード",
@@ -377,7 +377,7 @@
       "openGraph": {
         "title": "tcgpulls.xyz - {series}シリーズ {setName}の{cardName}",
         "description": "{series}シリーズ {setName}の{rarity}ポケモンカード、{cardName}。tcgpulls.xyzでカードの詳細を確認し、コレクションに追加できます。",
-        "siteName": "TCG Pulls",
+        "siteName": "tcgpulls.xyz",
         "imageAlt": "{cardName}のポケモンカード"
       },
       "twitter": {
