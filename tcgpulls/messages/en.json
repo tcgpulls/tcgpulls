@@ -247,18 +247,18 @@
     },
     "cta-button": "Start Tracking Now",
     "metadata": {
-      "title": "TCGPulls - Track & Analyze Your Trading Card Game Collection",
+      "title": "tcgpulls.xyz - Track & Analyze Your Trading Card Game Collection",
       "description": "Manage your TCG collection and track pack openings with detailed analytics. Get insights into pull rates, costs, and collection value for Pokémon cards and more.",
       "keywords": "tcg collection tracker, pokemon card collection, pack opening tracker, pull rate analytics, tcg collection manager, pokemon card pulls",
       "og": {
-        "title": "TCGPulls - Your Ultimate TCG Collection Companion",
+        "title": "tcgpulls.xyz - Your Ultimate TCG Collection Companion",
         "description": "Track your TCG collection, analyze pack openings, and get insights into your pull rates and collection value.",
-        "site_name": "TCGPulls",
-        "image_alt": "TCGPulls - Trading Card Game Collection Tracker"
+        "site_name": "tcgpulls.xyz",
+        "image_alt": "tcgpulls.xyz - Trading Card Game Collection Tracker"
       },
       "twitter": {
-        "title": "TCGPulls - Track Your TCG Collection",
-        "description": "Manage your trading card collection and analyze your pack openings with TCGPulls"
+        "title": "tcgpulls.xyz - Track Your TCG Collection",
+        "description": "Manage your trading card collection and analyze your pack openings with tcgpulls.xyz"
       }
     }
   },
