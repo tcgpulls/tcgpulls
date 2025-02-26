@@ -210,10 +210,42 @@
     }
   },
   "landing-page": {
-    "title": "tcgpulls.xyzへようこそ",
+    "title": "TCGの旅はここから",
+    "subtitle": "トレーディングカードゲームコレクターの究極のコンパニオン。今日からコレクション管理を始めて、近日公開予定のパック開封分析機能をお楽しみに。",
+    "features-heading": "機能一覧",
+    "features": {
+      "manage-collection": {
+        "title": "コレクション管理",
+        "description": "コレクション全体を整理。カードの状態、バリアント、完全なデータベースを維持します。"
+      },
+      "track-pulls": {
+        "title": "パック開封記録（近日公開）",
+        "description": "まもなく、すべてのパック開封を記録し、詳細な履歴を保管できるようになります。開封したカードを見逃すことはもうありません。"
+      },
+      "analyze-stats": {
+        "title": "分析ダッシュボード（近日公開）",
+        "description": "パック開封のコストと潜在的な利益を追跡。引き率やコレクションの価値について洞察を得られます。"
+      },
+      "coming-soon": {
+        "title": "その他の機能も計画中",
+        "description": "市場動向の統合、コレクション共有など、さらに魅力的な機能を開発中。お楽しみに！"
+      }
+    },
+    "cta-button": "今すぐ始める",
     "metadata": {
-      "title": "ホーム - tcgpulls.xyz",
-      "description": "TCGパックの開封結果や排出率を一元管理！"
+      "title": "TCGPulls - トレーディングカードゲームのコレクション管理・分析ツール",
+      "description": "TCGコレクションを管理し、パック開封を記録。ポケモンカードなどの引き率、コスト、コレクション価値について詳細な分析が可能です。",
+      "keywords": "TCGコレクション管理, ポケモンカードコレクション, パック開封記録, 引き率分析, TCGコレクションマネージャー, ポケカ開封",
+      "og": {
+        "title": "TCGPulls - TCGコレクションの最強コンパニオン",
+        "description": "TCGコレクションを記録し、パック開封を分析。引き率やコレクション価値についての洞察を得られます。",
+        "site_name": "TCGPulls",
+        "image_alt": "TCGPulls - トレーディングカードゲームコレクション管理ツール"
+      },
+      "twitter": {
+        "title": "TCGPulls - TCGコレクションを記録",
+        "description": "TCGPullsでトレーディングカードのコレクションを管理し、パック開封を分析"
+      }
     }
   },
   "app-page": {

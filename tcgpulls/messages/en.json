@@ -224,10 +224,42 @@
     }
   },
   "landing-page": {
-    "title": "Welcome to tcgpulls.xyz",
+    "title": "Your TCG Journey Starts Here",
+    "subtitle": "The ultimate companion for Trading Card Game collectors. Manage your collection today, with pack opening analytics coming soon.",
+    "features-heading": "Features",
+    "features": {
+      "manage-collection": {
+        "title": "Manage Collection",
+        "description": "Keep your entire collection organized. Track conditions, variants, and maintain a complete database of your cards."
+      },
+      "track-pulls": {
+        "title": "Track Your Pulls (Coming Soon)",
+        "description": "Soon you'll be able to log every pack opening and keep a detailed history of your pulls. Never lose track of what you've opened."
+      },
+      "analyze-stats": {
+        "title": "Analytics Dashboard (Coming Soon)",
+        "description": "Track costs and potential profits from your pack openings. Get insights into your pull rates and collection value."
+      },
+      "coming-soon": {
+        "title": "More Features Planned",
+        "description": "Market trends integration, collection sharing, and more exciting features in development. Stay tuned!"
+      }
+    },
+    "cta-button": "Start Tracking Now",
     "metadata": {
-      "title": "tcgpulls.xyz - Home",
-      "description": "Get your TCG pack pulls and pull rates all in one place!"
+      "title": "TCGPulls - Track & Analyze Your Trading Card Game Collection",
+      "description": "Manage your TCG collection and track pack openings with detailed analytics. Get insights into pull rates, costs, and collection value for Pokémon cards and more.",
+      "keywords": "tcg collection tracker, pokemon card collection, pack opening tracker, pull rate analytics, tcg collection manager, pokemon card pulls",
+      "og": {
+        "title": "TCGPulls - Your Ultimate TCG Collection Companion",
+        "description": "Track your TCG collection, analyze pack openings, and get insights into your pull rates and collection value.",
+        "site_name": "TCGPulls",
+        "image_alt": "TCGPulls - Trading Card Game Collection Tracker"
+      },
+      "twitter": {
+        "title": "TCGPulls - Track Your TCG Collection",
+        "description": "Manage your trading card collection and analyze your pack openings with TCGPulls"
+      }
     }
   },
   "app-page": {
