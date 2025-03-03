@@ -11,7 +11,7 @@ type Props = {
   size?: "small" | "medium" | "large";
 };
 
-const Header = ({
+const PageNavigation = ({
   title,
   description,
   icon,
@@ -49,4 +49,4 @@ const Header = ({
   );
 };
 
-export default Header;
+export default PageNavigation;

@@ -16,7 +16,7 @@ import { GET_POKEMON_SET } from "@/graphql/tcg/pokemon/sets/queries";
 import createApolloClient from "@/lib/clients/createApolloClient";
 import { getTranslations } from "next-intl/server";
 import CardsList from "@/components/tcg/pokemon/cards-page/CardsList";
-import Header from "@/components/misc/Header";
+import PageNavigation from "@/components/navigation/PageNavigation";
 import { Metadata } from "next";
 interface Props {
   params: UrlParamsT;
@@ -83,7 +83,7 @@ export default async function SetCardsPage({ params }: Props) {
   if (!cardsData?.pokemonCards?.length) {
     return (
       <>
-        <Header
+        <PageNavigation
           title={t(`common.${tcgCategory}`)}
           size="small"
           withBackButton
@@ -96,7 +96,7 @@ export default async function SetCardsPage({ params }: Props) {
 
   return (
     <>
-      <Header
+      <PageNavigation
         title={t(`common.${tcgCategory}`)}
         size="small"
         withBackButton

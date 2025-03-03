@@ -13,7 +13,7 @@ import {
   POKEMON_SETS_PAGE_SIZE,
   POKEMON_SETS_SORT_OPTIONS,
 } from "@/constants/tcg/pokemon";
-import Header from "@/components/misc/Header";
+import PageNavigation from "@/components/navigation/PageNavigation";
 import createApolloClient from "@/lib/clients/createApolloClient";
 
 interface Props {
@@ -64,7 +64,7 @@ const TcgTypeSetsPage = async ({ params }: Props) => {
 
   return (
     <>
-      <Header
+      <PageNavigation
         title={t(`common.tcg-pokemon-short`)}
         size={`small`}
         withBackButton
@@ -116,7 +116,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: t("twitter.title"),
       description: t("twitter.description"),
-      creator: "@yourtwitterhandle",
+      creator: "@tcgpullsxyz",
       // images: ["/twitter-image.png"],
     },
   };

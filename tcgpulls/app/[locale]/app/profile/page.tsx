@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
-import Header from "@/components/misc/Header";
+import PageNavigation from "@/components/navigation/PageNavigation";
 import ProfileForm from "@/components/profile/ProfileForm";
 import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
 import { RedirectReasons } from "@/types/Redirect";
@@ -20,7 +20,7 @@ const ProfilePage = async ({ params }: Props) => {
 
   return (
     <>
-      <Header title={t("title")} />
+      <PageNavigation title={t("title")} />
       <ProfileForm />
     </>
   );

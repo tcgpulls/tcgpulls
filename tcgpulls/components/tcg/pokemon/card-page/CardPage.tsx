@@ -1,4 +1,4 @@
-import Header from "@/components/misc/Header";
+import PageNavigation from "@/components/navigation/PageNavigation";
 import { UrlParamsT } from "@/types/Params";
 import { getPokemonCard } from "@/lib/tcg/pokemon/getPokemonCard";
 import { getTranslations } from "next-intl/server";
@@ -22,7 +22,7 @@ const PokemonCardPage = async ({ params }: Props) => {
   const t = await getTranslations();
 
   const client = createApolloClient(
-    !session?.user?.id ? session?.user?.id : undefined,
+    !session?.user?.id ? session?.user?.id : undefined
   );
 
   try {
@@ -49,8 +49,8 @@ const PokemonCardPage = async ({ params }: Props) => {
 
     return (
       <>
-        {/* Header */}
-        <Header
+        {/* PageNavigation */}
+        <PageNavigation
           title={`${set?.name}`}
           size="small"
           withBackButton

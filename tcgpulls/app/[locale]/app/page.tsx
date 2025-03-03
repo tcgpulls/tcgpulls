@@ -3,7 +3,7 @@ import Card from "@/components/misc/Card";
 import { getTranslations } from "next-intl/server";
 import { UrlParamsT } from "@/types/Params";
 import getTcgLanguage from "@/utils/getTcgLanguage";
-import Header from "@/components/misc/Header";
+import PageNavigation from "@/components/navigation/PageNavigation";
 import { Link } from "@/i18n/routing";
 import { assetsUrl } from "@/utils/assetsUrl";
 import Image from "next/image";
@@ -14,7 +14,7 @@ const AppPage = async () => {
 
   return (
     <>
-      <Header title={t("common.home")} />
+      <PageNavigation title={t("common.home")} />
 
       <Link href={`/app/tcg/pokemon/${tcgLang}`}>
         <Card
@@ -74,7 +74,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: t("twitter.title"),
       description: t("twitter.description"),
-      creator: "@yourtwitterhandle", // Replace with your Twitter handle
+      creator: "@tcgpullsxyz", // Replace with your Twitter handle
       images: ["/twitter-image.png"], // Add your Twitter image
     },
   };

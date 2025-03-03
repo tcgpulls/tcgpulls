@@ -314,6 +314,7 @@
   "sets-page": {
     "title": "拡張パック",
     "no-sets": "拡張パックが見つかりません。",
+    "no-search-results": "検索に一致する拡張パックが見つかりません。",
     "metadata": {
       "title": "tcgpulls.xyz - ポケモンカードセット一覧",
       "description": "tcgpulls.xyzで全てのポケモンカードセットを閲覧。各拡張パックやシリーズの詳細情報をご覧いただけます。",
@@ -331,7 +332,8 @@
   },
   "collection-page": {
     "title": "コレクション",
-    "no-items": "現在、コレクションにはアイテムがありません。",
+    "no-items": "現在、コレクションにはカードがありません。",
+    "no-search-results": "検索に一致するカードが見つかりません。",
     "metadata": {
       "title": "tcgpulls.xyz - ポケモンカードコレクション",
       "description": "tcgpulls.xyzでポケモンカードコレクションを管理・記録。使いやすいコレクション管理ツールで、あなたのカードを整理しましょう。",
@@ -351,6 +353,8 @@
   },
   "cards-page": {
     "no-cards": "カードが見つかりません。",
+    "no-search-results": "検索に一致するカードが見つかりません。",
+    "search-placeholder": "名前、番号、レアリティで検索...",
     "metadata": {
       "title": "tcgpulls.xyz - {setName}のカード",
       "description": "{setName}のカードを閲覧・収集",
