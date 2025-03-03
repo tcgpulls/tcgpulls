@@ -9,7 +9,7 @@ const HomePage = async () => {
   const t = await getTranslations();
 
   return (
-    <div className="flex flex-col justify-between min-h-screen bg-gradient-to-b from-background to-accent-50/10">
+    <div className="flex flex-col justify-between min-h-screen">
       <div className="fixed top-2 right-2 sm:top-4 sm:right-4 z-10">
         <LanguageSwitcher />
       </div>
@@ -17,12 +17,9 @@ const HomePage = async () => {
       <main className="flex-1 container mx-auto px-4 py-8 sm:py-16">
         {/* Logo Section */}
         <div className="my-16 sm:mb-24">
-          <div className="relative">
-            <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-accent-400/30 to-primary-400/30" />
-            <h1 className="relative text-5xl sm:text-6xl md:text-7xl font-extrabold text-accent-600 tracking-tight text-center">
-              {t("common.company")}
-            </h1>
-          </div>
+          <h1 className="relative text-5xl sm:text-6xl md:text-7xl font-extrabold text-accent-600 tracking-tight text-center">
+            {t("common.company")}
+          </h1>
         </div>
 
         {/* Hero Content */}

@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Select } from "@/components/catalyst-ui/select";
 import { OrderDirection } from "@/graphql/generated";
@@ -7,6 +5,7 @@ import { Field, Label } from "@/components/catalyst-ui/fieldset";
 import { useTranslations } from "use-intl";
 import slugifyText from "@/utils/slugifyText";
 import { Divider } from "@/components/catalyst-ui/divider";
+import { Input } from "../catalyst-ui/input";
 
 interface FilterBarProps {
   title?: string;
@@ -16,31 +15,47 @@ interface FilterBarProps {
   sortOrder: OrderDirection;
   onSortOrderChange: (newSortOrder: OrderDirection) => void;
   sortOptions: string[];
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
 export function FilterBar({
-  title,
   sortBy,
   onSortByChange,
   sortOrder,
   onSortOrderChange,
   sortOptions,
+  searchQuery,
+  onSearchChange,
 }: FilterBarProps) {
   const t = useTranslations();
 
   return (
     <>
       <Divider className={`sm:mt-5 mb-2`} />
-      <div
-        className={`flex flex-col sm:flex-row sm:items-center justify-between`}
-      >
-        <div>
-          <p className={`text-xl my-4 sm:my-0 sm:text-lg font-semibold`}>
-            {title}
-          </p>
-        </div>
-        <div className="w-full sm:w-auto flex flex-col md:flex-row md:items-center md:gap-12 mb-6">
-          <Field className={`flex gap-4 items-center`}>
+      <div className={`flex flex-col sm:flex-row sm:items-end justify-end`}>
+        <div className="w-full sm:w-auto flex flex-col md:flex-row md:items-end md:gap-8 mb-6">
+          <Field className={`flex gap-2 items-center`}>
+            <Label
+              title={t("common.search")}
+              className={`whitespace-nowrap mt-2 w-24 sm:w-auto`}
+            >
+              {t("common.search")}:
+            </Label>
+            <Input
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              placeholder={t("common.search")}
+              type="search"
+              onKeyDown={(e) => {
+                if (e.key === "a" && (e.ctrlKey || e.metaKey)) {
+                  e.stopPropagation();
+                }
+              }}
+            />
+          </Field>
+
+          <Field className={`flex gap-2 items-center`}>
             <Label className={`whitespace-nowrap mt-2 w-24 sm:w-auto`}>
               {t("filter-bar.sort-by")}:
             </Label>
@@ -57,7 +72,7 @@ export function FilterBar({
             </Select>
           </Field>
 
-          <Field className={`flex gap-4 items-center`}>
+          <Field className={`flex gap-2 items-center`}>
             <Label className={`whitespace-nowrap mt-2 w-24 sm:w-auto`}>
               {t("filter-bar.order-by")}:
             </Label>

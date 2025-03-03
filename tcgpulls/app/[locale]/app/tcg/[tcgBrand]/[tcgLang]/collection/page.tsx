@@ -7,7 +7,7 @@ import {
 import { OrderDirection } from "@/graphql/generated";
 import { getTranslations } from "next-intl/server";
 import { GET_USER_POKEMON_COLLECTION_ITEMS } from "@/graphql/tcg/pokemon/collection/queries";
-import Header from "@/components/misc/Header";
+import PageNavigation from "@/components/navigation/PageNavigation";
 import { auth } from "@/auth";
 import createApolloClient from "@/lib/clients/createApolloClient";
 import CollectionList from "@/components/tcg/pokemon/collection/CollectionList";
@@ -78,14 +78,14 @@ export default async function CollectionCardsPage({ params }: Props) {
 
   return (
     <>
-      <Header
+      <PageNavigation
         title={t(`common.tcg-pokemon-short`)}
         size="small"
         withBackButton
         previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}`}
       />
+      <h1 className="text-2xl font-bold mt-8">{t("common.collection")}</h1>
       <CollectionList
-        // Force a unique key per default sort (optional)
         key={`${sortBy}-${sortOrder}`}
         initialItems={collectionItems}
         tcgLang={tcgLang}
@@ -117,21 +117,12 @@ export async function generateMetadata({
       siteName: t("openGraph.siteName"),
       type: "website",
       locale: locale,
-      // images: [
-      //   {
-      //     url: "/og-image.png",
-      //     width: 1200,
-      //     height: 630,
-      //     alt: "tcgpulls.xyz",
-      //   },
-      // ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("twitter.title"),
       description: t("twitter.description"),
-      creator: "@yourtwitterhandle",
-      // images: ["/twitter-image.png"],
+      creator: "@tcgpullsxyz",
     },
   };
 }

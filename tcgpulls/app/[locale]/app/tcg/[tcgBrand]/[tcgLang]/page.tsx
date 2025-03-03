@@ -111,7 +111,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: t("twitter.title"),
       description: t("twitter.description"),
-      creator: "@yourtwitterhandle",
+      creator: "@tcgpullsxyz",
       // images: ["/twitter-image.png"],
     },
   };

@@ -328,6 +328,7 @@
   "sets-page": {
     "title": "Sets",
     "no-sets": "No sets found.",
+    "no-search-results": "No sets found matching your search.",
     "metadata": {
       "title": "tcgpulls.xyz - Pokémon Card Sets",
       "description": "Browse and explore all Pokémon card sets on tcgpulls.xyz. Find detailed information about every Pokémon TCG expansion and series.",
@@ -345,7 +346,8 @@
   },
   "collection-page": {
     "title": "Collection",
-    "no-items": "There are currently no items in your collection.",
+    "no-items": "There are currently no cards in your collection.",
+    "no-search-results": "No cards found matching your search.",
     "metadata": {
       "title": "tcgpulls.xyz - My Pokémon Card Collection",
       "description": "Manage and track your Trading Card Game collection on tcgpulls.xyz. Keep your collection organized and up to date with our easy-to-use collection manager.",
@@ -365,6 +367,8 @@
   },
   "cards-page": {
     "no-cards": "No cards found.",
+    "no-search-results": "No cards found matching your search.",
+    "search-placeholder": "Search by name, number, or rarity...",
     "metadata": {
       "title": "tcgpulls.xyz - {setName} Cards",
       "description": "Browse and collect cards from {setName}",
