@@ -26,11 +26,14 @@ const PageNavigation = ({
   };
 
   return (
-    <div className={`pb-6`}>
+    <div className={`pb-10`}>
       <div
         className={`inline-flex items-center ${previousUrl !== "" && "gap-4 "}`}
       >
-        <Link href={previousUrl} className={`text-primary-100`}>
+        <Link
+          href={previousUrl}
+          className={`flex items-center text-primary-100`}
+        >
           <span
             className={`flex gap-4 items-center ${titleSizes[size]} font-bold ${previousUrl !== "" && "hover:text-primary-300"}`}
           >

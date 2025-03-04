@@ -389,7 +389,7 @@
     "collection": "Collection",
     "collection-empty": "No cards in collection.",
     "metadata": {
-      "title": "tcgpulls.xyz - {cardName} ({setName}) | {series} Series",
+      "title": "tcgpulls.xyz - {cardName} #{number} ({setName}) | {series} Series",
       "description": "{cardName} - Card #{number} from {setName} ({series} Series). {rarity} Pokémon card of type(s): {types}. View card details, prices, and add to your collection.",
       "keywords": "pokemon card, {cardName}, {setName}, {series} series, {types}, pokemon tcg, trading cards",
       "openGraph": {

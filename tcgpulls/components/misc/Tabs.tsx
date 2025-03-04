@@ -15,7 +15,7 @@ const Tabs = ({ tabs }: TabsProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div>
+    <div className={`w-full`}>
       {/* Tab Buttons */}
       <div className="flex gap-2 border-b border-primary-800">
         {tabs.map((tab, index) => (

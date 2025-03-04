@@ -79,12 +79,12 @@
   --color-error-900: #7f1d1d;
 
   --background: var(--color-primary-50);
-  --foreground: var(--color-primary-950);
+  --foreground: var(--color-primary-900);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: var(--color-secondary-950);
+    --background: var(--color-secondary-900);
     --foreground: var(--color-secondary-50);
   }
 }

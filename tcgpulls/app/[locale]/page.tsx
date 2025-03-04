@@ -10,14 +10,14 @@ const HomePage = async () => {
 
   return (
     <div className="flex flex-col justify-between min-h-screen">
-      <div className="fixed top-2 right-2 sm:top-4 sm:right-4 z-10">
+      <div className="flex items-center justify-end gap-4 z-10 p-2 sm:p-4">
         <LanguageSwitcher />
       </div>
 
       <main className="flex-1 container mx-auto px-4 py-8 sm:py-16">
         {/* Logo Section */}
         <div className="my-16 sm:mb-24">
-          <h1 className="relative text-5xl sm:text-6xl md:text-7xl font-extrabold text-accent-600 tracking-tight text-center">
+          <h1 className="relative text-5xl sm:text-6xl md:text-7xl font-extrabold text-accent-500 tracking-tight text-center">
             {t("common.company")}
           </h1>
         </div>
@@ -32,7 +32,6 @@ const HomePage = async () => {
               {t("landing-page.subtitle")}
             </p>
           </div>
-
           <Button href="/app">{t("landing-page.cta-button")}</Button>
         </div>
 
@@ -53,7 +52,7 @@ const HomePage = async () => {
                 key={feature}
                 className="relative p-6 sm:p-8 rounded-xl sm:rounded-2xl border border-accent-200/50 bg-background/50 backdrop-blur-sm"
               >
-                <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-accent-600">
+                <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-accent-500">
                   {t(`landing-page.features.${feature}.title`)}
                 </h3>
                 <p className="text-base text-foreground/80 leading-relaxed">

@@ -9,6 +9,7 @@ import BrandHeader from "@/components/tcg/pokemon/BrandHeader";
 import { TbCards } from "react-icons/tb";
 import { BiGridAlt } from "react-icons/bi";
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
+import PageNavigation from "@/components/navigation/PageNavigation";
 
 type Props = {
   params: UrlParamsT;
@@ -23,6 +24,12 @@ const TcgLangPage = async ({ params }: Props) => {
 
   return (
     <>
+      <PageNavigation
+        title={t(`common.home`)}
+        size={`small`}
+        withBackButton
+        previousUrl={`/app`}
+      />
       <BrandHeader />
       <div className={`mt-8 grid gap-8`}>
         <div>

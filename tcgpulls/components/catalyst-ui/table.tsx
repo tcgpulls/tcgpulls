@@ -39,7 +39,7 @@ export function Table({
         >
       }
     >
-      <div className="flow-root">
+      <div className="flow-root h-full">
         <div
           {...props}
           className={clsx(
