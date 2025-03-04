@@ -35,6 +35,7 @@ import toast from "react-hot-toast";
 import CollectionRemoveDialog from "@/components/tcg/pokemon/collection/CollectionRemoveDialog";
 import { PokemonCollectionItem } from "@/graphql/generated";
 import { useRouter } from "next/navigation";
+import { gaEvent } from "@/lib/gtag";
 
 type CollectionDialogProps = {
   cardId: string;
@@ -129,12 +130,26 @@ export default function CollectionDialog({
           success: t("tcg.collection.update-success"),
           error: t("tcg.collection.update-error"),
         });
+
+        gaEvent("update_collection_item", {
+          category: "collection",
+          label: cardId,
+          condition: formData.condition,
+          quantity: formData.quantity,
+        });
       } else {
         // === ADD path ===
         await toast.promise(addToCollection(additionalFields), {
           loading: t("tcg.collection.adding"),
           success: t("tcg.collection.add-success"),
           error: t("tcg.collection.add-error"),
+        });
+
+        gaEvent("add_to_collection", {
+          category: "collection",
+          label: cardId,
+          condition: formData.condition,
+          quantity: formData.quantity,
         });
       }
       setIsOpen(false);

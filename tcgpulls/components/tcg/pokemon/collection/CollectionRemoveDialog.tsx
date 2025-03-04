@@ -13,6 +13,7 @@ import { useTranslations } from "use-intl";
 import { usePokemonCollection } from "@/hooks/tcg/pokemon/usePokemonCollection";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { gaEvent } from "@/lib/gtag";
 
 /**
  * Props:
@@ -47,6 +48,13 @@ const CollectionRemoveDialog: FC<CollectionRemoveDialogProps> = ({
         success: t("tcg.collection.remove-success"),
         error: t("tcg.collection.remove-error"),
       });
+
+      gaEvent("remove_from_collection", {
+        category: "collection",
+        label: cardId,
+        item_id: itemId,
+      });
+
       setIsOpen(false);
       router.refresh();
     } catch (error) {
