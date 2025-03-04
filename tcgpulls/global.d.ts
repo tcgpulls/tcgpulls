@@ -2,6 +2,12 @@ import "next-auth";
 import { AppJWT } from "@/types/Auth";
 import { AdapterUser as DefaultAdapterUser } from "next-auth/adapters";
 
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}
+
 /**
  * Here we augment the `next-auth` module's `User`, `Session`, `JWT`, plus
  * the `AdapterUser` from `next-auth/adapters`.
