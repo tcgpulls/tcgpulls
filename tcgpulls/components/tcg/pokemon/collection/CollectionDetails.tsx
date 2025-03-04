@@ -27,6 +27,7 @@ import {
   TcgCollectionDetailsSortBy,
   TcgCollectionDetailsSortByT,
 } from "@/types/Tcg";
+import { PriceChangeState } from "@/types/Price";
 
 type Props = {
   collectionItems: PokemonCollectionItem[];
@@ -282,8 +283,12 @@ export default function CollectionDetails({ collectionItems }: Props) {
                                     <TableCell>
                                       <PriceFormatter
                                         price={item.price}
-                                        priceActionCondition={
+                                        priceChangeState={
                                           item.price < TEMPORARY_PREV_PRICE
+                                            ? PriceChangeState.Decreased
+                                            : item.price > TEMPORARY_PREV_PRICE
+                                              ? PriceChangeState.Increased
+                                              : PriceChangeState.Unchanged
                                         }
                                       />
                                     </TableCell>

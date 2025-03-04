@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
-import { UrlParamsT } from "@/types/Params";
+import { SearchParamsT, UrlParamsT } from "@/types/Params";
 import { ComponentType } from "react";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
@@ -8,9 +8,10 @@ import { getPokemonCard } from "@/lib/tcg/pokemon/getPokemonCard";
 
 interface Props {
   params: UrlParamsT;
+  searchParams: SearchParamsT;
 }
 
-const CardPage = async ({ params }: Props) => {
+const CardPage = async ({ params, searchParams }: Props) => {
   const { tcgBrand } = await params;
 
   if (!tcgBrand) {
@@ -18,7 +19,10 @@ const CardPage = async ({ params }: Props) => {
   }
 
   // Dynamically import the CardPage component based on the tcgBrand
-  let TcgBrandCardPage: ComponentType<{ params: UrlParamsT }>;
+  let TcgBrandCardPage: ComponentType<{
+    params: UrlParamsT;
+    searchParams: SearchParamsT;
+  }>;
   try {
     // Import the CardPage component based on the tcgBrand e.g: components/tcg/pokemon/CardPage
     TcgBrandCardPage = dynamic(
@@ -29,7 +33,7 @@ const CardPage = async ({ params }: Props) => {
     notFound();
   }
 
-  return <TcgBrandCardPage params={params} />;
+  return <TcgBrandCardPage params={params} searchParams={searchParams} />;
 };
 
 export default CardPage;

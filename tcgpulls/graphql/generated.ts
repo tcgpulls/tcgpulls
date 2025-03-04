@@ -2806,6 +2806,14 @@ export type GetPokemonCollectionCardQueryVariables = Exact<{
 
 export type GetPokemonCollectionCardQuery = { __typename?: 'Query', pokemonCard?: { __typename?: 'PokemonCard', id: string, collections?: Array<{ __typename?: 'PokemonCollectionItem', id: string, user?: { __typename?: 'User', id: string } | null }> | null } | null };
 
+export type GetUserCollectionStatusQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  cardIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+
+export type GetUserCollectionStatusQuery = { __typename?: 'Query', pokemonCollectionItems?: Array<{ __typename?: 'PokemonCollectionItem', id: string, quantity?: number | null, card?: { __typename?: 'PokemonCard', id: string } | null }> | null };
+
 export type AddCardToPokemonCollectionMutationVariables = Exact<{
   data: PokemonCollectionItemCreateInput;
 }>;
@@ -3185,6 +3193,53 @@ export type GetPokemonCollectionCardQueryHookResult = ReturnType<typeof useGetPo
 export type GetPokemonCollectionCardLazyQueryHookResult = ReturnType<typeof useGetPokemonCollectionCardLazyQuery>;
 export type GetPokemonCollectionCardSuspenseQueryHookResult = ReturnType<typeof useGetPokemonCollectionCardSuspenseQuery>;
 export type GetPokemonCollectionCardQueryResult = Apollo.QueryResult<GetPokemonCollectionCardQuery, GetPokemonCollectionCardQueryVariables>;
+export const GetUserCollectionStatusDocument = gql`
+    query GetUserCollectionStatus($userId: ID!, $cardIds: [ID!]!) {
+  pokemonCollectionItems(
+    where: {user: {id: {equals: $userId}}, card: {id: {in: $cardIds}}}
+  ) {
+    id
+    quantity
+    card {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserCollectionStatusQuery__
+ *
+ * To run a query within a React component, call `useGetUserCollectionStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserCollectionStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserCollectionStatusQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      cardIds: // value for 'cardIds'
+ *   },
+ * });
+ */
+export function useGetUserCollectionStatusQuery(baseOptions: Apollo.QueryHookOptions<GetUserCollectionStatusQuery, GetUserCollectionStatusQueryVariables> & ({ variables: GetUserCollectionStatusQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserCollectionStatusQuery, GetUserCollectionStatusQueryVariables>(GetUserCollectionStatusDocument, options);
+      }
+export function useGetUserCollectionStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserCollectionStatusQuery, GetUserCollectionStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserCollectionStatusQuery, GetUserCollectionStatusQueryVariables>(GetUserCollectionStatusDocument, options);
+        }
+export function useGetUserCollectionStatusSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserCollectionStatusQuery, GetUserCollectionStatusQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserCollectionStatusQuery, GetUserCollectionStatusQueryVariables>(GetUserCollectionStatusDocument, options);
+        }
+export type GetUserCollectionStatusQueryHookResult = ReturnType<typeof useGetUserCollectionStatusQuery>;
+export type GetUserCollectionStatusLazyQueryHookResult = ReturnType<typeof useGetUserCollectionStatusLazyQuery>;
+export type GetUserCollectionStatusSuspenseQueryHookResult = ReturnType<typeof useGetUserCollectionStatusSuspenseQuery>;
+export type GetUserCollectionStatusQueryResult = Apollo.QueryResult<GetUserCollectionStatusQuery, GetUserCollectionStatusQueryVariables>;
 export const AddCardToPokemonCollectionDocument = gql`
     mutation AddCardToPokemonCollection($data: PokemonCollectionItemCreateInput!) {
   createPokemonCollectionItem(data: $data) {

@@ -1,6 +1,12 @@
+export enum PriceChangeState {
+  Increased = "increased",
+  Decreased = "decreased",
+  Unchanged = "unchanged",
+}
+
 export type PriceBadgeT = {
-  price: number;
-  priceActionCondition: boolean;
+  price: string;
+  priceChangeState: PriceChangeState;
   currencySymbol?: string;
   side?: PriceBadgeSide;
 };

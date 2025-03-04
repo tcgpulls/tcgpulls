@@ -1,3 +1,5 @@
+"use client";
+
 import Card from "@/components/misc/Card";
 import { Link } from "@/components/catalyst-ui/link";
 import { Href } from "@react-types/shared";
@@ -11,15 +13,26 @@ import { Divider } from "@/components/catalyst-ui/divider";
 import CardHeader from "@/components/misc/CardHeader";
 import CardFooter from "@/components/misc/CardFooter";
 import SmallCardImage from "@/components/tcg/pokemon/card-page/SmallCardImage";
+import { CollectionInfoCardsList } from "@/types/Collection";
+import { useTranslations } from "use-intl";
 
 type PokemonCardItem = NonNullable<GetPokemonCardsQuery["pokemonCards"]>[0];
 
 type Props = {
   card: PokemonCardItem;
   href: Href;
+  inCollection?: boolean;
+  collectionInfo?: CollectionInfoCardsList;
 };
 
-const CardCard = ({ card, href }: Props) => {
+const CardCard = ({
+  card,
+  href,
+  inCollection = false,
+  collectionInfo,
+}: Props) => {
+  const t = useTranslations();
+
   return (
     <Link href={href}>
       <Card
@@ -27,7 +40,16 @@ const CardCard = ({ card, href }: Props) => {
         className="flex flex-col items-stretch h-full space-y-4"
       >
         {/* Image */}
-        <SmallCardImage card={card} />
+        <div className={`relative`}>
+          {inCollection && collectionInfo && (
+            <div
+              className={`absolute z-10 bottom-2 right-2 px-2 py-1 rounded-lg bg-accent-500 text-primary-100 font-semibold text-xs border border-primary-100`}
+            >
+              {collectionInfo.quantity} {t("common.collected")}
+            </div>
+          )}
+          <SmallCardImage card={card} />
+        </div>
 
         <Divider />
 

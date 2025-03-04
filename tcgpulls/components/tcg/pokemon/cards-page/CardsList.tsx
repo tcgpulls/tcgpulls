@@ -11,6 +11,7 @@ import {
   PokemonCardItemFragment,
   PokemonSetItemFragment,
   useGetPokemonCardsQuery,
+  useGetUserCollectionStatusQuery,
 } from "@/graphql/generated";
 import { TcgBrandT, TcgCardSortByT, TcgCategoryT, TcgLangT } from "@/types/Tcg";
 import {
@@ -23,16 +24,10 @@ import { Button } from "@/components/catalyst-ui/button";
 import CardsHeader from "@/components/tcg/pokemon/cards-page/CardsHeader";
 import { useDebounce } from "@/hooks/useDebounce";
 import { buildSearchPokemonCardFilter } from "@/graphql/tcg/pokemon/cards/filters";
-
-// Even if both default orders are ascending, we can still define a mapping
-// to keep the code consistent and extensible.
-const defaultCardsSortOrders: Record<string, OrderDirection> = {
-  normalizedNumber: OrderDirection.Desc,
-  name: OrderDirection.Asc,
-  // If you have additional sort keys, define their defaults here.
-};
+import { CollectionInfoCardsList } from "@/types/Collection";
 
 interface CardsListProps {
+  userId?: string;
   initialCards: PokemonCardItemFragment[];
   tcgLang: TcgLangT;
   tcgBrand: TcgBrandT;
@@ -43,6 +38,14 @@ interface CardsListProps {
   initialSearchQuery?: string;
 }
 
+// Even if both default orders are ascending, we can still define a mapping
+// to keep the code consistent and extensible.
+const defaultCardsSortOrders: Record<string, OrderDirection> = {
+  normalizedNumber: OrderDirection.Desc,
+  name: OrderDirection.Asc,
+  // If you have additional sort keys, define their defaults here.
+};
+
 export function CardsList({
   initialCards,
   tcgBrand,
@@ -52,6 +55,7 @@ export function CardsList({
   sortBy: initialSortBy,
   sortOrder: initialSortOrder,
   initialSearchQuery = "",
+  userId,
 }: CardsListProps) {
   const t = useTranslations();
 
@@ -60,6 +64,11 @@ export function CardsList({
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const [manuallyRefetching, setManuallyRefetching] = useState(false);
   const [hasActiveSearch, setHasActiveSearch] = useState(!!initialSearchQuery);
+
+  // Collection state
+  const [collectionMap, setCollectionMap] = useState<
+    Record<string, CollectionInfoCardsList>
+  >({});
 
   // 1) Local sort state.
   const [sortBy, setSortBy] = useState<string>(initialSortBy);
@@ -114,6 +123,14 @@ export function CardsList({
     [hasActiveSearch, data?.pokemonCards, initialCards],
   );
 
+  const { data: collectionData } = useGetUserCollectionStatusQuery({
+    variables: {
+      userId: userId || "",
+      cardIds: cards.map((card) => card.id),
+    },
+    skip: !userId || cards.length === 0,
+  });
+
   // 6) "fetchMore" callback for infinite scroll.
   const fetchMoreCards = useCallback(
     async (offset: number) => {
@@ -147,6 +164,21 @@ export function CardsList({
     },
     [searchQuery, baseWhereFilter, sortBy, sortOrder, refetch],
   );
+
+  // Update collection map when data changes
+  useEffect(() => {
+    if (collectionData?.pokemonCollectionItems) {
+      const newMap: Record<string, CollectionInfoCardsList> = {};
+      collectionData.pokemonCollectionItems.forEach((item) => {
+        if (item.card?.id && item.quantity != null) {
+          newMap[item.card.id] = {
+            quantity: item.quantity,
+          };
+        }
+      });
+      setCollectionMap(newMap);
+    }
+  }, [collectionData]);
 
   // Debounced search effect
   useEffect(() => {
@@ -184,7 +216,6 @@ export function CardsList({
     <div className="pt-2">
       <CardsHeader set={set} />
 
-      {/* Render the FilterBar with search functionality */}
       <FilterBar
         sortBy={sortBy}
         onSortByChange={handleSortByChange}
@@ -225,6 +256,8 @@ export function CardsList({
                 key={card.id}
                 card={card}
                 href={`/app/tcg/pokemon/${tcgLang}/sets/${card.tcgSetId}/cards/${card.tcgCardId}-${card.variant}-${tcgLang}`}
+                inCollection={!!collectionMap[card.id]}
+                collectionInfo={collectionMap[card.id]}
               />
             )}
           />

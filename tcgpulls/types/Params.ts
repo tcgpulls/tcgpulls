@@ -19,6 +19,7 @@ export type SearchParamsKeyT = {
   callbackUrl: string;
   redirectReason: RedirectReasons;
   error: string;
+  fromPage: string;
 };
 
 export type SearchParamsT = Promise<Partial<SearchParamsKeyT>>;

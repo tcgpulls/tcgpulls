@@ -1,5 +1,5 @@
 import PageNavigation from "@/components/navigation/PageNavigation";
-import { UrlParamsT } from "@/types/Params";
+import { SearchParamsT, UrlParamsT } from "@/types/Params";
 import { getPokemonCard } from "@/lib/tcg/pokemon/getPokemonCard";
 import { getTranslations } from "next-intl/server";
 import BasicInfo from "@/components/tcg/pokemon/card-page/BasicInfo";
@@ -22,6 +22,7 @@ import { ReactNode } from "react";
 
 interface Props {
   params: UrlParamsT;
+  searchParams: SearchParamsT;
 }
 
 const PageNavigationImage = ({
@@ -48,8 +49,9 @@ const PageNavigationImage = ({
   );
 };
 
-const PokemonCardPage = async ({ params }: Props) => {
+const PokemonCardPage = async ({ params, searchParams }: Props) => {
   const { tcgBrand, tcgCategory, tcgLang, cardSlug } = await params;
+  const { fromPage } = await searchParams;
   const session = await auth();
   const t = await getTranslations();
 
@@ -63,7 +65,6 @@ const PokemonCardPage = async ({ params }: Props) => {
       return <p>{t("card-page.not-found")}</p>;
     }
 
-    // Fetch ALL items (unchanged)
     const collectionResponse = await client.query({
       query: GET_USER_POKEMON_COLLECTION_ITEMS_FOR_CARD,
       variables: {
@@ -79,19 +80,25 @@ const PokemonCardPage = async ({ params }: Props) => {
 
     const { tcgSetId, set } = card;
 
+    const pageNavigationTitle =
+      fromPage === "collection"
+        ? t("common.collection")
+        : set && tcgLang && <PageNavigationImage set={set} lang={tcgLang} />;
+    const pageNavigationUrl =
+      fromPage === "collection"
+        ? `/app/tcg/${tcgBrand}/${tcgLang}/collection`
+        : `/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${tcgSetId}`;
+
     return (
       <>
-        {/* PageNavigation with properly typed and passed props */}
         <PageNavigation
-          title={
-            set && tcgLang && <PageNavigationImage set={set} lang={tcgLang} />
-          }
+          title={pageNavigationTitle}
           size="small"
           withBackButton
-          previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${tcgSetId}`}
+          previousUrl={pageNavigationUrl}
         />
 
-        {/* Main Content Container - Changed to flex-col on mobile, flex-row on md and above */}
+        {/* Main Content Container */}
         <div className="flex flex-col md:flex-row gap-8 md:gap-8 py-4 md:py-6">
           {/* Card Image - Full width on mobile, fixed width on bigger screens */}
           <div className="w-full md:w-auto md:min-w-[460px]">

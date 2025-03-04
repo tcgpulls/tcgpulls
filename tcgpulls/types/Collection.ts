@@ -41,3 +41,7 @@ export enum GradingRating {
   // Fallback option for any non-standard or unanticipated ratings:
   OTHER = "Other",
 }
+
+export type CollectionInfoCardsList = {
+  quantity: number;
+};

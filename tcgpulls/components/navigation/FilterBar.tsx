@@ -65,7 +65,6 @@ export function FilterBar({
             >
               {sortOptions.map((option) => (
                 <option key={option} value={option}>
-                  {/* Convert something like "releaseDate" to user-friendly text */}
                   {t(`filter-bar.${slugifyText(option)}`)}
                 </option>
               ))}

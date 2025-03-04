@@ -1,28 +1,39 @@
 import { FaCaretDown, FaCaretUp } from "react-icons/fa6";
-import { PriceBadgeSide, PriceBadgeT } from "@/types/Price";
+import { PriceBadgeSide, PriceChangeState, PriceBadgeT } from "@/types/Price";
+import React from "react";
 
-type Props = PriceBadgeT;
+// Define the mapping outside the component
+const PRICE_CHANGE_STYLES = {
+  [PriceChangeState.Increased]: {
+    icon: <FaCaretUp size={10} className="text-success-500 mt-0.5" />,
+    color: "text-success-500",
+  },
+  [PriceChangeState.Decreased]: {
+    icon: <FaCaretDown size={10} className="text-error-500" />,
+    color: "text-error-500",
+  },
+  [PriceChangeState.Unchanged]: {
+    icon: <></>,
+    color: "text-accent-500",
+  },
+};
 
 const PriceFormatter = ({
   price,
-  priceActionCondition,
+  priceChangeState,
   currencySymbol = "$",
   side = PriceBadgeSide.Left,
-}: Props) => {
-  return (
-    <div className={`flex items-center gap-1`}>
-      {priceActionCondition ? (
-        <FaCaretDown size={10} className={`text-red-500`} />
-      ) : (
-        <FaCaretUp size={10} className={`text-green-500 mt-0.5`} />
-      )}
+}: PriceBadgeT) => {
+  const { icon, color } = PRICE_CHANGE_STYLES[priceChangeState];
+  const formattedPrice = parseFloat(price).toLocaleString();
 
-      <span
-        className={` ${priceActionCondition ? "text-red-500" : "text-green-500"}`}
-      >
+  return (
+    <div className="flex items-center gap-0.5">
+      {icon}
+      <span className={color}>
         {side === PriceBadgeSide.Left
-          ? `${currencySymbol}${price}`
-          : `${price}${currencySymbol}`}
+          ? `${currencySymbol}${formattedPrice}`
+          : `${formattedPrice}${currencySymbol}`}
       </span>
     </div>
   );
