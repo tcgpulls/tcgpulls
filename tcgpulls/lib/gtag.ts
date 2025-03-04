@@ -1,6 +1,12 @@
 // lib/gtag.ts
 export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
+type GaEventParams = {
+  category: string;
+  label: string;
+  value?: number;
+} & Record<string, unknown>;
+
 // Track a page view
 export const pageview = (url: string) => {
   if (typeof window !== "undefined" && window.gtag) {
@@ -20,16 +26,7 @@ export const setUserId = (userId: string) => {
 // Track custom events
 export const gaEvent = (
   action: string,
-  {
-    category,
-    label,
-    value,
-    ...rest
-  }: {
-    category: string;
-    label: string;
-    value?: number;
-  },
+  { category, label, value, ...rest }: GaEventParams,
 ) => {
   if (typeof window !== "undefined" && window.gtag) {
     window.gtag("event", action, {
