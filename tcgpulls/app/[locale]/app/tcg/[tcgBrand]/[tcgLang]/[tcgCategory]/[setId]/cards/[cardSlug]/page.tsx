@@ -22,7 +22,7 @@ const CardPage = async ({ params }: Props) => {
   try {
     // Import the CardPage component based on the tcgBrand e.g: components/tcg/pokemon/CardPage
     TcgBrandCardPage = dynamic(
-      () => import(`@/components/tcg/${tcgBrand}/card-page/CardPage`)
+      () => import(`@/components/tcg/${tcgBrand}/card-page/CardPage`),
     );
   } catch (error) {
     console.error(`Failed to load CardPage for brand: ${tcgBrand}`, error);
@@ -63,7 +63,7 @@ export async function generateMetadata({
   const series = set?.series || "";
 
   return {
-    title: t("title", { cardName: name, setName, series }),
+    title: t("title", { cardName: name, number, setName, series }),
     description: t("description", {
       cardName: name,
       setName,

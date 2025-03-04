@@ -5,16 +5,48 @@ import { getTranslations } from "next-intl/server";
 import BasicInfo from "@/components/tcg/pokemon/card-page/BasicInfo";
 import CardImage from "@/components/tcg/pokemon/card-page/CardImage";
 import { GET_USER_POKEMON_COLLECTION_ITEMS_FOR_CARD } from "@/graphql/tcg/pokemon/collection/queries";
-import { OrderDirection, PokemonCollectionItem } from "@/graphql/generated";
+import {
+  OrderDirection,
+  PokemonCollectionItem,
+  PokemonSet,
+} from "@/graphql/generated";
 import { auth } from "@/auth";
 import createApolloClient from "@/lib/clients/createApolloClient";
 import CollectionDetails from "@/components/tcg/pokemon/collection/CollectionDetails";
 import Tabs from "@/components/misc/Tabs";
 import CardDetails from "@/components/tcg/pokemon/card-page/CardDetails";
+import { assetsUrl } from "@/utils/assetsUrl";
+import Image from "next/image";
+import { TcgLangT } from "@/types/Tcg";
+import { ReactNode } from "react";
 
 interface Props {
   params: UrlParamsT;
 }
+
+const PageNavigationImage = ({
+  set,
+  lang,
+}: {
+  set: PokemonSet;
+  lang: TcgLangT;
+}): ReactNode => {
+  if (!set || !lang) return null;
+
+  return (
+    <p className="flex items-center gap-4 text-sm text-gray-400 min-w-0">
+      <Image
+        width={100}
+        height={46}
+        src={assetsUrl(`img/tcg/pokemon/sets/${lang}/${set.tcgSetId}/logo.png`)}
+        alt={`${set.name} - ${set.series}`}
+      />
+      <span className="truncate">
+        {set.name} - {set.series}
+      </span>
+    </p>
+  );
+};
 
 const PokemonCardPage = async ({ params }: Props) => {
   const { tcgBrand, tcgCategory, tcgLang, cardSlug } = await params;
@@ -22,7 +54,7 @@ const PokemonCardPage = async ({ params }: Props) => {
   const t = await getTranslations();
 
   const client = createApolloClient(
-    !session?.user?.id ? session?.user?.id : undefined
+    !session?.user?.id ? session?.user?.id : undefined,
   );
 
   try {
@@ -49,47 +81,58 @@ const PokemonCardPage = async ({ params }: Props) => {
 
     return (
       <>
-        {/* PageNavigation */}
+        {/* PageNavigation with properly typed and passed props */}
         <PageNavigation
-          title={`${set?.name}`}
+          title={
+            set && tcgLang && <PageNavigationImage set={set} lang={tcgLang} />
+          }
           size="small"
           withBackButton
           previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}/${tcgSetId}`}
         />
 
-        {/* Main Content Container */}
-        <div className="flex gap-8 py-4 md:py-6">
-          {/* Left Column: Card Image */}
-          <div className="min-w-[460px]">
-            <CardImage card={card} />
+        {/* Main Content Container - Changed to flex-col on mobile, flex-row on md and above */}
+        <div className="flex flex-col md:flex-row gap-8 md:gap-8 py-4 md:py-6">
+          {/* Card Image - Full width on mobile, fixed width on bigger screens */}
+          <div className="w-full md:w-auto md:min-w-[460px]">
+            {/* BasicInfo for Mobile Only - Shows above image */}
+            <div className="block md:hidden py-2 pb-6">
+              <BasicInfo card={card} />
+            </div>
+            <div className="flex flex-col items-center">
+              <CardImage card={card} />
+            </div>
           </div>
 
-          {/* Right Column: Card Info */}
-          <div className="flex flex-col gap-4 grow">
-            <BasicInfo card={card} tcgLang={tcgLang!} />
+          {/* Right Column: Card Info - Full width on all screens with proper min-width for overflow handling */}
+          <div className="w-full min-w-0 flex flex-col gap-8">
+            {/* BasicInfo for Desktop Only - Shows next to image */}
+            <div className="hidden md:block">
+              <BasicInfo card={card} />
+            </div>
 
-            {/*<Divider />*/}
-
-            <Tabs
-              tabs={[
-                {
-                  label: t("common.collection"),
-                  content: (
-                    <div>
-                      <CollectionDetails collectionItems={collectionItems} />
-                    </div>
-                  ),
-                },
-                {
-                  label: t("common.details"),
-                  content: (
-                    <div className={`max-w-[640px]`}>
-                      <CardDetails card={card} />
-                    </div>
-                  ),
-                },
-              ]}
-            />
+            <div className="w-full min-w-0">
+              <Tabs
+                tabs={[
+                  {
+                    label: t("common.collection"),
+                    content: (
+                      <div className="w-full">
+                        <CollectionDetails collectionItems={collectionItems} />
+                      </div>
+                    ),
+                  },
+                  {
+                    label: t("common.details"),
+                    content: (
+                      <div className="w-full max-w-full md:max-w-[640px]">
+                        <CardDetails card={card} />
+                      </div>
+                    ),
+                  },
+                ]}
+              />
+            </div>
           </div>
         </div>
       </>

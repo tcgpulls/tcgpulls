@@ -60,12 +60,10 @@ export default function CollectionDetails({ collectionItems }: Props) {
         bValue = parseFloat(b.price || "0");
         break;
       case TcgCollectionDetailsSortBy.Condition:
-        // Compare condition strings (you could also map these to numeric values if needed)
         aValue = a.condition || "";
         bValue = b.condition || "";
         break;
       case TcgCollectionDetailsSortBy.GradingCompany:
-        // Compare companies case-insensitively
         aValue = a.gradingCompany ? a.gradingCompany.toLowerCase() : "";
         bValue = b.gradingCompany ? b.gradingCompany.toLowerCase() : "";
         break;
@@ -166,156 +164,176 @@ export default function CollectionDetails({ collectionItems }: Props) {
         setIsOpen={setIsRemoveDialogOpen}
       />
 
-      {/*<h4 className="text-2xl font-semibold mb-4 flex gap-2 justify-between">*/}
-      {/*  <span>*/}
-      {/*    {t("card-page.collection")}{" "}*/}
-      {/*    {userId &&*/}
-      {/*      collectionItems.length > 0 &&*/}
-      {/*      `(${collectionItems.length})`}*/}
-      {/*  </span>*/}
-      {/*  <CardPageAddToCollection cardId={cardId} />*/}
-      {/*</h4>*/}
-      <div>
-        <div
-          className={`h-[382px] flex flex-col w-full justify-stretch items-stretch bg-primary-800 rounded-xl p-3 py-2`}
-        >
+      <div className="w-full">
+        <div className="h-[382px] flex flex-col bg-primary-800 rounded-xl p-3 py-2">
           {status === "loading" && (
-            <div className={`h-full flex justify-center items-center`}>
+            <div className="h-full flex justify-center items-center">
               <Spinner />
             </div>
           )}
           {status === "authenticated" && (
-            <div className={`h-full flex flex-col justify-between`}>
-              <Table className="table-fixed w-full grow">
-                <TableHead>
-                  <TableRow>
-                    <SortableTableHeader
-                      label={t("tcg.collection.details.acquired-on")}
-                      field={TcgCollectionDetailsSortBy.AcquiredAt}
-                      requestSort={requestSort}
-                      sortConfig={sortConfig}
-                      className="w-[15%]"
-                    />
-                    <SortableTableHeader
-                      label={t("tcg.collection.details.condition")}
-                      field={TcgCollectionDetailsSortBy.Condition}
-                      requestSort={requestSort}
-                      sortConfig={sortConfig}
-                      className="w-[15%]"
-                    />
-                    <SortableTableHeader
-                      label={t("tcg.collection.details.company")}
-                      field={TcgCollectionDetailsSortBy.GradingCompany}
-                      requestSort={requestSort}
-                      sortConfig={sortConfig}
-                      className="w-[15%]"
-                    />
-                    <SortableTableHeader
-                      label={t("tcg.collection.details.rating")}
-                      field={TcgCollectionDetailsSortBy.GradingRating}
-                      requestSort={requestSort}
-                      sortConfig={sortConfig}
-                      className="w-[10%]"
-                    />
-                    <SortableTableHeader
-                      label={t("tcg.collection.details.quantity")}
-                      field={TcgCollectionDetailsSortBy.Quantity}
-                      requestSort={requestSort}
-                      sortConfig={sortConfig}
-                      className="w-[10%]"
-                    />
-                    <SortableTableHeader
-                      label={t("tcg.collection.details.price")}
-                      field={TcgCollectionDetailsSortBy.Price}
-                      requestSort={requestSort}
-                      sortConfig={sortConfig}
-                      className="w-[10%]"
-                    />
-                    <SortableTableHeader
-                      label={t("tcg.collection.details.notes")}
-                      field={TcgCollectionDetailsSortBy.Notes}
-                      requestSort={requestSort}
-                      sortConfig={sortConfig}
-                      className="w-[20%]"
-                    />
-                    <TableHeader className="w-[5%]">
-                      {t("tcg.collection.details.actions")}
-                    </TableHeader>
-                  </TableRow>
-                </TableHead>
-                <TableBody className={`w-full`}>
-                  {displayedItems.map((item) => {
-                    if (!item.card) return null;
-                    return (
-                      <TableRow key={item.id} className={`w-full`}>
-                        <TableCell>
-                          {item.acquiredAt
-                            ? new Date(item.acquiredAt).toLocaleDateString()
-                            : "-"}
-                        </TableCell>
-                        <TableCell>
-                          {item.condition
-                            ? t(`tcg.grading.conditions-list.${item.condition}`)
-                            : "-"}
-                        </TableCell>
-                        <TableCell>
-                          {item.gradingCompany
-                            ? t(
-                                `tcg.grading.companies-list.${item.gradingCompany.toLowerCase()}`,
-                              )
-                            : "-"}
-                        </TableCell>
-                        <TableCell>{item.gradingRating || "-"}</TableCell>
-                        <TableCell>{item.quantity ?? "-"}</TableCell>
-                        <TableCell>
-                          <PriceFormatter
-                            price={item.price}
-                            priceActionCondition={
-                              item.price < TEMPORARY_PREV_PRICE
-                            }
-                          />
-                        </TableCell>
-                        <TableCell className={`max-w-[320px]`}>
-                          <p className="block max-w-full truncate">
-                            {item.notes ?? "-"}
-                          </p>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-1.5 items-center">
-                            <div
-                              className={`cursor-pointer p-1 hover:text-accent-500`}
-                              onClick={() => handleEdit(item)}
-                            >
-                              <FiEdit size={16} />
-                            </div>
-                            <div
-                              className={`cursor-pointer p-1 hover:text-accent-500`}
-                              onClick={() => handleRemove(item)}
-                            >
-                              <FiTrash size={16} />
-                            </div>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+            <div className="h-full flex flex-col justify-between">
+              {collectionItems.length > 0 ? (
+                <>
+                  {/* Main content area with table */}
+                  <div className="flex-grow overflow-hidden">
+                    <div className="h-full custom-scroll-container relative">
+                      {/* Add a spacing div to prevent content from scrolling under the action column */}
+                      <div className="absolute top-0 bottom-0 right-0 w-[5%] bg-transparent z-20 pointer-events-none" />
 
-              {collectionItems.length < 1 && (
-                <div className={`flex w-full justify-center items-center grow`}>
-                  <p className={`text font-medium`}>
+                      <div className="h-full">
+                        <div className="custom-table-wrapper h-full">
+                          <Table className="table-fixed h-full">
+                            <TableHead>
+                              <TableRow>
+                                <SortableTableHeader
+                                  label={t(
+                                    "tcg.collection.details.acquired-on",
+                                  )}
+                                  field={TcgCollectionDetailsSortBy.AcquiredAt}
+                                  requestSort={requestSort}
+                                  sortConfig={sortConfig}
+                                  className="w-[15%]"
+                                />
+                                <SortableTableHeader
+                                  label={t("tcg.collection.details.condition")}
+                                  field={TcgCollectionDetailsSortBy.Condition}
+                                  requestSort={requestSort}
+                                  sortConfig={sortConfig}
+                                  className="w-[15%]"
+                                />
+                                <SortableTableHeader
+                                  label={t("tcg.collection.details.company")}
+                                  field={
+                                    TcgCollectionDetailsSortBy.GradingCompany
+                                  }
+                                  requestSort={requestSort}
+                                  sortConfig={sortConfig}
+                                  className="w-[15%]"
+                                />
+                                <SortableTableHeader
+                                  label={t("tcg.collection.details.rating")}
+                                  field={
+                                    TcgCollectionDetailsSortBy.GradingRating
+                                  }
+                                  requestSort={requestSort}
+                                  sortConfig={sortConfig}
+                                  className="w-[10%]"
+                                />
+                                <SortableTableHeader
+                                  label={t("tcg.collection.details.quantity")}
+                                  field={TcgCollectionDetailsSortBy.Quantity}
+                                  requestSort={requestSort}
+                                  sortConfig={sortConfig}
+                                  className="w-[10%]"
+                                />
+                                <SortableTableHeader
+                                  label={t("tcg.collection.details.price")}
+                                  field={TcgCollectionDetailsSortBy.Price}
+                                  requestSort={requestSort}
+                                  sortConfig={sortConfig}
+                                  className="w-[10%]"
+                                />
+                                <SortableTableHeader
+                                  label={t("tcg.collection.details.notes")}
+                                  field={TcgCollectionDetailsSortBy.Notes}
+                                  requestSort={requestSort}
+                                  sortConfig={sortConfig}
+                                  className="w-[20%] pr-[5%]"
+                                />
+                                {/* Fixed action column header with enhanced z-index */}
+                                <TableHeader className="w-[5%] sticky right-0 z-30 border-b border-b-primary-950/10 dark:border-b-white/10 bg-primary-800 shadow-lg">
+                                  {t("tcg.collection.details.actions")}
+                                </TableHeader>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody className="w-full">
+                              {displayedItems.map((item) => {
+                                if (!item.card) return null;
+                                return (
+                                  <TableRow key={item.id} className="w-full">
+                                    <TableCell>
+                                      {item.acquiredAt
+                                        ? new Date(
+                                            item.acquiredAt,
+                                          ).toLocaleDateString()
+                                        : "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                      {item.condition
+                                        ? t(
+                                            `tcg.grading.conditions-list.${item.condition}`,
+                                          )
+                                        : "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                      {item.gradingCompany
+                                        ? t(
+                                            `tcg.grading.companies-list.${item.gradingCompany.toLowerCase()}`,
+                                          )
+                                        : "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                      {item.gradingRating || "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                      {item.quantity ?? "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                      <PriceFormatter
+                                        price={item.price}
+                                        priceActionCondition={
+                                          item.price < TEMPORARY_PREV_PRICE
+                                        }
+                                      />
+                                    </TableCell>
+                                    <TableCell className="max-w-[320px] pr-[5%]">
+                                      <p className="block max-w-full truncate">
+                                        {item.notes ?? "-"}
+                                      </p>
+                                    </TableCell>
+                                    {/* Fixed action column cell with enhanced z-index */}
+                                    <TableCell className="sticky right-0 z-30 border-b border-primary-950/5 dark:border-white/5 bg-primary-800 shadow-lg">
+                                      <div className="flex gap-1.5 items-center">
+                                        <div
+                                          className="cursor-pointer p-1 hover:text-accent-500"
+                                          onClick={() => handleEdit(item)}
+                                        >
+                                          <FiEdit size={16} />
+                                        </div>
+                                        <div
+                                          className="cursor-pointer p-1 hover:text-accent-500"
+                                          onClick={() => handleRemove(item)}
+                                        >
+                                          <FiTrash size={16} />
+                                        </div>
+                                      </div>
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {totalPages > 1 && (
+                    <div className="mt-2">
+                      <Pagination
+                        page={page}
+                        totalPages={totalPages}
+                        onPageChange={(newPage) => setPage(newPage)}
+                      />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex w-full justify-center items-center grow">
+                  <p className="text font-medium">
                     {t("card-page.collection-empty")}
                   </p>
-                </div>
-              )}
-              {totalPages > 1 && (
-                <div className={`mt-2`}>
-                  <Pagination
-                    page={page}
-                    totalPages={totalPages}
-                    onPageChange={(newPage) => setPage(newPage)}
-                  />
                 </div>
               )}
             </div>
