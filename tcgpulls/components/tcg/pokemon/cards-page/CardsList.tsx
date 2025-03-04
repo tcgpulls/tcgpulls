@@ -216,7 +216,6 @@ export function CardsList({
     <div className="pt-2">
       <CardsHeader set={set} />
 
-      {/* Render the FilterBar with search functionality */}
       <FilterBar
         sortBy={sortBy}
         onSortByChange={handleSortByChange}

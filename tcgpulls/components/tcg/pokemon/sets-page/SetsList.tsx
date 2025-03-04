@@ -181,7 +181,6 @@ export default function SetsList({
         <SetsHeader sets={data?.pokemonSets} tcgCategory={tcgCategory} />
       )}
 
-      {/* Render FilterBar with our custom sort key change handler */}
       <FilterBar
         sortBy={sortBy}
         onSortByChange={handleSortByChange}

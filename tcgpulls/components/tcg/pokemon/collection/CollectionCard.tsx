@@ -17,6 +17,7 @@ import { Divider } from "@/components/catalyst-ui/divider";
 import CardHeader from "@/components/misc/CardHeader";
 import CardFooter from "@/components/misc/CardFooter";
 import SmallCardImage from "@/components/tcg/pokemon/card-page/SmallCardImage";
+import { PriceChangeState } from "@/types/Price";
 
 type Props = {
   item: PokemonCollectionItem;
@@ -51,7 +52,13 @@ const CollectionCard = ({ item, href }: Props) => {
           <Badge>
             <PriceFormatter
               price={price}
-              priceActionCondition={price < TEMPORARY_PREV_PRICE}
+              priceChangeState={
+                price < TEMPORARY_PREV_PRICE
+                  ? PriceChangeState.Decreased
+                  : price > TEMPORARY_PREV_PRICE
+                    ? PriceChangeState.Increased
+                    : PriceChangeState.Unchanged
+              }
             />
           </Badge>
         </CardHeader>

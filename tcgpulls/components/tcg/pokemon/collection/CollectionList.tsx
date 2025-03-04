@@ -179,7 +179,6 @@ export default function CollectionList({
 
   return (
     <div className="pt-2">
-      {/* Render the FilterBar with the custom sort key change handler */}
       <FilterBar
         sortBy={sortBy}
         onSortByChange={handleSortByChange}
@@ -224,7 +223,7 @@ export default function CollectionList({
                 <CollectionCard
                   key={item.id}
                   item={item}
-                  href={`/app/tcg/pokemon/${tcgLang}/sets/${card.tcgSetId}/cards/${card.tcgCardId}-${card.variant}-${tcgLang}`}
+                  href={`/app/tcg/pokemon/${tcgLang}/sets/${card.tcgSetId}/cards/${card.tcgCardId}-${card.variant}-${tcgLang}?fromPage=collection`}
                 />
               );
             }}
