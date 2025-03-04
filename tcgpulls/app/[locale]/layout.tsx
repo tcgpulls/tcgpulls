@@ -9,6 +9,7 @@ import CustomApolloProvider from "@/components/providers/CustomApolloProvider";
 import { SessionProvider } from "next-auth/react";
 import TcgLanguageContextWrapper from "@/components/context/TcgLanguageContextWrapper";
 import ToasterProvider from "@/components/providers/ToasterProvider";
+import GoogleAnalytics from "@/components/misc/GoogleAnalytics";
 
 const LocaleLayout = async ({
   children,
@@ -37,6 +38,7 @@ const LocaleLayout = async ({
               <body className={`flex flex-col min-h-screen grow font-sans`}>
                 <ToasterProvider />
                 {children}
+                <GoogleAnalytics />
               </body>
             </html>
           </CustomApolloProvider>
