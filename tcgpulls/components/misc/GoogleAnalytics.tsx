@@ -2,12 +2,15 @@
 
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Script from "next/script";
 
 const GoogleAnalytics = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // Track page views
   useEffect(() => {
     const handleRouteChange = (url: string) => {
       window.gtag("config", process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID, {
@@ -17,6 +20,13 @@ const GoogleAnalytics = () => {
 
     handleRouteChange(pathname + searchParams.toString());
   }, [pathname, searchParams]);
+
+  // Set user ID for GA if available
+  useEffect(() => {
+    if (session?.user?.id && window.gtag) {
+      window.gtag("set", { user_id: session.user.id });
+    }
+  }, [session]);
 
   return (
     <>
