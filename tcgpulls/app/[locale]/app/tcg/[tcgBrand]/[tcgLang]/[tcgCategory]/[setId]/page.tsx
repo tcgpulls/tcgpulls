@@ -18,12 +18,14 @@ import { getTranslations } from "next-intl/server";
 import CardsList from "@/components/tcg/pokemon/cards-page/CardsList";
 import PageNavigation from "@/components/navigation/PageNavigation";
 import { Metadata } from "next";
+import { auth } from "@/auth";
 interface Props {
   params: UrlParamsT;
 }
 
 export default async function SetCardsPage({ params }: Props) {
   const { setId, tcgLang, tcgBrand, tcgCategory } = await params;
+  const session = await auth();
   const client = createApolloClient();
   const t = await getTranslations();
 
@@ -103,6 +105,7 @@ export default async function SetCardsPage({ params }: Props) {
         previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}/${tcgCategory}`}
       />
       <CardsList
+        userId={session?.user?.id}
         // The initial SSR data
         initialCards={cardsData.pokemonCards}
         // IDs and sort info

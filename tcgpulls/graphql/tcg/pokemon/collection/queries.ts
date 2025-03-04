@@ -99,6 +99,26 @@ export const GET_POKEMON_COLLECTION_CARD = gql`
 `;
 
 /**
+ * Fetches the user's collection status for a list of card IDs.
+ */
+export const GET_USER_COLLECTION_STATUS = gql`
+  query GetUserCollectionStatus($userId: ID!, $cardIds: [ID!]!) {
+    pokemonCollectionItems(
+      where: {
+        user: { id: { equals: $userId } }
+        card: { id: { in: $cardIds } }
+      }
+    ) {
+      id
+      quantity
+      card {
+        id
+      }
+    }
+  }
+`;
+
+/**
  * Creates a new PokemonCardUserCollection record referencing the given cardId.
  * The backend automatically sets the "user" from context.session if not provided.
  */

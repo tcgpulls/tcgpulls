@@ -4,7 +4,7 @@ import {
   POKEMON_COLLECTION_PAGE_SIZE,
   POKEMON_COLLECTION_SORT_OPTIONS,
 } from "@/constants/tcg/pokemon";
-import { OrderDirection } from "@/graphql/generated";
+import { OrderDirection, PokemonCollectionItem } from "@/graphql/generated";
 import { getTranslations } from "next-intl/server";
 import { GET_USER_POKEMON_COLLECTION_ITEMS } from "@/graphql/tcg/pokemon/collection/queries";
 import PageNavigation from "@/components/navigation/PageNavigation";
@@ -15,6 +15,7 @@ import { requireAuthOrRedirect } from "@/auth/requireAuthOrRedirect";
 import { RedirectReasons } from "@/types/Redirect";
 import buildCollectionsOrderBy from "@/utils/buildCollectionsOrderBy";
 import { Metadata } from "next";
+import CollectionHeader from "@/components/tcg/pokemon/collection/CollectionHeader";
 
 interface Props {
   params: UrlParamsT;
@@ -76,6 +77,11 @@ export default async function CollectionCardsPage({ params }: Props) {
   // 7) SSR done—render a header + the client component
   const t = await getTranslations();
 
+  const collectionValue = collectionItems.reduce(
+    (acc: number, item: PokemonCollectionItem) => acc + parseFloat(item.price),
+    0,
+  );
+
   return (
     <>
       <PageNavigation
@@ -84,7 +90,12 @@ export default async function CollectionCardsPage({ params }: Props) {
         withBackButton
         previousUrl={`/app/tcg/${tcgBrand}/${tcgLang}`}
       />
-      <h1 className="text-2xl font-bold mt-8">{t("common.collection")}</h1>
+
+      <CollectionHeader
+        nbOfItems={collectionItems.length}
+        collectionValue={collectionValue}
+      />
+
       <CollectionList
         key={`${sortBy}-${sortOrder}`}
         initialItems={collectionItems}
